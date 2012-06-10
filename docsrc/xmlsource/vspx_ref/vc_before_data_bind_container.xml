@@ -1,0 +1,21 @@
+<refentry id="vc_before_data_bind_container">
+  <refmeta>
+  <refentrytitle>before-data-bind-container</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>before-data-bind-container</refname>
+  <refpurpose>This is identical to v:before-data-bind.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_before_data_bind_container">
+    <funcprototype id="vc_proto_before_data_bind_container">
+      <funcdef>
+            &lt;<function>before-data-bind-container</function>&gt;(EventHandler)&lt;/<function>before-data-bind-container</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_before_data_bind_container">
+  <title>Description</title>
+  </refsect1>
+ </refentry>

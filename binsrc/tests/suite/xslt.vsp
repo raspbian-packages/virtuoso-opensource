@@ -1,0 +1,4 @@
+<?vsp
+  http ('<root><a>Test</a></root>');
+  http_xslt ('virt://WS.WS.SYS_DAV_RES.RES_FULL_PATH.RES_CONTENT:/DAV/xslt/t.xsl');
+?>

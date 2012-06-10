@@ -1,0 +1,41 @@
+REPORT
+VARCHAR
+_______________________________________________________________________________
+
+OpenLink Virtuoso  Server
+Version 06.01.3127-pthreads for Linux as of Oct 28 2011 
+Started on: 2011/10/28 20:13 GMT+120
+ 
+Database Status:
+  File size 20971520, 2560 pages, 2010 free.
+  2000 buffers, 501 used, 0 dirty 0 wired down, repl age 0 0 w. io 0 w/crsr.
+  Disk Usage: 8 reads avg 0 msec, 0% r 0% w last  0 s, 566 writes,
+    0 read ahead, batch = 0.  Autocompact 81 in 58 out, 28% saved.
+Gate:  0 2nd in reads, 0 gate write waits, 0 in while read 0 busy scrap. 
+Log = virtuoso.trx, 155 bytes
+501 pages have been changed since last backup (in checkpoint state)
+Current backup timestamp: 0x0000-0x00-0x00
+Last backup date: unknown
+Clients: 1 connects, max 1 concurrent
+RPC: 4 calls, 1 pending, 1 max until now, 0 queued, 0 burst reads (0%), 0 second brk=160923648
+Checkpoint Remap 38 pages, 0 mapped back. 0 s atomic time.
+    DB master 2560 total 2010 free 38 remap 0 mapped back
+   temp  256 total 251 free
+ 
+Lock Status: 0 deadlocks of which 0 2r1w, 0 waits,
+   Currently 1 threads running 0 threads waiting 0 threads in vdb.
+Pending:
+ 
+Client 1111:1:  Account: dba, 203 bytes in, 256 bytes out, 1 stmts.
+PID: 8379, OS: unix, Application: unknown, IP#: 127.0.0.1
+Transaction status: PENDING, 1 threads.
+Locks: 
+ 
+ 
+Running Statements:
+ Time (msec) Text
+          30 status()
+ 
+ 
+Hash indexes
+ 

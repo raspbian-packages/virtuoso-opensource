@@ -1,0 +1,994 @@
+ 
+<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
+<!--     using base file:///Users/carl/dev/oplsrc/cartridges/google+/oplgoogleplus.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <owl:Ontology rdf:about="http://www.openlinksw.com/schemas/googleplus">
+        <dc:creator>OpenLink Software, http://www.openlinksw.com</dc:creator>
+        <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2011-09-26</dc:date>
+        <dc:description>OpenLink schema for Google+ objects and properties</dc:description>
+        <dc:title>OpenLink schema for Google+</dc:title>
+    </owl:Ontology>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Access">
+        <comment>Identifies who has access to see a Google+ Activity</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Access</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#AccessItem">
+        <comment>An access entry</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>AccessItem</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Activity">
+        <comment>A Google+ activity</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Activity</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://rdfs.org/sioc/ns#Post"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#ActivityObject">
+        <comment>The object of an activity</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>ActivityObject</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://rdfs.org/sioc/ns#Post"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Actor">
+        <comment>The person who performed a Google+ Activity</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Actor</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://rdfs.org/sioc/ns#UserAccount"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Attachment">
+        <comment>A media object attached to an Activity</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Attachment</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Comment">
+        <comment>A Google+ comment</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Comment</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://rdfs.org/sioc/ns#Post"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Email">
+        <comment>An email address of a Google+ user</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Email</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#EmbeddableLink">
+        <comment>An embeddable link to a attached video</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>EmbeddableLink</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#FullImage">
+        <comment>A full image photo attachment</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>FullImage</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#InReplyTo">
+        <comment>A description of the Activity a Comment replied to</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>InReplyTo</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Name">
+        <comment>An object representing the individual components of a person's name</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Name</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Object">
+        <comment>A base class representing all Google+ objects</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Google+ object</label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Organization">
+        <comment>An organization with which a Google+ user is or has been associated</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Organization</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Person">
+        <comment>A Google+ user</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Person</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <owl:equivalentClass rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#PlaceLived">
+        <comment>A place where a Google+ user has lived</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>PlaceLived</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#PreviewImage">
+        <comment>A preview image for a photo or video attachment</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>PreviewImage</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.openlinksw.com/schemas/googleplus#Url">
+        <comment>A URL for a Google+ user</comment>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>Url</label>
+        <subClassOf rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+    </owl:Class>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#aboutMe">
+        <comment>A short biography for this person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>about me</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <subPropertyOf rdf:resource="http://purl.org/dc/elements/1.1/description"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#access">
+        <comment>Identifies who has access to see an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>access</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Access"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#access_description">
+        <comment>Description of the access granted, suitable for display</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Access"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>access description</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#access_item">
+        <comment>An access entry</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Access"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>access item</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#AccessItem"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#access_item_type">
+        <comment>The type of entry describing to whom access is granted</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Access"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>access item type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#access_kind">
+        <comment>Access kind</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Access"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>access kind</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#activity_object">
+        <comment>The object of an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>activity object</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#activity_object_type">
+        <comment>The type of the activity object. e.g.
+	'note' - Textual content.
+	'activity' - A Google+ activity.
+	</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>activity object type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#activity_replied_to_id">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <comment>ID of the Activity replied to</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#InReplyTo"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>id of activity replied to</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#activity_title">
+        <comment>The title of an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>activity title</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://purl.org/dc/elements/1.1/title"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#activity_url">
+        <comment>The URL associated with the activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>activity URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#actor">
+        <comment>The person who performed this activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>actor</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+        <owl:equivalentProperty rdf:resource="http://rdfs.org/sioc/ns#has_creator"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#actor_displayName">
+        <comment>The name of the actor, suitable for display</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>actor display name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#actor_profile_image">
+        <comment>The URL of an actor's profile photo</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>actor profile image</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/img"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#actor_profile_url">
+        <comment>The URL of an actor's Google+ profile</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>actor profile URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#address">
+        <comment>Street address where this activity occurred</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>address</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#annotation">
+        <comment>Additional content added by the person who shared this activity, applicable only when resharing an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>annotation</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#associatedWith">
+        <comment>An organization with which this person is or has been associated</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>associated with</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#attachment">
+        <comment>A media object attached to an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>attachment</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#attachment_displayName">
+        <comment>The title of the attachment (such as a photo caption or an article title)</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>attachment display name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#attachment_media_type">
+        <comment>The type of media object. e.g. 'photo', 'video', 'article'</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>attachment media type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#attachment_url">
+        <comment>URL of the attachment</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>attachment URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#comment_actor">
+        <comment>The person who posted this comment</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>comment actor</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+        <owl:equivalentProperty rdf:resource="http://rdfs.org/sioc/ns#has_creator"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#comment_content">
+        <comment>The content of a comment</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>comment content</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#comment_self_link">
+        <comment>Link to a Comment resource</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>comment self link</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#comment_verb">
+        <comment>An comment's verb, indicating what action was performed e.g.
+	'post' - Publish content to the stream.
+	</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>comment verb</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#content">
+        <comment>If the attachment is an article, this property contains a snippet of text from the article</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>content</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#crosspostSource">
+        <comment>If this activity is a crosspost from another system, this property specifies the ID of the original activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>crosspost source</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#currentLocation">
+        <comment>The current location for this person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>current location</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#date_of_birth">
+        <comment>The person's date of birth</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>birthday</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+        <owl:equivalentProperty rdf:resource="http://www.openlinksw.com/schemas/rdfs/birthDate#this"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#department">
+        <comment>The department within the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>department</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#displayName">
+        <comment>The name of this person, suitable for display</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>display name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#email">
+        <comment>An email address of a Google+ user</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>email</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Email"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#email_type">
+        <comment>The type of email address. Possible values are:
+        'home' - Home email address
+        'work' - Work email address
+        'other' - Other
+        </comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Email"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>email address type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#email_value">
+        <comment>The actual email address</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Email"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>email value</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#embed">
+        <comment>If the attachment is a video, the embeddable link</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>embeddable link</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#EmbeddableLink"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#embed_media_type">
+        <comment>Media type of the link</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#EmbeddableLink"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>embed media type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#embed_url">
+        <comment>URL of embeddable link</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#EmbeddableLink"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>embed URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#endDate">
+        <comment>The date the person left the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>end date</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#familyName">
+        <comment>The family name (last name0 of a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>family name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/lastName"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#formatted">
+        <comment>The full name of a person, including middle names, suffixes etc.</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>formatted</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#fullImage">
+        <comment>The full image for photo attachments</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>full image</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#FullImage"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#full_image_height">
+        <comment>The height, in pixels, of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#FullImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>full image height</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#full_image_media_type">
+        <comment>Media type of the image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#FullImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>full image media type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#full_image_url">
+        <comment>URL of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#FullImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>full image URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#full_image_width">
+        <comment>The width, in pixels, of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#FullImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>full image width</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#gender">
+        <comment>The person's gender. Possible values are: 'male', 'female', 'other'</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>gender</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/gender"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#geocode">
+        <comment>Latitude and longitude where an activity occurred. Format is latitude followed by longitude, space separated</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>geocode</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#givenName">
+        <comment>The given name (first name) of a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>given name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/firstName"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#hasApp">
+        <comment>If true, indicates that the person has installed the app
+        that is making the request and has chosen to expose this install state
+        to the caller. A value of false indicates that the install state
+        cannot be determined (it is either not installed or the person has
+        chosen to keep this information private).
+        </comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>has app</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#has_comment">
+        <comment>A comment in reply to an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>has comment</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <owl:equivalentProperty rdf:resource="http://rdfs.org/sioc/ns#has_reply"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#honorificPrefix">
+        <comment>The honorific prefix (such as 'Dr' or 'Mrs') for a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>honorific prefix</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://www.w3.org/2001/vcard-rdf/3.0#TITLE"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#honorificSuffix">
+        <comment>The honorific suffix (such as 'Jr') for a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>honorific suffix</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#html_content">
+        <comment>The HTML-formatted content, suitable for display</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>html content</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#id">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty" />
+        <comment>A Google+ Person, Activity, AccessItem, ActivityObject, Actor, Attachment or Comment ID</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>id</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#in_reply_to">
+        <comment>The Activity to which a reply applies</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>is reply to activity</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <owl:equivalentProperty rdf:resource="http://rdfs.org/sioc/ns#reply_of"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#in_reply_to_object">
+        <comment>An object describing the activity this comment replied to</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Comment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>inReplyTo object</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#InReplyTo"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#in_reply_to_url">
+        <comment>URL of the Activity to which a reply applies</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#InReplyTo"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>is reply to activity with URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#location">
+        <comment>The location of the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>location</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#middleName">
+        <comment>The middle name of a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>middle name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#name">
+        <comment>An object representing the individual components of a person's name</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>name</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Name"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#nickname">
+        <comment>The nickname of a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>nickname</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/nick"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#object_actor">
+        <comment>If an activity's object is itself another activity (for example, when a person reshares an activity), 
+	this property specifies the original activity's actor.
+	</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>object actor</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Actor"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#object_url">
+        <comment>The URL associated with the activity object</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>activity object URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#organization_name">
+        <comment>The name of the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>organization name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#organization_type">
+        <comment>The type of organization, e.g. 'job', 'school'</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>organization type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#originalContent">
+        <comment>The content (text) as provided by the author, stored without any HTML formatting</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>original content</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#performed_activity">
+        <comment>A Google+ activity in the user's activities collection</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>performed activity</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#placeId">
+        <comment>ID of the place where an activity occurred</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>placeID</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#placeLived">
+        <comment>A place where a person has lived</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>place lived</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#PlaceLived"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#placeName">
+        <comment>Name of the place where an activity occurred</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>place name</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#plusoners_total">
+        <comment>Total number of people who +1'd this activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>plusoners total</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#previewImage">
+        <comment>The preview image for photos or videos</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Attachment"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>preview image</label>
+        <range rdf:resource="http://www.openlinksw.com/schemas/googleplus#PreviewImage"/>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#preview_image_height">
+        <comment>The height, in pixels, of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PreviewImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>preview image height</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#preview_image_media_type">
+        <comment>Media type of the image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PreviewImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>preview image media type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#preview_image_url">
+        <comment>URL of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PreviewImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>preview image URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#preview_image_width">
+        <comment>The width, in pixels, of the linked image</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PreviewImage"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>preview image width</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#primary_email">
+        <comment>If true, indicates this email address is the person's primary one</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Email"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>primary email</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#primary_organization">
+        <comment>If true, indicates this organization is the person's 
+        primary one (typically indicated as current one).
+        </comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>primary organization</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#primary_residence">
+        <comment>If true, this place of residence is a person's primary residence</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PlaceLived"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>primary residence</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#primary_url">
+        <comment>If true, this URL is a person's primary URL</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Url"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>primary URL</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#profile_image">
+        <comment>The URL of an person's profile photo</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>profile image</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <owl:equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/img"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#profile_url">
+        <comment>The URL of a person's Google+ profile</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>profile URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#providerTitle">
+        <comment>Name of the service provider that initially published an activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>provider title</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#published">
+        <comment>The time at which an activity or comment was initially published</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>published</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#datetime"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#radius">
+        <comment>Radius, in metres, of the region where this activity occurred, centered at the latitude and 
+	longitude identified by geocode
+	</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>radius</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#relationshipStatus">
+        <comment>The person's relationship status</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>relationship status</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#replies_total">
+        <comment>Total number of comments on this activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>replies total</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#resharers_total">
+        <comment>Total number of people who reshared this activity</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#ActivityObject"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>resharers total</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#residence_location">
+        <comment>A place where a person has lived</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#PlaceLived"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>residence location</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#role">
+        <comment>A short description of the person's role in the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>description</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#shared_url">
+        <comment>A URL associated with and shared via a person's Google+ profile</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>shared URL</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <owl:equivalentProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#speaksLanguage">
+        <comment>A language spoken by this person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>speaks language</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#startDate">
+        <comment>The date the person joined the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>start date</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#tagline">
+        <comment>The brief description (tagline) of a person</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Person"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>tagline</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#title">
+        <comment>The person's job title or role within the organization</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Organization"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>title</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#updated">
+        <comment>The time at which an activity or comment was last updated</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Object"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>updated</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#datetime"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#url_type">
+        <comment>The type of this Google+ profile URL -
+        'home', 'work', 'blog', 'profile', 'other'
+        </comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Url"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>URL type</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#url_value">
+        <comment>The URL value</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Url"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>URL value</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.openlinksw.com/schemas/googleplus#verb">
+        <comment>An activity's verb, indicating what action was performed e.g.
+	'post' - Publish content to the stream.
+	'checkin' - Check in to a location.
+	'share' - Re-share an activity.
+	</comment>
+        <domain rdf:resource="http://www.openlinksw.com/schemas/googleplus#Activity"/>
+        <isDefinedBy rdf:resource="http://www.openlinksw.com/schemas/googleplus"/>
+        <label>verb</label>
+        <range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+</rdf:RDF>

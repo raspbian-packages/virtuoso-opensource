@@ -1,0 +1,9287 @@
+2011-10-28 23:28  source
+
+	* Updated version to 6.1.4 for final release
+
+2011-10-28 23:22  source
+
+	* Enabled check for bad index due to XML fragment
+
+2011-10-28 23:21  source
+
+	* Added information about upgrading from previous 6.1.x to 6.1.4
+
+2011-10-28 21:46  source
+
+	* Fixed prototype
+
+2011-10-28 21:41  source
+
+	* Fixed datetime fraction
+
+2011-10-28 21:10  source
+
+	* Rebuild drivers
+
+2011-10-28 16:09  source
+
+	* Fixed disable strict void var checking as /fct sometimes generates
+	  undefined vars
+
+2011-10-28 16:00  source
+
+	* Added support for setting syslog facility
+
+2011-10-28 15:56  source
+
+	* Fixed call auth check only when needed
+
+2011-10-28 15:55  source
+
+	* Fixed flags for ods
+
+2011-10-28 13:16  source
+
+	* Added common function for testing extensions for rdfxml
+
+2011-10-28 13:14  source
+
+	* Fixed encoding issues
+
+2011-10-26 15:38  source
+
+	* Added new UI for conditionals like = < > ranges and IN
+	* Added initial UI for geo based conditionals
+	* Added support for proper permalink
+	* Added Twitter, Facebook and Google+ share buttons to footer
+	* Added version info to footer
+
+2011-10-26 15:22  source
+
+	* Added AddThis share buttons
+
+2011-10-26 09:34  source
+
+	* Fixed Compiled for line in usage
+	* Fixed compiler warning
+
+2011-10-26 00:21  source
+
+	* Updated documentation
+
+2011-10-26 00:00  source
+
+	* Fixed run check init on local
+
+2011-10-25 23:56  source
+
+	* Fixed package uninstall
+
+2011-10-25 23:54  source
+
+	* Added async rdf extraction
+
+2011-10-25 23:36  source
+
+	* Added opl:mentions and opl:NamedEntity class to OpenLink Attribution
+
+2011-10-25 23:31  source
+
+	* Added missing location support
+
+2011-10-25 23:28  source
+
+	* Added finger print from twitter entry
+	* Fixed minor issues
+
+2011-10-25 23:25  source
+
+	* Added support for Google+ comments
+
+2011-10-25 23:20  source
+
+	* Fixed when dropping a graph, also check if there is a quad map for it
+	* Fixed move all cols in pk rdf view sel
+	* Fixed handling of syncml functionality
+	* Fixed labels
+
+2011-10-25 19:36  source
+
+	* Added new implementation of search_excerpt that can handle both
+	  ANSI/UTF8 and Wide strings
+
+2011-10-25 10:54  source
+
+	* Fixed problems re-creating quad map
+
+2011-10-21 12:03  source
+
+	* Fixed drop stmt gr
+
+2011-10-21 11:53  source
+
+	* Fixed bad conversion of utf8 in rdf/xml
+
+2011-10-19 15:22  source
+
+	* Fixed dtp check
+
+2011-10-19 15:18  source
+
+	* Fixed reset bitmap flag as previous insert might have set it to true
+
+2011-10-19 15:14  source
+
+	* Fixed missing cast
+
+2011-10-18 12:45  source
+
+	* Fixed if one column cannot fit into available space, then instead
+	  of guessing how much space is needed we calculate space for all
+	  columns which cannot fit
+
+2011-10-18 12:41  source
+
+	* Fixed error adding inherited roles as they can overlap
+
+2011-10-18 09:15  source
+
+	* Updated default settings file
+
+2011-10-17 15:50  source
+
+	* Fixed issue building with Mono
+
+2011-10-17 14:06  source
+
+	* Fixed log info about row state
+
+2011-10-17 09:55  source
+
+	* Fixed labels
+
+2011-10-17 09:48  source
+
+	* Fixed issue with SPASQL and ADONET3 named parameters
+	* Fixed ADO.Net Provider failure retrieving RDF datetime literal values
+	* Removed duplicate functions
+
+2011-10-14 17:02  source
+
+	* Fixed issue with rdfview generation
+
+2011-10-14 12:54  source
+
+	* Fixed if BeginTransaction is called with an Unspecified isolation
+	  level, use a default of ReadCommitted
+
+2011-10-14 12:47  source
+
+	* Fixed recompile all qr's cached on cli connection when dropping
+	  a group or creating new graph group
+
+2011-10-14 10:33  source
+
+	* Fixed labels
+
+2011-10-14 00:32  source
+
+	* Fixed missing Diagnostic
+
+2011-10-13 22:14  source
+
+	* Rebuild driver
+
+2011-10-13 22:07  source
+
+	* Upgraded driver to Sesame 2.5.1
+
+2011-10-13 18:36  source
+
+	* Added new Google+ cartridge
+	* Added new Jigsaw cartridge
+	* Added gr:Brand information to Ebay cartridge
+	* Added money class similar to GoodRelations prices for Crunchbase
+	* Fixed handling of HTTPS Groupon URIs
+	* Fixed do not immediately index in normal mode
+	* Fixed eBay URL-schemes
+	* Fixed MIME type for JSON-LD
+	* Fixed documentation
+	* Removed CRLF
+
+2011-10-13 18:33  source
+
+	* Added new tabs to Linked Data
+	* Added PSH tabs
+	* Fixed labels and texts
+
+2011-10-13 18:32  source
+
+	* Fixed issue displayong characters in isql.vspx
+
+2011-10-13 18:29  source
+
+	* Fixed uninitialized var
+
+2011-10-13 18:28  source
+
+	* Added support for ms-author-va : sparql header
+	* Fixed use new virtuoso_ini_item_value
+	* Fixed set id of current user
+	* Fixed issue compiling stored procedure
+
+2011-10-13 17:08  source
+
+	* Added support for VirtuosoDateTime, VirtuosoDateTimeOffset and
+	  VirtuosoTimeSpan
+	* Fixed issue with dropped connection after multiple bad login attempts
+	* Fixed dispose methods should never throw an exception
+	* Fixed drop statement in Virtuoso when it is disposed in the provider
+
+2011-10-13 16:52  source
+
+	* Fixed copyright year to 2011
+
+2011-10-13 16:50  source
+
+	* Fixed buggy comparison when installing VAD packages
+
+2011-10-13 16:48  source
+
+	* Added stats for time waiting on a mutex
+
+2011-10-13 16:29  source
+
+	* Removed duplicate stored procedures
+
+2011-10-13 14:39  source
+
+	* Fixed use openssl md5 where available
+
+2011-10-13 14:24  source
+
+	* Fixed check for min async queue size
+
+2011-10-13 14:21  source
+
+	* Added new setting RdfFreeTextRulesSize
+
+2011-10-13 14:08  source
+
+	* Fixed execute on all partitions at same time
+
+2011-10-13 14:06  source
+
+	* Fixed undefined Inference rule error when rule created from graph
+	  created from SPARUL insert statement
+	* Fixed issue loading inf rules on cluster
+
+2011-10-13 14:00  source
+
+	* Added support to sql_bif_excerpt for using wide string
+
+2011-10-13 13:59  source
+
+	* Fixed memleak
+
+2011-10-13 13:58  source
+
+	* Fixed issue with fulltext indexing
+
+2011-10-13 13:56  source
+
+	* Fixed issue with bif:contains
+
+2011-10-13 13:54  source
+
+	* Fixed deadlock on attempt of qr_recompile during the run of
+	  SPARQL-to_SQL front-end
+
+2011-10-13 13:28  source
+
+	* Fixed http recording
+
+2011-10-13 13:27  source
+
+	* Fixed crash when array is bad
+
+2011-10-13 13:26  source
+
+	* Fixed function name in argument
+
+2011-10-13 13:11  source
+
+	* Fixed SSL verification context
+
+2011-10-13 13:00  source
+
+	* Added inproved support for inference and RDF views to "non-default"
+	  storages
+	* Added option to register pos-processing callbacks to DESCRIBE
+
+2011-10-13 12:54  source
+
+	* Added new BIF functions for handling dictionaries of triples
+
+2011-10-13 12:15  source
+
+	* Added iri range size setting
+
+2011-10-13 12:14  source
+
+	* Added new "mode" flag to TURTLE parser, so it adds source line
+	  numbers (and source text labels) to blank nodes of the parsed
+	  document
+
+2011-10-13 12:12  source
+
+	* Fixed check for DAV
+
+2011-10-13 11:09  source
+
+	* Added dbs id hash to log
+
+2011-10-13 11:05  source
+
+	* Fixed compiler warning
+
+2011-10-13 11:04  source
+
+	* Fixed private key protection
+
+2011-10-13 11:03  source
+
+	* Fixed checks
+
+2011-10-13 11:03  source
+
+	* Fixed inlist to mean equality, not a lt of the one_of_these call
+	  comparison
+
+2011-10-13 11:01  source
+
+	* Fixed label
+
+2011-10-13 11:00  source
+
+	* Fixed use cartridge if such is defined
+
+2011-10-13 10:59  source
+
+	* Fixed moved assignment before loop, as sqlerror can lead to a
+	  double free
+
+2011-10-13 10:58  source
+
+	* Fixed issue with foreignkey handling inside rdfview
+
+2011-09-28 17:04  source
+
+	* Rewrite HTML generation for /sparql endpoint
+
+2011-09-28 17:01  source
+
+	* Added new function virtuoso_ini_item_value which can read settings
+	  from the virtuoso.ini, without having to open/parse it for every
+	  request
+
+2011-09-27 09:42  source
+
+	* Fixed sql codegen for combination of SERVICE {} that binds a
+	  variable and OPTIONAL {} that uses it later, and the binding in
+	  SERVICE is the only non-nullable binding of that variable
+
+2011-09-27 09:40  source
+
+	* Fixed do not cache samples indefinitely
+
+2011-09-23 19:22  source
+
+	* Added initial support for filtering on value ranges
+	* Added new export formats
+	* Fixed MIME type for JSON-LD
+	* Fixed use lang for properties labels
+	* Fixed pretty-print query
+	* Fixed check for owl:Class
+	* Fixed label prefs and metadata
+	* Fixed footer
+
+2011-09-23 19:12  source
+
+	* Added extra mime types to accept header
+
+2011-09-23 15:20  source
+
+	* Fixed overflow in bif_date_diff
+
+2011-09-21 15:23  source
+
+	* FIxed do not make UNAMEs in SQL texts immortal
+
+2011-09-21 15:22  source
+
+	* Fixed must save IN list as it will be reset to 0 inside
+
+2011-09-21 13:27  source
+
+	* Fixed use len of the N leading chars represented as UTF8
+
+2011-09-21 13:23  source
+
+	* Added support for DV_BIN
+
+2011-09-20 12:03  source
+
+	* Fixed issues detecting images
+
+2011-09-20 11:58  source
+
+	* Fixed handling of sparql endpoint in Pivot permalink generation
+
+2011-09-19 13:37  source
+
+	* Fixed do not check byte-order on crash recovery replay
+
+2011-09-15 16:02  source
+
+	* Updated version to 6.1.4-rc1
+
+2011-09-15 10:42  source
+
+	* Fixed mem leaks
+
+2011-09-14 19:06  source
+
+	* Fixed uninitialized variable
+
+2011-09-14 15:38  source
+
+	* Fixed memory leaks
+
+2011-09-14 15:38  source
+
+	* Fixed valgrind warning when using DEBUG
+
+2011-09-13 14:50  source
+
+	* Fixed memory leaks
+
+2011-09-12 21:05  source
+
+	* Fixed GPF on optimization of DELETE/INSERT/MODIFY due to lists
+	  of known vars that were not deALIASed properly
+
+2011-09-12 20:08  source
+
+	* Added log when built-in procedure has duplicate in the db
+
+2011-09-12 20:04  source
+
+	* Fixed removed duplicate procedures
+
+2011-09-12 20:01  source
+
+	* Fixed crash
+
+2011-09-12 12:30  source
+
+	* Fixed mime type of JSON-ld to application/ld+json
+
+2011-09-12 11:02  source
+
+	* Updated documentation
+
+2011-09-12 10:52  source
+
+	* Fixed use available non-expiring access token
+	* Fixed drilldown through Posts (including posted links) to show
+	  associated comments
+	* Fixed removed oplcb:competitor property from its oplcb:competition
+	  wrapper and dropped latter
+	* Fixed use dbpedia:author property when handling books
+	* Fixed use string session with serialized XML for large csv files
+
+2011-09-12 10:47  source
+
+	* Added initial support for PHP 5.3
+
+2011-09-12 10:36  source
+
+	* Fixed indentation
+
+2011-09-12 10:28  source
+
+	* Fixed use shorter names
+
+2011-09-12 10:21  source
+
+	* Fixed WebID demo pages
+
+2011-09-09 14:09  source
+
+	* Updated documentation
+
+2011-09-09 13:30  source
+
+	* Fixed warning about uninitialized data
+
+2011-09-09 13:21  source
+
+	* Added option for explicit graph
+	* Fixed SyncML Folder Types in drop-down list
+	* Fixed labels
+
+2011-09-09 13:20  source
+
+	* Fixed do not remove trailing cr/lf
+
+2011-09-09 13:19  source
+
+	* Fixed issue when dirname is a blob
+
+2011-09-09 13:12  source
+
+	* Added dbpedia:author property when handling books
+	* Fixed ACL rule */* allows everybody
+	* Fixed Facebook auth
+	* Fixed use string session with serialized XML for large csv files
+	* Fixed map OpenLink Zillow ontology to geo:lat/long
+	* Fixed map oplog:likes_XXX property to like:likes
+
+2011-09-09 13:11  source
+
+	* Added support for switchable favicon to Sponger front page
+
+2011-09-09 12:51  source
+
+	* Fixed issues with linked data upload
+
+2011-09-09 11:16  source
+
+	* Added HTTP status codes in SPARQL graph store protocol
+
+2011-09-09 11:13  source
+
+	* Fixed issue with SPARUL LOAD INTO command creating duplicate graphs
+
+2011-09-09 00:10  source
+
+	* Fixed issue when pragma list was empty
+	* Fixed issues generating Pivot Permalink
+	* Fixed whitespace and stray > char from Raw formats line
+
+2011-09-08 18:54  source
+
+	* Fixed handling of GROUP BY and ORDER BY using expressions
+
+2011-09-08 15:29  source
+
+	* Fixed re-definition of a quad map that is a single user of a quad
+	  map format
+
+2011-09-08 15:28  source
+
+	* Fixed codegeneration issue with awk 4.0
+
+2011-09-08 12:51  source
+
+	* Fixed UI for sponger options
+
+2011-09-08 12:19  source
+
+	* Fixed issue with sparql LOAD from file
+
+2011-09-07 22:44  source
+
+	* Fixed crash running FILTER query containing IN clause with only
+	  one item in it
+	* Fixed issue with ORDER BY expression optimization
+
+2011-09-05 15:27  source
+
+	* Added test for empty graph result
+	* Added margins for RDF mini browser container
+	* Added check for existence of sparql_cxml to enable display of CXML
+	  result link
+	* Replaced default AJAX throbber with new OAT Notify
+	* Fixed undef variable causing dereference control malfunction
+	* Fixed layout bug causing the dereference mode control hiding behind
+	  a block
+
+2011-09-05 15:26  source
+
+	* Added support for replacing existing content on OAT.Notify.send
+
+2011-08-30 15:02  source
+
+	* Fixed issue with code generation using gawk 4
+
+2011-08-29 10:37  source
+
+	* Added Google Place cartridge
+	* Added Seatgeek cartridge
+	* Added API for selective sponging
+	* Added Google+ button
+	* Added menu item linking direct to 'How it Works'
+	* Fixed bug when offline_access=1 not present in OpenGraph cartridge
+	* Fixed access token requests now request permission to read user and
+	  friend checkins
+	* Fixed complete rdf boxes when looking for label
+	* Fixed lang use for comment
+	* Fixed missing block op
+	* Fixed minor issues
+
+2011-08-29 10:27  source
+
+	* Added support for anytime query (timeout) on virtuoso
+	* Added CSS for pushbar notify
+	* Fixed bug with updated maxrow value not being passed
+	* Fixed dereferencing preference dropdown disappearing when paging
+	  between results
+	* Fixed cosmetics
+
+2011-08-29 10:23  source
+
+	* Added support for oplzilw:latitude and longitude
+	* Fixed rdftabs notification to use PUSHBAR
+	* Fixed problem in geo coordinates detection
+
+2011-08-29 10:22  source
+
+	* Added new option to rdfmini to facilitate placing of view control
+	  outside its container
+
+2011-08-29 10:21  source
+
+	* Added new notification widget types PUSHBAR and BAR
+	* Added target class for notify content for skinning
+
+2011-08-29 10:19  source
+
+	* Added support for HEAD requests in AJAX
+
+2011-08-29 10:18  source
+
+	* Added limit to number of open statements
+
+2011-08-26 19:34  source
+
+	* Fixed if we have a wide string and want typed string we cast to utf-8
+
+2011-08-26 18:04  source
+
+	* Fixed /sparql/ endpoint to produce more accurate diagnostics for
+	  failed INSERT DATA statements
+
+2011-08-26 18:03  source
+
+	* Fixed timeout should be specified in miliseconds according to docs
+
+2011-08-26 17:59  source
+
+	* Added limit to number of open statements
+
+2011-08-26 17:57  source
+
+	* Added mem debug support for sqlp_box_id_upcase
+
+2011-08-26 17:55  source
+
+	* Fixed memory leak
+
+2011-08-26 10:58  source
+
+	* Fixed crash when un-expected array is passed as argument
+
+2011-08-26 10:57  source
+
+	* Fixed loading member functions of UDT that refer to XML namespace
+	  declarations and other items loaded after the loading of the UTD
+	  declaration
+
+2011-08-26 10:54  source
+
+	* Fixed issue with trim('test', null)
+
+2011-08-21 12:54  source
+
+	* Added initial code for timeout handling
+	* Added param to control the anchor mode, persisted in permalinks.
+	* Added anchor mode to pass the URL to /describe
+	* Added missing URI encoding in some generated links/queries
+	* Fixed "aliased" qtxt URL param
+	* Fixed re-enabled anchor mode to control what to do when dereferencing links.
+	* Fixed try to set values of nonexisting UI objects in /view
+	* Fixed visibility of footer in /view
+
+2011-08-21 12:52  source
+
+	* Fixed display of RDF store stats
+
+2011-08-21 12:51  source
+
+	* Fixed set default anchorMode back to 0
+
+2011-08-21 12:50  source
+
+	* Fixed footer background
+
+2011-08-21 12:50  source
+
+	* Added MSG MAP_NOTHING_TO_SHOW to rdftabs Map widget
+	* Added MAP_NOTHING_TO_SHOW to rdfmini by switching to default viewer
+	* Added references in map popups
+	* Added function to detect nodes that only contain coordinates
+	* Fixed bugs in getContent link generation
+	* Fixed removed attempt to resolve item references throught recursion
+	* Fixed drawMarker to extract properties from referencing node when node contains only
+	  coordinate data
+	* Fixed structure of rdftabs marker popups
+	* Fixed make properties list scrollable instead of whole window
+
+2011-08-21 12:34  source
+
+	* Rebuild drivers
+
+2011-08-21 12:33  source
+
+	* Removed deprecated functions and files
+
+2011-08-18 09:16  source
+
+	* Fixed connection leak in connection pool during long checkpoints
+
+2011-08-17 17:46  source
+
+	* Fixed memory leak in statement when using connectionpooling
+
+2011-08-17 17:36  source
+
+	* Rebuild drivers
+
+2011-08-17 17:20  source
+
+	* Rebuild driver
+
+2011-08-17 17:20  source
+
+	* Updated hibernate support to work with Hibernate 3.6.6-Final
+
+2011-08-15 15:30  source
+
+	* Fixed bad merge
+
+2011-08-14 14:48  source
+
+	* Fixed check for NULL IRI before printing
+
+2011-08-09 11:19  source
+
+	* Fixed indentation and whitespace
+
+2011-08-09 11:17  source
+
+	* Fixed missing namespave declarations
+
+2011-08-09 11:11  source
+
+	* Fixed minor issue
+
+2011-08-09 10:58  source
+
+	* Added SimpleGeo cartridge
+	* Added Eventful cartridge
+	* Fixed use standard properties for Latitude and Longitude
+	* Fixed use /about to sponge URL
+
+2011-08-03 11:36  source
+
+	* Added show photo in WebID login/registrer
+	* Fixed typo in messages
+	* Fixed facebook accounts
+
+2011-08-03 11:34  source
+
+	* Added missing files
+
+2011-08-01 14:19  source
+
+	* Added Twitter cartridge using OAuth and Twitter REST api
+	* Added XRD cartridge
+	* Added Google Profile cartridge
+	* Fixed use OG community page as starting point for facebook OpenGraph
+	  cartridge
+	* Fixed minor issues
+
+2011-08-01 14:17  source
+
+	* Added check for XML
+	* Fixed update must do delta and remove all entries which are not
+	  from this source
+
+2011-08-01 14:15  source
+
+	* Fixed SIOC data
+
+2011-08-01 14:13  source
+
+	* Updated CKeditor to version 3.6.1
+
+2011-08-01 14:12  source
+
+	* Added RDF links in header and head
+
+2011-08-01 14:12  source
+
+	* FIxed Delicious publish
+
+2011-08-01 14:09  source
+
+	* Fixed undefined function
+
+2011-08-01 14:08  source
+
+	* Added user/mail availablitiy action
+	* Added mail verification service
+	* Fixed WebID login and registration
+	* Fixed Facebook accounts
+	* Fixed order tabs and labels
+	* Fixed SIOC RDF links API functions
+
+2011-08-01 14:05  source
+
+	* Added ACL eXecute flag
+	* Fixed ACl issue with editing .acl file
+	* Fixed API functions
+
+2011-08-01 14:04  source
+
+	* Fixed encryption and signing
+	* Fixed security properties
+	* Fixed mail parameters
+
+2011-08-01 13:18  source
+
+	* Fixed throw away old content before starting execute
+
+2011-07-29 10:04  source
+
+	* Fixed debug code
+
+2011-07-29 10:03  source
+
+	* Fixed must redirect on OPTIONS
+
+2011-07-29 10:03  source
+
+	* Fixed calculate lenght before inserting the row
+
+2011-07-29 10:00  source
+
+	* Fixed unnamed GPF
+
+2011-07-20 15:56  source
+
+	* Added check for %nn
+
+2011-07-20 09:50  source
+
+	* Added Idp
+	* Added Domain check
+	* Added WebID
+
+2011-07-20 08:58  source
+
+	* Added Hyperpublic cartridge
+
+2011-07-20 08:56  source
+
+	* Added configuration option for page title
+
+2011-07-20 08:51  source
+
+	* Added webid_check option to control execution flag
+
+2011-07-20 08:51  source
+
+	* Fixed problems with big tokens
+
+2011-07-20 08:29  source
+
+	* Added support for dumping v5 in v6 log format
+
+2011-07-20 00:01  source
+
+	* Reverted merge from wrong branch
+
+2011-07-19 23:58  source
+
+	* Fixed DV_RDF serialization
+
+2011-07-19 23:43  source
+
+	* Fixed small issue for single engine
+
+2011-07-19 23:40  source
+
+	* Added new aggregate DB.DBA.GROUP_DIGEST which makes it possible
+	  to return part of big output of DB.DBA.GROUP_CONCAT without
+	  running out of row length limits
+
+2011-07-19 23:38  source
+
+	* Added support to call XPath/XQuery functions in SPARQL
+	* Added bif functions xpath_funcall and xpath_apply
+
+2011-07-19 23:34  source
+
+	* Fixed moved macros isdatechar, isfloatchar and inplainURIchar
+
+2011-07-19 23:33  source
+
+	* Added option 'exec_as_get' to http map
+	* Added support for SPARQL Graph CRUD
+
+2011-07-19 23:30  source
+
+	* Added function isfinitenumeric()
+
+2011-07-19 23:30  source
+
+	* Fixed memleak
+
+2011-07-19 23:29  source
+
+	* Fixed compiler warnings
+
+2011-07-19 23:27  source
+
+	* Added optimized codegen for built-in aggregate functions
+
+2011-07-19 23:26  source
+
+	* Fixed DV_RDF serializationo
+	* Added upgrade procedure for RDF_QUAD
+
+2011-07-19 19:36  source
+
+	* Added generic function to describe objects
+	* Fixed check to see if ssl is in effect
+	* Fixed use proper case as sparql is always using quoted identifiers
+
+2011-07-19 19:27  source
+
+	* Fixed bug in endpoint setting persistence
+	* Fixed visibility of pager in navigator
+	* Improved recovery from some proxy-AJAX-related errors
+
+2011-07-19 19:25  source
+
+	* Changed handling of anchors in map bubbles
+
+2011-07-15 11:17  source
+
+	* Added missing opl:provided by property
+
+2011-07-15 11:16  source
+
+	* Added option to set site logo in banner text
+	* Added new serialization format examples
+
+2011-07-15 11:15  source
+
+	* Added Seevl cartridge
+	* Added Guardian cartridge
+
+2011-07-15 11:15  source
+
+	* Fixed minor issue
+
+2011-07-15 11:07  source
+
+	* Added new export formats
+
+2011-07-15 11:06  source
+
+	* Added generation of CV from LinkedIn using the oplcv ontology
+
+2011-07-15 11:02  source
+
+	* Added OpenLink CV/Resume ontology
+
+2011-07-14 19:14  source
+
+	* Fixed use the actual length of the string in cli_utf82narrow not max len
+
+2011-07-13 19:09  source
+
+	* Added check for cert
+
+2011-07-12 14:46  source
+
+	* Fixed extra debugging
+
+2011-07-08 13:44  source
+
+	* Merged first part of V7
+
+2011-07-05 21:09  source
+
+	* Fixed GPF as stmt not available at this point
+
+2011-07-04 09:59  source
+
+	* Fixed XML escape data
+	* Fixed issues with mail addresses and encrypted mails
+
+2011-07-04 09:57  source
+
+	* Added header and head links for IRIs
+
+2011-07-04 09:56  source
+
+	* Added header and head procedures for IRI URLs
+	* Added new ODS rewrite rules
+	* Fixed get CA from connection if not set
+	* Fixed ACL using patterns
+	* Fixed default cert login
+	* FIxed take relevant webid
+	* Fixed Offers
+
+2011-07-04 09:54  source
+
+	* Added LinkedIn cartridge
+	* Added linkedIn access token
+	* Added Zoopla cartridge
+	* Added new pattern for Eventbrite
+	* Added support for acct scheme
+	* Adjustments to OpenGraph RDF mappings and additions to OpenGraph ontology
+	* Fixed Yelp cartridge
+	* Fixed minor issuesdded additional checks for RDFa
+	* Fixed use origin as a base, not graph
+	* Fixed protection against bad datetime offsets returned by OpenGraph
+
+2011-07-04 09:33  source
+
+	* Added loading NS prefixes into IRIDB through virtuoso defaults page
+
+2011-06-29 10:10  source
+
+	* Fixed cannot perform file_stat as it runs on a different node
+
+2011-06-27 19:45  source
+
+	* Added nsprefix and rulelist pages
+
+2011-06-27 11:24  source
+
+	* Fixed do not perform keyset update on non pk ref
+
+2011-06-24 19:05  source
+
+	* Added initial support for HTML+Microformat, Microformat/JSON and
+	  JSON-LD output formats
+
+2011-06-24 11:25  source
+
+	* Added result type detection
+	* Fixed SVG capability detection
+
+2011-06-24 11:25  source
+
+	* Fixed .isparql serialization in FF4 and IE9
+
+2011-06-24 11:24  source
+
+	* Fixed JSON output for native parsers
+
+2011-06-24 11:22  source
+
+	* Added prefix for http://www.w3.org/2002/07/owl# (owl:)
+	* Added prefix for http://www.openlinksw.com/schemas/rdfs/ (oplrdfs:)
+	* Fixed prefix handling in IRIDB, rdfstore and rdftabs
+
+2011-06-24 11:20  source
+
+	* Fixed MSIE detection in opacity anim
+
+2011-06-24 11:20  source
+
+	* Fixed handling of decoding url values with + instead of spaces
+
+2011-06-22 13:30  source
+
+	* Fixed no not crash when key is empty
+
+2011-06-22 13:29  source
+
+	* Fixed check for NULL pred
+
+2011-06-21 18:11  source
+
+	* Fixed make sure all required dfe are placed before making a decision
+
+2011-06-20 19:27  source
+
+	* Fixed replay as we need to take into account non txn mode
+
+2011-06-20 19:25  source
+
+	* Fixed memory leak
+
+2011-06-20 14:15  source
+
+	* Fixed cast to uint32 instead of long as this is a serialized type
+
+2011-06-17 15:21  source
+
+	* Fixed when sas, O is considered to be an iri
+
+2011-06-17 15:20  source
+
+	* Fixed if result is empty but input is same variable as input then
+	  pesumable we have distinct and have to send input
+
+2011-06-17 00:11  source
+
+	* Fixed placement of ifdef
+
+2011-06-16 22:53  source
+
+	* Added check for errors on bitmap insert
+
+2011-06-13 14:25  source
+
+	* Fixed if too many cursors, do not crash server, just kill txn
+
+2011-06-13 09:31  source
+
+	* Fixed "delayed" filters like
+	  ?x p1 ?o1 ; p2 ?o2 . optional { ... } . filter (?o1 = ?o2)
+
+2011-06-13 09:29  source
+
+	* Added function to backup index to log
+
+2011-06-11 16:41  source
+
+	* Added support for SQLQUERY syntax in declaration of RDF views
+	* Fixed SQL codegen bug in SPARQL queries of R2RML rewriter
+
+2011-06-11 16:39  source
+
+	* Fixed issue with variable argument list
+
+2011-06-11 16:28  source
+
+	* Fixed fill can get out of bounds
+
+2011-06-10 22:45  source
+
+	* Fixed disable debug code from standard binary
+
+2011-06-10 22:44  source
+
+	* Fixed skip rules which perform http redirect when doing a POST
+
+2011-06-10 21:39  source
+
+	* Fixed check if instance has trx and it has thread, else we do not
+	  run
+
+2011-06-09 17:41  source
+
+	* Fixed problem with non-existing item and get API function
+	* Fixed myA JS error
+
+2011-06-09 17:39  source
+
+	* Added tooltop for 'Language' property
+	* Fixed 'My Offers' typo
+	* Fixex get CA from connection if not set
+	* Fixed myA JS error
+	* Fixed error message
+	* Fixed check name when uload private key
+
+2011-06-09 17:26  source
+
+	* Fixed crash when trying to unbox non-boxed item from tree
+
+2011-06-09 15:32  source
+
+	* Added sponger splash page
+
+2011-06-09 15:29  source
+
+	* Added sponger splash page
+	* Fixed minor issues
+
+2011-06-09 13:27  source
+
+	* Added option to enable/disable ?P statistics
+
+2011-06-09 13:25  source
+
+	* FIxed added option to enable/disable ?P statistics
+
+2011-06-09 13:24  source
+
+	* Fixed memory leak
+
+2011-06-07 18:53  source
+
+	* Fixed compiler warning
+
+2011-06-07 18:52  source
+
+	* Added new functions
+
+2011-06-07 18:51  source
+
+	* Fixed if cannot ensure sas then return proper error not null
+
+2011-06-07 12:30  source
+
+	* Fixed print ins options
+
+2011-06-07 12:29  source
+
+	* Fixed issue with int32 stats
+
+2011-06-06 08:06  source
+
+	* Added function to create certificate from CSR
+
+2011-06-06 08:02  source
+
+	* Fixed memory leaks
+
+2011-06-03 15:13  source
+
+	* Fixed memory leak
+
+2011-06-02 12:32  source
+
+	* Fixed bad URL in typeahead.css
+	* Fixed issue with external ccount creation
+	* Fixed WebDAV selection
+
+2011-06-02 12:25  source
+
+	* Fixed iCalendar parser
+
+2011-06-02 12:24  source
+
+	* Added daylight saving time
+	* Fixed issue with validation
+	* Fixed WebDAV selection
+
+2011-06-02 12:22  source
+
+	* Fixed WebDAV selection
+
+2011-06-02 12:22  source
+
+	* Fixed issue with validation
+	* Fixed WebDAV selection
+
+2011-06-02 12:21  source
+
+	* Fixed issue with validation
+	* Fixed WebDAV selection
+	* Fixed uninstall some views
+
+2011-06-02 12:20  source
+
+	* Added user's rewrite rules
+	* Added WebID verify service
+
+2011-06-02 12:08  source
+
+	* Added ProgrammableWeb cartridge
+
+2011-06-02 12:08  source
+
+	* Fixed minor issue
+
+2011-06-02 11:18  source
+
+	* Fixed check vdb col for nullable
+
+2011-06-01 09:20  source
+
+	* Fixed signal error instead of GPF in normal build
+
+2011-05-31 15:34  source
+
+	* Fixed set rehash factor if expecting large number of inserts in hash
+
+2011-05-31 15:33  source
+
+	* Added function for CSR generation
+
+2011-05-31 15:32  source
+
+	* Fixed use max number to avoid buffer overrun
+
+2011-05-30 20:19  source
+
+	* Fixed translation from nodeiD://xxx to _:xxx
+
+2011-05-30 20:17  source
+
+	* Fixed issue with cost based optimizer
+
+2011-05-24 18:57  source
+
+	* Fixed when iri exceeds 2KB limit and flag is enabled then shorten
+	  the iri, instead of rejecting it
+
+2011-05-24 18:56  source
+
+	* Fixed loop so it only uses local files
+
+2011-05-23 13:44  source
+
+	* Added initial support for SPARQL 1.1. build-in IF and COALISCE
+
+2011-05-23 11:24  source
+
+	* Fixed minor issue
+
+2011-05-23 11:23  source
+
+	* Fixed LastFM cartridge
+
+2011-05-23 09:02  source
+
+	* Added support for CREATE LITERAL CLASS "format string" ...
+
+2011-05-20 16:20  source
+
+	* Fixed WebID selection
+
+2011-05-20 16:20  source
+
+	* Fixed use certificate to verify the signature as an option
+	* Fixed use ldap&webid login
+
+2011-05-20 16:11  source
+
+	* Fixed add sponger ACL when installed
+
+2011-05-20 12:01  source
+
+	* Fixed comments
+
+2011-05-20 12:00  source
+
+	* Added support for WebID idp
+	* Fixed WebID selection
+
+2011-05-20 11:51  source
+
+	* Added csv bulk loader script
+
+2011-05-20 11:46  source
+
+	* Fixed CSV import failed importing NULL values
+
+2011-05-20 11:44  source
+
+	* Fixed dav_enable should not be touched for dba account
+
+2011-05-19 18:32  source
+
+	* Fixed NULL value is not an error in lax mode
+
+2011-05-19 18:22  source
+
+	* Fixed wrong arg
+
+2011-05-19 13:34  source
+
+	* Added ldap schema support to WebID
+
+2011-05-19 13:15  source
+
+	* Added version and timeout argument
+
+2011-05-19 13:11  source
+
+	* Fixed duplicate symbol
+
+2011-05-19 10:17  source
+
+	* Fixed API contact edit function
+
+2011-05-19 09:58  source
+
+	* Fixed compiler warning
+
+2011-05-19 09:57  source
+
+	* Fixed add user to bootstrap as it can run procs in this context
+
+2011-05-18 21:15  source
+
+	* Fixed SIOC object services
+
+2011-05-18 21:12  source
+
+	* Fixed install/uninstall bugs
+
+2011-05-18 09:19  source
+
+	* Added Eventbrite cartridge
+	* Fixed guard against using revoked long-lived FB access token
+
+2011-05-18 09:10  source
+
+	* Added instructions on revoking access tokens to FB on retrieval
+	  confirmation page
+
+2011-05-18 09:09  source
+
+	* Fixed issue with properties
+
+2011-05-18 09:01  source
+
+	* Added Upcoming cartridge
+	* Added Plancast cartridge
+	* Fixed use labels by default
+	* Fixed remove pro
+	* Fixed minor issues
+
+2011-05-17 22:53  source
+
+	* Added SIOC object services
+	* Fixed problem with edit command and Wiki version folders
+	* Fixed version history properties
+	* Fixed move/copy API with wrong source/destination
+	* Fixed problems with WebID
+
+2011-05-17 22:51  source
+
+	* Added SIOC object services
+	* Fixed IE JS problems
+	* Fixed UI bug
+
+2011-05-17 22:50  source
+
+	* Added SIOC object services
+	* Fixed changing/deleting events does not trigger re-sync with publication
+	* Fixed import/export bug
+	* Fixed IE JS problems
+
+2011-05-17 22:48  source
+
+	* Added SIOC object services
+	* Added annotation rules
+	* Fixed navigation and UI
+	* Fixed css
+	* Fixed IE bug
+	* Fixed UI bug
+
+2011-05-17 22:46  source
+
+	* Added SIOC object services
+	* Fixed IE bug
+	* Fixed UI bug
+
+2011-05-17 22:45  source
+
+	* Fixed IE JS problems
+	* Fixed UI bugs
+
+2011-05-17 22:44  source
+
+	* Added SIOC object services
+
+2011-05-17 22:43  source
+
+	* Fixed issue with Wiki after delete and restore VVC folder
+
+2011-05-17 22:42  source
+
+	* Added SIOC object services
+	* Fixed a++
+
+2011-05-17 21:14  source
+
+	* Fixed compiler warnings
+
+2011-05-17 14:06  source
+
+	* Added optimization for %g specifier for "Decimal" types in RDFViews
+
+2011-05-17 13:51  source
+
+	* Rebuild drivers
+
+2011-05-17 13:48  source
+
+	* Added function to get/set Query timeout (default = 0 = unlimited)
+
+2011-05-16 09:04  source
+
+	* Added initial support for SPARQL 1.1 Graph Store HTTP Protocol
+
+2011-05-16 08:51  source
+
+	* Fixed usage of http_request_header
+	* Fixed useage of last modified
+
+2011-05-16 08:50  source
+
+	* Fixed empty subject
+	* Fixed WebID selection
+	* Fixed problem with certificate generation using Safari on windows
+	* Fixed topic of interests
+	* Fixed a++
+
+2011-05-16 08:35  source
+
+	* Fixed setting name
+
+2011-05-16 08:34  source
+
+	* Fixed entry page for sponged Facebook user's profile to top level
+	  container document
+
+2011-05-12 20:53  source
+
+	* Fixed compiler warning
+
+2011-05-12 20:53  source
+
+	* Added more system unames
+
+2011-05-11 14:49  source
+
+	* Fixed small issue
+
+2011-05-11 13:32  source
+
+	* Fixed issue compiling zip support on Mac OS X
+
+2011-05-11 13:19  source
+
+	* Fixed typo in Content-Type header
+
+2011-05-11 13:15  source
+
+	* Added missing file
+
+2011-05-11 13:11  source
+
+	* Fixed rdf_sink is not a DET
+
+2011-05-11 13:09  source
+
+	* Added more parameters for crawling
+	* Fixed top proc must run as dba
+	* Fixed use array for values
+
+2011-05-11 09:39  source
+
+	* Added WebID support to dynares
+	* Added optional async mode for dav meta extraction
+
+2011-05-11 08:08  source
+
+	* Added missing files
+
+2011-05-10 18:57  source
+
+	* Fixed write processing status to sponger queue
+	* Fixed access tokens for OpenGraph cartridge save/restore from table
+	  instead of the API key
+
+2011-05-10 18:43  source
+
+	* Fixed access tokens for OpenGraph cartridge save/restore from table
+	  instead of the API key
+
+2011-05-10 18:42  source
+
+	* Fixed minor issues
+
+2011-05-10 18:40  source
+
+	* Fixed disabled pg_check_map by default to make cpt faster
+
+2011-05-10 18:37  source
+
+	* Fixed disable pg_check_map by default to make cpt faster
+
+2011-05-10 12:20  source
+
+	* Fixed myust set sl_owner before cpt_rollback in order to know which
+	  thread owns the process, otherwise other threads may wrongly go
+	  inside the wait_checkpoint
+
+2011-05-10 12:18  source
+
+	* Added initial support for B.C. datetimes
+	* Added new functions to convert datetime from/to NASA Truncated
+	  Julian Day
+	* Fixed bug in date2num and num2date
+
+2011-05-09 12:06  source
+
+	* Fixed internal error in sparql_detalize on SPARUL statement
+
+2011-05-09 12:05  source
+
+	* Added new statistic counters
+
+2011-05-08 22:24  source
+
+	* Added GROUP_CONCAT and SAMPLE
+
+2011-05-08 22:23  source
+
+	* Added common function to set certificate server-side
+
+2011-05-08 22:18  source
+
+	* Added option to use certificates stored in the db
+
+2011-05-06 11:34  source
+
+	* Fixed call to sponger status procedure
+
+2011-05-05 12:55  source
+
+	* Fixed do not use aq if in sponger queue
+
+2011-05-05 12:54  source
+
+	* Fixed print literals with meta info only when html is requested
+
+2011-05-03 18:00  source
+
+	* Fixed workaround for missing offers
+
+2011-05-03 18:00  source
+
+	* Fixed minor issue
+
+2011-05-03 17:55  source
+
+	* Fixed compiling on VC10
+
+2011-05-03 17:51  source
+
+	* Fixed function signature for windows build
+
+2011-05-03 17:50  source
+
+	* Fixed error checking
+
+2011-05-03 14:03  source
+
+	* Added check for native JSON serializer/deserializer when available
+	* Fixed detection of buggy XML serializer in IE9
+	* Fixed MSIE detection
+	* Fixed SVG detection in OAT.Browser
+
+2011-05-03 11:50  source
+
+	* Fixed set rehash pct
+
+2011-05-03 11:15  source
+
+	* Fixed SPARQL OPTIONAL keyword sometimes causing queries to not
+	  return graph matches
+
+2011-05-02 14:16  source
+
+	* Added app discussion rules
+	* Added annotation rules
+	* Added common css
+	* Fixed navigation and standardize UI
+	* Fixed updating external URIs access rights in UI profile
+	* Fixed missing webfinger lookup
+	* Fixed OpenId not registered id message
+	* Fixed user selection page size
+	* Fixed popup windows
+	* Fixed security tab
+
+2011-05-02 14:09  source
+
+	* Added support for social bookmarking
+	* Fixed use 404 when no data is found
+	* Fixed links in footer
+	* Fixed escape the single quote char
+
+2011-05-02 14:06  source
+
+	* Fixed labels
+
+2011-05-02 14:02  source
+
+	* Fixed links
+
+2011-05-02 12:48  source
+
+	* Fixed popup windows
+
+2011-05-02 12:44  source
+
+	* Added annotation rules
+	* Added discussion IRIs
+	* Fixed navigation and standardize UI
+	* Fixed popup windows
+
+2011-05-02 12:30  source
+
+	* Added option to obtain a Facebook OAuth access token for use with
+	  sponger cartridge
+	* Fixed group export and delete of crawling targets
+	* Fixed crawling feeds, parameters for crawling
+	* Fixed disable config if no https
+	* Fixed shorten queue description
+
+2011-05-02 12:22  source
+
+	* Added Gowalla cartridge
+	* Added Productontology
+	* Added Google Product
+	* Updated Facebook cartridge with multiple access tokens
+	* Fixed do not print empty container string if there is no name
+
+2011-05-02 08:24  source
+
+	* Fixed col_default to be same dtp as col_dtp to prevent default value
+	  misuse
+
+2011-05-02 08:23  source
+
+	* Fixed wrong deref of default int value
+
+2011-04-29 11:56  source
+
+	* Fixed when redirect is to secure site, setup the appropriate flags
+
+2011-04-26 12:16  source
+
+	* Fixed loading TriG
+
+2011-04-26 12:14  source
+
+	* Fixed loading NQuads
+
+2011-04-26 12:13  source
+
+	* Fixed check webid only if not uathenticated
+
+2011-04-21 13:09  source
+
+	* Added session counters for read/write/seek on gzip file
+
+2011-04-21 11:41  source
+
+	* Upgraded to zlib 1.2.5
+
+2011-04-20 15:12  source
+
+	* FIxed hang or crash after cpt over
+
+2011-04-20 15:12  source
+
+	* Fixed disable dep cols check
+
+2011-04-20 15:11  source
+
+	* Added debug code to detect mutex hang on same thread
+
+2011-04-19 20:50  source
+
+	* Fixed lock status report
+
+2011-04-19 20:49  source
+
+	* Fixed key dep cols check for sample
+
+2011-04-19 16:16  source
+
+	* Fixed bad bnode syntax in output
+
+2011-04-19 16:15  source
+
+	* Added session read waits statistic
+
+2011-04-18 16:03  source
+
+	* Fixed default mode for sponger should be sync instead of async
+
+2011-04-18 16:03  source
+
+	* Fixed http_lock requires that maintenance page is set
+
+2011-04-18 16:02  source
+
+	* Added statistics on read/write/seek session via file/gzip counters
+
+2011-04-15 12:42  source
+
+	* Added deadlock retry handler
+	* Added support to use redirect and timeout options
+
+2011-04-15 12:39  source
+
+	* Added Foursquare cartridge
+	* Added Zappos cartridge
+	* Added enhancements to Facebook OpenGraph cartridge
+	* Fixed minor issues
+
+2011-04-15 12:33  source
+
+	* Added "Raw linked data format" permalinks
+	* Fixed CSS
+
+2011-04-15 12:05  source
+
+	* Fixed codegen for service invocation for case of IN parameter
+	  that is not bound in SINV subquery (used only in filter) and is
+	  neither external/global nor fixed in parent group pattern
+
+2011-04-15 12:04  source
+
+	* Fixed support for xsd:time() in sparql when the argument value
+	  is safe for SQL CASET instead of function call
+
+2011-04-13 22:51  source
+
+	* Added initial variant for estimate taking dep cols in account
+	  (by default disabled)
+
+2011-04-13 22:50  source
+
+	* Added missing param for http_get
+
+2011-04-13 10:16  source
+
+	* Fixed if tf_xx signals an error, xn_children were released twice
+
+2011-04-12 18:29  source
+
+	* Fixed check bnode subject
+	* Fixed clear avalues array before possible jump
+	* Fixed compiler warnings
+
+2011-04-11 21:44  source
+
+	* Fixed do not report a frequent error re unescaped "&&" in <SCRIPT>
+	  HTML tag
+	* Fixed can jump over buffer boundary if you have an &xx not ending
+	  in a semicolon
+
+2011-04-11 21:42  source
+
+	* Added option top copy/clone crawler target
+	* Added option for crawl-delay
+
+2011-04-11 21:39  source
+
+	* Added support for crawl-delay
+
+2011-04-11 21:01  source
+
+	* Fixed removed leading CRLF
+
+2011-04-11 21:01  source
+
+	* Fixed wrong function call
+	* Fixed bad inference tag
+
+2011-04-11 20:55  source
+
+	* Fixed error message in spar_find_sc_for_big_ssl_const
+
+2011-04-11 20:54  source
+
+	* Added support for RDFa 1.1
+
+2011-04-11 20:53  source
+
+	* Fixed compiler warnings
+
+2011-04-11 15:36  source
+
+	* Added DB.DBA.RDF_RDFA11_FETCH_PROFILES() to sponge and return
+	  RDFa 1.1 external profile data
+
+2011-04-11 15:35  source
+
+	* Added rdfa: namespace prefix
+
+2011-04-11 15:05  source
+
+	* Added w3-1999-xhtml/vocab for RDFa 1.1
+
+2011-04-11 09:15  source
+
+	* Fxed issue with rdf_type attr
+
+2011-04-11 08:28  source
+
+	* Fixed double free
+
+2011-04-11 08:27  source
+
+	* Added support for trig
+
+2011-04-11 08:27  source
+
+	* Fixed check if file is present on local fs
+
+2011-04-07 21:19  source
+
+	* Added function to validate rdfxml
+
+2011-04-07 21:17  source
+
+	* Fixed do not flush immediately, as client may ask for gzip later
+
+2011-04-07 21:16  source
+
+	* FIxed if bitmap error on a cursor, kill the transaction instead of GPF
+
+2011-04-07 11:11  source
+
+	* Fixed if process is swapping do not try to signal self as lock reaper
+	  may decide to kill this transaction where it may wait for select
+	  thread to run its signal function
+
+2011-04-06 12:09  source
+
+	* Fixed issue with multiple transitive subqueries in sql optimizer
+
+2011-04-06 12:01  source
+
+	* Fixed when doing subseq, session will return session handle, which
+	  needs to be converted to string
+
+2011-04-05 14:38  source
+
+	* Fixed issues with RDFa 1.1 test
+
+2011-04-05 14:37  source
+
+	* Fixed possible mutex deadlock
+
+2011-04-04 12:32  source
+
+	* Added support for javascript-like hrefs in RDFa
+
+2011-04-04 12:31  source
+
+	* Fixed when not a string, use a cast to string
+
+2011-04-04 12:31  source
+
+	* Fixed use mtx in proper order
+
+2011-03-31 21:33  source
+
+	* Fixed issues with RDFa parsing
+
+2011-03-31 21:32  source
+
+	* Added check for MacDataSourceSize with default of 20MB
+
+2011-03-29 23:20  source
+
+	* Updated version to 6.1.3 for final release
+
+2011-03-29 22:55  source
+
+	* Fixed do not check immutable graph when dba is running
+
+2011-03-29 22:52  source
+
+	* FIxed minor issue
+
+2011-03-29 22:52  source
+
+	* FIxed ACL
+
+2011-03-29 22:49  source
+
+	* Fixed minor issue with prices
+
+2011-03-29 22:46  source
+
+	* Fixed swapped menu items
+
+2011-03-29 22:43  source
+
+	* Fixed use INFORMATION_SCHEMA.TABLES
+
+2011-03-29 21:08  source
+
+	* Fixed menu layout
+
+2011-03-29 20:14  source
+
+	* Fixed JS IE bug on profile page
+	* Small code cleanup
+
+2011-03-29 14:06  source
+
+	* Fixed typo in Makefile.am
+
+2011-03-29 12:45  source
+
+	* Fixed put absolute path for database in default virtuoso.ini
+
+2011-03-29 11:02  source
+
+	* Added alt to images in rdftab
+
+2011-03-29 10:58  source
+
+	* Fixed tuned handling of page params
+	* Fixed permalinks now encode information of which editor was used
+	  to produce the query
+
+2011-03-29 10:53  source
+
+	* Fixed must return error when cast fails
+
+2011-03-29 10:53  source
+
+	* Fixed issue with sparql filter with two optionals
+
+2011-03-29 00:31  source
+
+	* FIxed issue locating jvm runtime library location on linux x86_64
+
+2011-03-29 00:09  source
+
+	* Fixed build issue when prerequisite support .jar files not present
+
+2011-03-28 23:11  source
+
+	* Fixed check for demo data before continuing
+
+2011-03-28 17:29  source
+
+	* Added configure option for enabling mutex debugging
+
+2011-03-28 16:04  source
+
+	* Fixed dependency for VOS
+
+2011-03-28 15:56  source
+
+	* Rolled back previous patch
+
+2011-03-28 13:52  source
+
+	* Added missing files to distribution
+
+2011-03-28 12:57  source
+
+	* Fixed minor layout issue
+
+2011-03-28 12:53  source
+
+	* Added support for posh triples
+
+2011-03-28 12:52  source
+
+	* Fixed labels
+
+2011-03-28 12:22  source
+
+	* Fixed allow varbinary as input for obj
+
+2011-03-26 14:22  source
+
+	* Fixed user's pages to start with profile page
+
+2011-03-26 14:21  source
+
+	* Fixed skin handling
+
+2011-03-25 21:33  source
+
+	* Updated version
+
+2011-03-25 21:29  source
+
+	* Updated build environment for win32 and win64
+
+2011-03-25 17:47  source
+
+	* Fixed possible copy overlap on some newer C libs
+
+2011-03-25 16:23  source
+
+	* Fixed vcard handling
+
+2011-03-25 16:19  source
+
+	* Fixed encoding
+
+2011-03-25 15:10  source
+
+	* Updated testsuite
+
+2011-03-25 12:20  source
+
+	* Fixed if there is no subclass/property but there is an equivalent,
+	  then use that as the statrt point, otherwise we would not get a
+	  result
+
+2011-03-24 16:15  source
+
+	* Added bulk-loader to virtuoso binary
+
+2011-03-24 16:04  source
+
+	* Updated documentation
+
+2011-03-24 15:50  source
+
+	* Fixed do now use daq because rdf_label has two keys and soft
+	  does not work
+	* Fixed use labels if not curie or uri
+	* Fixed issue with recent dbpedia onthology
+	* Fixed labels
+	* Fixed auto-complete failed when exact match & prefix found
+
+2011-03-24 15:47  source
+
+	* Fixed use labels for IRIs only
+	* Fixed use special describe mode to avoid empty results
+	* Fixed error handling
+	* Fixed keep sas & inf
+	* Fixed bad encoding
+	* Fixed proper escape for uris
+	* Fixed wrong labels
+
+2011-03-24 13:48  source
+
+	* Fixed additional xml document parser error handling for Opera
+
+2011-03-23 16:45  source
+
+	* Added function to format rdf object for printing in html
+
+2011-03-23 12:25  source
+
+	* Fixed typo
+
+2011-03-23 12:17  source
+
+	* Added LinkedIn import
+	* Fixed duplicate addressbook entries issue
+
+2011-03-23 12:13  source
+
+	* Added rdfs schema
+	* Fixed datetime format
+	* Fixed minor issues
+
+2011-03-23 12:13  source
+
+	* Added more properties
+
+2011-03-23 12:13  source
+
+	* Fixed minor issues
+
+2011-03-23 12:03  source
+
+	* Added more options for exporting a site
+	* Added more delimiters
+	* Fixed folder DET type presentation
+	* Fixed export as text
+
+2011-03-23 12:01  source
+
+	* Fixed wrong serialization of VirtuosoExplicitString when it is
+	  binding with DV_ANY parameter
+
+2011-03-23 11:05  source
+
+	* Rebuild drivers
+
+2011-03-23 11:04  source
+
+	* Fixed issue with using _JAVA_ on sparql select
+
+2011-03-23 10:49  source
+
+	* Fixed duplicate addressbook entries issue
+
+2011-03-23 10:48  source
+
+	* Fixed broken show filter
+
+2011-03-23 10:48  source
+
+	* Fixed feeds aggregator
+
+2011-03-23 10:47  source
+
+	* Updated folder type list with 'Dynamic Resource'
+
+2011-03-23 10:37  source
+
+	* Added support for DV_RDF in v:isql rendering
+
+2011-03-23 10:35  source
+
+	* Added custom UA
+	* Fixed gunzip the zipped rdfs
+	* Fixed large pages in results
+
+2011-03-23 10:33  source
+
+	* Improved session persistence
+	* Fixed handling of XML+RDF parsing errors
+	* Fixed bugs in query cache handling/paging
+	* Fixed Cosmetics in "Raw triples" view
+	* Fixed Default view set as "Advanced" in query permalinks
+	* Fixed URL params handling so they always take precedence from
+	  persisted session
+	* Fixed bug in menu item to Reset session
+
+2011-03-23 10:28  source
+
+	* Added code to facilitate better error recovery when parsing
+	  invalid RDF+XML
+	* Fixed small code cosmetics
+
+2011-03-22 23:50  source
+
+	* Fixed missing globals
+
+2011-03-21 13:30  source
+
+	* Fixed missing variable initialization
+
+2011-03-21 10:44  source
+
+	* Fixed check if subselect has a recursive ref
+
+2011-03-18 10:51  source
+
+	* Fixed use new pages & disk reads to trigger the startup values
+
+2011-03-17 16:30  source
+
+	* Added lax mode in csv import
+
+2011-03-17 13:55  source
+
+	* Fixed when removing a join from outer's branches, do that repeatedly
+	  to remove all not needed. The recursion is done via sqlo_scope in
+	  order to get new labels for columns in select list, so process does
+	  not get confused by moving left part into FROM
+
+2011-03-17 13:53  source
+
+	* Fixed when compiling a shared query, we must have a reset context
+	  as it may jump from compiler outside of shared cache and leave
+	  a mutex locked, thus eventually can get hang
+
+2011-03-16 10:34  source
+
+	* Fixed issue with partial index when no path is followed
+
+2011-03-14 15:52  source
+
+	* Fixed return byte[] data from column with datatype = DV_ANY
+
+2011-03-14 15:47  source
+
+	* Fixed disable debug messages
+
+2011-03-14 15:46  source
+
+	* Fixed use dv_bin where needed like for dav-res
+
+2011-03-12 00:17  source
+
+	* Fixed increase delay on sequential deadlock
+
+2011-03-12 00:17  source
+
+	* Fixed labels
+
+2011-03-11 18:26  source
+
+	* Fixed use exclusive locks when doing sparul ops
+
+2011-03-11 13:08  source
+
+	* Fixed comment about missing io sect
+
+2011-03-11 13:08  source
+
+	* Added retry deadlock if session is not flushed
+
+2011-03-11 13:07  source
+
+	* Fixed do not do read ahead with less than 10k buffers available
+
+2011-03-11 12:17  source
+
+	* Fixed if no free buffer available, signal an error
+
+2011-03-11 11:28  source
+
+	* Fixed do not do read-ahead on extent map
+
+2011-03-10 23:24  source
+
+	* Added index to search over label text
+
+2011-03-09 16:41  source
+
+	* FIxed _java_ should not have effect on select
+
+2011-03-08 15:46  source
+
+	* Fixed labels in value side
+	* Fixed pages to pass W3C validator (mostly)
+	* Fixed check for integers
+	* FIxed xml excape will happen on <?V use
+
+2011-03-08 15:44  source
+
+	* Fixed hide value ranges option for now
+
+2011-03-08 15:43  source
+
+	* Fixed copyright year
+
+2011-03-08 14:32  source
+
+	* Added missing files to distribution
+
+2011-03-08 13:56  source
+
+	* Added workaround to tell _JAVA_ driver the input is string as it is
+	  confused on DV_ANY and breaks utf-8 support
+
+2011-03-08 13:44  source
+
+	* Added quick rule to check version string
+
+2011-03-08 13:44  source
+
+	* Rebuild driver
+
+2011-03-08 13:44  source
+
+	* Fixed only allow URI or Blank nodes as subjects
+
+2011-03-08 13:38  source
+
+	* Added additional crawler params
+	* Fixed show status without errors
+	* Fixed label
+
+2011-03-08 13:36  source
+
+	* Added Described By
+	* Added ProductWiki cartridge
+	* Fixed do not use triple dicts on long files
+	* Fixed OWL
+	* Fixed labels
+	* Fixed minor issues
+
+2011-03-08 13:24  source
+
+	* Updated to CKeditor version 3.5.2
+
+2011-03-08 13:08  source
+
+	* Added map markers for various types of things
+	* Added a smaller throbber animated gif
+	* Fixed resizing issue for mobile browsers
+	* Fixed bug in processing item title HREFs in map popup
+	* Fixed bugs in marker selection code using rtb:useMarker
+
+2011-03-08 12:48  source
+
+	* Fixed mime types
+	* Fixed mail rendering
+
+2011-03-08 12:47  source
+
+	* Fixed attendees
+
+2011-03-08 12:47  source
+
+	* Fixed Twitter and LinkedIn registration/login
+	* Fixed RDF object properties
+	* Fixed UI
+	* Fixed escape params
+	* Fixed scroll bars
+
+2011-03-08 12:35  source
+
+	* Added support for AddThis
+	* Added manual mode for entering location when automatic location fails
+	* Added more geocoding support
+	* Fixed location timeout to 10 sec
+	* Fixed location popup
+	* Fixed text when Javascript is not enabled
+	* Fixed bug in management of user settings
+	* Fixed bugs in session persistance
+
+2011-03-08 12:24  source
+
+	* Fixed debug defines
+
+2011-03-08 12:19  source
+
+	* Added support for robots.txt
+
+2011-03-08 12:18  source
+
+	* Fixed update crawler entries using id and avoid table scans
+
+2011-03-08 11:52  source
+
+	* Fixed size of input buffer of an XML parser is now adaptive
+
+2011-03-08 10:38  source
+
+	* Updated version to 6.1.3-rc7
+
+2011-03-07 21:49  source
+
+	* Fixed when there is a gb node, test the sort node for dep part in
+	  the sort spec
+
+2011-03-05 00:03  source
+
+	* Updated documentation
+
+2011-03-04 14:46  source
+
+	* Fixed moved mutex lock/unlock calls to avoid deadlock
+
+2011-03-03 17:12  source
+
+	* Added read-ahead on extent
+
+2011-03-03 17:10  source
+
+	* Fixed immutable graph setting can be a pattern, so we can disable
+	  sponging on all graphs
+
+2011-03-03 11:56  source
+
+	* Fixed DATETIME to DATE conversions
+
+2011-03-02 12:24  source
+
+	* Fixed issue with special sparql variables
+
+2011-03-02 12:24  source
+
+	* Fixed issue with qualifier in SQLForeignKeys
+
+2011-03-01 19:35  source
+
+	* Fixed initialization of defaults
+
+2011-03-01 19:32  source
+
+	* Fixed set HTTP status to 503 when showing maintenance page and
+	  added a Retry-After: 1800 (seconds) header as a hint to the remote
+
+2011-02-28 17:02  source
+
+	* Fixed issue if data did not generate prefix2iri hash
+
+2011-02-28 13:47  source
+
+	* Fixed check for 5xx or 4xx status codes
+
+2011-02-26 08:35  source
+
+	* Added http maintenance functions
+
+2011-02-25 17:31  source
+
+	* Fixed only start from the beginning when there is a thread else we
+	  could get into a busy loop
+
+2011-02-23 21:35  source
+
+	* Fixed bad regexp
+
+2011-02-23 17:31  source
+
+	* Fixed size of input buffer of an XML parser is made adaptive
+
+2011-02-21 13:36  source
+
+	* Added support for named parameters
+
+2011-02-20 16:14  source
+
+	* Fixed increase the size of the input buffer of the TURTLE lexer
+	  for file resources, in order to improve disk access pattern if many
+	  resources are loaded in parallel
+
+2011-02-18 15:49  source
+
+	* Updated version to 6.1.3-rc6
+
+2011-02-18 15:49  source
+
+	* Fixed issue with scalar subq with SSG_VALMODE_NUM output as in TPCD
+
+2011-02-18 15:37  source
+
+	* Updated version
+
+2011-02-18 15:36  source
+
+	* Added language and type options for offers
+
+2011-02-18 15:32  source
+
+	* Fixed issues with map sizing
+
+2011-02-18 15:30  source
+
+	* Fixed rdftab height for maps
+
+2011-02-18 11:19  source
+
+	* Added initial codegen for ASK subquery
+	* Fixed issue with sponging options and DESCRIBE on /sparql endpoint
+
+2011-02-18 11:16  source
+
+	* Fixed "serialize" debugging output of many threads and label
+	  messages of different threads
+
+2011-02-18 11:14  source
+
+	* Added better support of "seealso" predicate in case of recursive
+	  sponging
+
+2011-02-18 10:37  source
+
+	* Fixed use mem pool to release all objects if an error occurs
+
+2011-02-18 10:24  source
+
+	* Regenerated drivers
+
+2011-02-18 10:24  source
+
+	* Fixed issue with closing XAConnection and connectionpool
+
+2011-02-17 15:23  source
+
+	* Fixed more log info
+
+2011-02-16 21:08  source
+
+	* Updated documentation
+
+2011-02-16 20:55  source
+
+	* Fixed iSPARQL icons placed on Home screen on iPhone/iPod now have the
+	  WebApp appearance (i.e. no URL bar, etc. controls.)
+	* Fixed a regression causing reappearance of Ubiq gem on non-firefox browsers
+	* Fixed missing message candlers for geocoding module
+	* Disabled buggy location UI absorbing into statusui
+	* Improved formatting of errors in response tab somewhat
+
+2011-02-16 20:53  source
+
+	* FIxed avoid long URLs to generate wacky error
+
+2011-02-16 20:51  source
+
+	* Fixed missing line
+
+2011-02-16 17:33  source
+
+	* Fixed offers SIOC data
+
+2011-02-16 17:32  source
+
+	* Fixed if no svc and FF then show generator page
+
+2011-02-16 17:32  source
+
+	* Fixed typo
+
+2011-02-16 17:31  source
+
+	* Fixed missing case
+
+2011-02-16 17:25  source
+
+	* Fixed status controls
+
+2011-02-16 17:25  source
+
+	* Fixed proper position
+
+2011-02-16 17:20  source
+
+	* Added support for map marker URLs in OAT.RDFTabs.map
+	* Fixed OAT.RDFTab.map control height on iPhone
+	* Fixed bug causing OAT.RDFTABs.navigator layout flowing into footer
+	* Fixed navigator layout
+
+2011-02-16 17:16  source
+
+	* Fixed separate virtrdf:label into own file
+
+2011-02-16 17:08  source
+
+	* Fixed ADO.NET datatype handling
+	* Fixed null pointer exception
+
+2011-02-15 14:45  source
+
+	* Fixed memory leaks
+
+2011-02-15 14:11  source
+
+	* Fixed signal errors other than deadlock
+
+2011-02-15 14:05  source
+
+	* Fixed issues with --with-debug and setting CFLAGS
+
+2011-02-15 10:11  source
+
+	* Fixed missing prototype
+	* Fixed after free data_col make sure it is nil
+
+2011-02-14 13:05  source
+
+	* Updated version to 6.1.3-rc5
+
+2011-02-14 13:04  source
+
+	* Fixed certificates
+
+2011-02-14 13:03  source
+
+	* Fixed page load bug
+
+2011-02-14 13:03  source
+
+	* Added RSS and Atom imports
+
+2011-02-14 13:03  source
+
+	* Fixed issue with dashboard
+
+2011-02-14 13:03  source
+
+	* Fixed mail selection from private instances
+	* Fixed encrypted emails
+
+2011-02-14 12:51  source
+
+	* Added rudimentary geocoder support module
+	* Fixed endpoints options tolle menu
+	* Fixed title to "Sponger"
+	* Fixed header margins
+	* Fixed ordering of Sponger and Query Metadata
+	* Fixed location error handler failure to change aquire state
+	* Fixed statement help popup window
+
+2011-02-14 12:49  source
+
+	* Fixed try to resize map in a more mobile friendly way
+
+2011-02-14 12:48  source
+
+	* Added more properties to virtlabel ontology
+	* Fixed issues reported by W3C Validator
+
+2011-02-14 12:33  source
+
+	* Fixed compiler warnings on SOlaris with openssl 1.0
+
+2011-02-14 11:48  source
+
+	* Fixed when P is known get stats on it to make better decision on
+	  execution plan
+
+2011-02-14 11:48  source
+
+	* Fixed infinite loop when dealing with string like abc&def and no token
+
+2011-02-14 01:25  source
+
+	* Fixed dump all mem references before dying
+
+2011-02-14 01:14  source
+
+	* Fixed issue when client disconnects inside compile where no reset ctx
+
+2011-02-11 13:19  source
+
+	* Added ssl const decoration in explain
+
+2011-02-10 20:58  source
+
+	* Added new bif getenv
+
+2011-02-07 15:07  source
+
+	* Fixed attribution
+
+2011-02-04 15:36  source
+
+	* Added check for max number of elements
+
+2011-02-03 13:30  source
+
+	* Fixed check if there is dpipes to be placed before trans node
+
+2011-02-03 11:27  source
+
+	* Fixed when compiling statement with sparqre_qi == CALLER_LOCAL, do
+	  not pass this value to box_cast
+
+2011-02-03 10:32  source
+
+	* Fixed issue with namespace pollution in FireFox
+
+2011-02-03 10:30  source
+
+	* Added separate sponge and ack for rdf flags
+	* Fixed copyright year
+
+2011-02-03 10:29  source
+
+	* Added pure RDFa cartridge
+	* Fixed copyright year
+
+2011-02-03 10:28  source
+
+	* Fixed geolocation to automatically use a location if a minimum
+	  accuracy is reached. Default=500m
+	* Fixed creation of options in anchor which did not work with FireFox
+	* Fixed copyright year
+
+2011-02-03 09:26  source
+
+	* Fixed box_cast when qst is CALLER_LOCAL
+
+2011-02-03 09:25  source
+
+	* Fixed copyright year
+
+2011-02-02 15:36  source
+
+	* Fixed make sure boxlen is within limits
+
+2011-02-02 12:06  source
+
+	* Added separate sponge and ack for rdf flags
+
+2011-02-02 11:28  source
+
+	* Added new location properties and datatypes
+
+2011-02-01 00:07  source
+
+	* Fixed use origin as base
+
+2011-02-01 00:07  source
+
+	* Added support for virtrdf:image
+
+2011-01-31 20:47  source
+
+	* Fixed declaration after statement
+
+2011-01-31 15:23  source
+
+	* Fixed to follow http redirects
+
+2011-01-31 15:23  source
+
+	* Fixed memory leak if QUIETCAST query operates with ill formed
+	  data such as invalid date/time
+
+2011-01-31 11:17  source
+
+	* Fixed problem with upstreaming of updated and deleted posts
+	* Fixed problem with triggers
+
+2011-01-31 11:16  source
+
+	* Added virtrdf-label for iCalendar
+
+2011-01-31 11:15  source
+
+	* Fixed CSS of execution grid
+
+2011-01-31 10:48  source
+
+	* Fixed RDFa cartridge
+
+2011-01-31 10:45  source
+
+	* Added UI for Login Authentication Keys
+
+2011-01-30 15:23  source
+
+	* Fixed box_cast so QUIETCAST mode returns NULL instead of error
+	  even if the problem is detected in some nested function
+
+2011-01-28 17:34  source
+
+	* Fixed when on a queue, i.e. waiting for compile to finish, we freeze
+	  the thread so cpt can proceed
+
+2011-01-28 13:35  source
+
+	* Added namespace prefix 'fn' for 'http://www.w3.org/2005/xpath-functions/#'
+	  for XPATH 2.0 and XQuery 1.0 Core Functions library
+
+2011-01-28 13:34  source
+
+	* Fixed detection of bad blank nodes
+
+2011-01-28 13:32  source
+
+	* Fixed compiler warnings
+
+2011-01-28 13:31  source
+
+	* Added numeric_from_string_is_ok to do quick syntax check on string
+	  without actual parsing
+
+2011-01-28 13:29  source
+
+	* Added support for "xpath:function_IRI" syntax, which is usally an
+	  internal syntax for functions automatically recognized as XPATH
+
+2011-01-28 13:28  source
+
+	* Fixed compiler warning
+
+2011-01-28 13:28  source
+
+	* Added xqr_stub_for_funcall
+	* Fixed memory leak
+
+2011-01-28 13:26  source
+
+	* Fixed cast to xsd:float
+
+2011-01-28 13:26  source
+
+	* Fixed moved free inside of semaphore
+
+2011-01-27 14:19  source
+
+	* Fixed use default smime
+
+2011-01-27 13:30  source
+
+	* Fixed wrong condition check
+
+2011-01-27 12:43  source
+
+	* Added support for S/MIME encrypt and decrypt
+
+2011-01-26 17:52  source
+
+	* Fixed missing namespace in </results>
+
+2011-01-25 19:15  source
+
+	* Fixed cost model to count inx cond and scale card at end
+
+2011-01-25 18:54  source
+
+	* Fixed in log replay we can drop the old objects to free memory
+
+2011-01-25 14:51  source
+
+	* Updated version to 6.1.3-rc4
+
+2011-01-25 14:39  source
+
+	* Fixed allocate space for \0 terminator
+
+2011-01-25 14:38  source
+
+	* Fixed memory leak
+
+2011-01-25 14:36  source
+
+	* Fixed compiler warning
+
+2011-01-25 14:35  source
+
+	* Added configurable normalization of accented characters
+
+2011-01-25 14:33  source
+
+	* Fixed compiler warnings
+
+2011-01-25 14:32  source
+
+	* Fixed wrong buffer
+
+2011-01-25 14:30  source
+
+	* Fixed crawling aside of the target
+	* Fixed no more need of dummy targets
+	* Fixed decrease use of lock on site table
+
+2011-01-25 14:29  source
+
+	* Fixed python initialization
+
+2011-01-25 14:11  source
+
+	* Aded linkedIn login/register
+	* Fixed bad profile UI
+	* FIxed hyperlink session expire issue
+
+2011-01-25 14:09  source
+
+	* Fixed use base as origin on zillow
+
+2011-01-25 14:09  source
+
+	* Fixed do not try to put headers when an error is detected
+
+2011-01-25 14:07  source
+
+	* Fixed connection check page
+	* Fixed error message generation in execute
+	* Fixed Preferences dialog
+
+2011-01-25 14:00  source
+
+	* Fixed cosmetics and layout
+
+2011-01-25 13:53  source
+
+	* Added RDF graph property for links
+
+2011-01-25 13:52  source
+
+	* Added IMAP support
+
+2011-01-25 13:51  source
+
+	* Fixed install issue with new DB
+	* Fixed parent
+
+2011-01-25 13:50  source
+
+	* Fixed UI
+
+2011-01-25 13:17  source
+
+	* Updated documentation
+
+2011-01-22 14:12  source
+
+	* Fixed check for blank node in wrong places
+
+2011-01-21 13:43  source
+
+	* Fixed no need to access .cfg file for plain ?query= call
+
+2011-01-19 13:17  source
+
+	* Fixed codegen for xsd:decimal() and similar cast operations
+
+2011-01-18 14:36  source
+
+	* Added configurable normalization of accented characters
+
+2011-01-18 10:41  source
+
+	* Added normalization of accented characters
+
+2011-01-18 10:32  source
+
+	* Fixed debug code
+
+2011-01-18 10:31  source
+
+	* Fixed more debug output for xte_word_range
+
+2011-01-11 22:41  source
+
+	* Fixed compiler warnings
+
+2011-01-11 22:38  source
+
+	* Fixed whitespace
+
+2011-01-11 13:18  source
+
+	* Added mime_header function to parse rfc header of mail message
+
+2011-01-11 13:14  source
+
+	* Fixed commented out bogus help button
+
+2011-01-11 13:13  source
+
+	* Added more prefixes
+
+2011-01-11 13:12  source
+
+	* Added new entries to virtrdf-label
+
+2011-01-11 10:33  source
+
+	* Added new SPARQL-to-SQL codegen for type cast functions
+
+2011-01-11 10:32  source
+
+	* Fixed set box flags to BF_IRI in this special case as graphs are IRIs
+
+2011-01-10 20:49  source
+
+	* Added transitivity cache
+
+2011-01-10 16:56  source
+
+	* Fixed bifs returning int or date should use same cast as auto
+
+2011-01-10 13:23  source
+
+	* Fixed width of users, capabilities listings
+
+2011-01-10 13:22  source
+
+	* Fixed use sitemaps for default crawling, option for depth
+	* Fixed links conversion should be off by default
+	* Fixed issue with listing
+
+2011-01-10 11:51  source
+
+	* FIxed missing initialization
+
+2011-01-07 17:18  source
+
+	* Fixed set timeout only when non empty
+
+2011-01-07 15:42  source
+
+	* Fixed when explicit output format is give, make it part of the
+	  query text so don't cache eventual internal guess to turtle output
+
+2011-01-07 15:08  source
+
+	* Added cxml and csv links
+	* Fixed link layout
+
+2011-01-07 14:12  source
+
+	* Fixed allow bigger header values to be returned
+
+2011-01-05 20:58  source
+
+	* Added optional QRcode
+	* Added CXML link typing dropdowns to fct UI
+	* Added search query limit of 100 words
+	* Added CXML and CSV links on describe page
+
+2011-01-05 20:14  source
+
+	* Fixed declaration after statement warning
+
+2011-01-05 13:58  source
+
+	* Fixed search and page load behaviour
+	* Fixed RefByAll result page
+
+2011-01-05 12:45  source
+
+	* Fixed align at 8 when double align defined
+	* Fixed always return NULL when allocation failed
+
+2011-01-05 12:44  source
+
+	* Fixed compiler warnings
+
+2011-01-05 12:36  source
+
+	* Added OWL mime type
+
+2011-01-05 01:58  source
+
+	* Fixed stats on inference
+
+2011-01-03 23:37  source
+
+	* Added client-based HTTP auth support in OAT.Ajax
+	* Fixed bug in RDFStore handling of hasNamespacePrefix that caused
+	  corruption
+	* Fixed error in dialog button handler
+	* Fixed typo in insertIRIArr
+	* Fixed several issues in RDFTabs related to RDFStore changes
+
+2011-01-03 21:23  source
+
+	* Fixed json tcn
+
+2011-01-03 21:22  source
+
+	* Added optional vCal QRCode
+	* Fixed date change in events/tasks
+
+2011-01-03 21:21  source
+
+	* Added optional vCard QRCode
+
+2011-01-03 21:21  source
+
+	* Fixed UI of maintenance page
+	* Fixed ref-by command output
+
+2011-01-03 21:14  source
+
+	* Fixed detect iSPARQL Server Connection using PROPFIND
+	* Fixed link behaviour in SPARQL result set view is now
+	  controlled by dropdown
+	* Fixed Save/serialize in .ldr/.isparql file types
+
+2011-01-03 21:11  source
+
+	* Added option for crawl depth
+	* Added check for gzip magic header
+	* Fixed use sitemaps for default crawling
+	* Fixed no clean opt
+	* Fixed optmimize queue recovery
+	* Fixed when */xml reported butthe content is gziped, the client
+	  will decode on the fly
+
+2011-01-03 21:09  source
+
+	* Added properties to enable HTTP DIGEST auth on some browsers
+
+2011-01-03 21:02  source
+
+	* Added Groupon cartridge
+	* Added RDFohloh cartridge
+	* Added EOL cartridge
+	* Fixed use common API to delete target
+	* Fixed minor issues
+
+2011-01-03 10:21  source
+
+	* Added support for FILTER EXISTST and FILTER NOT EXISTS
+	* Added partial support for MINUS
+
+2011-01-03 10:18  source
+
+	* FIxed minor issues
+
+2011-01-03 10:17  source
+
+	* Fixed issue with large number of namespace declarations
+
+2010-12-23 16:33  source
+
+	* Fixed JSON tcn for host-meta
+
+2010-12-22 20:58  source
+
+	* Fixed default options
+
+2010-12-22 10:31  source
+
+	* Fixed issue with aggregates and ORDER BY
+
+2010-12-22 10:27  source
+
+	* Fixed issue with DATATYPE
+
+2010-12-22 10:25  source
+
+	* Fixed string is aligned to 8
+	* Fixed wide data must be presented as UTF8 before hash chksum
+
+2010-12-21 12:27  source
+
+	* Fixed whitespace
+
+2010-12-21 10:42  source
+
+	* Added retry on deadlock when sponging on multiple threads
+
+2010-12-20 21:43  source
+
+	* Updated version to 6.1.3-rc2
+
+2010-12-20 19:12  source
+
+	* Fixed minor issue
+
+2010-12-20 18:20  source
+
+	* Fixed layout to make optional qrcode fit without wasting space
+	* Fixed tabs CSS and overall margins etc
+
+2010-12-20 18:09  source
+
+	* Fixed sqltype and display size of DV_IRI_ID column
+
+2010-12-20 13:26  source
+
+	* Fixed merge error
+
+2010-12-20 12:31  source
+
+	* Fixed missing column error in SPARQL-to-SQL preprocessor
+
+2010-12-20 12:27  source
+
+	* Added support for Twitter
+	* Added JSON format for webfinger
+	* Added optional qrcode
+
+2010-12-20 12:26  source
+
+	* Fixed missing files from vad
+
+2010-12-20 12:26  source
+
+	* Added progress bar, ping and ACL
+
+2010-12-20 12:22  source
+
+	* Added option to use tidy before loading rdfa
+
+2010-12-20 11:34  source
+
+	* Fixed minor issues
+
+2010-12-17 17:40  source
+
+	* Added support for connection string parameters with or without
+	  spaces in name
+	* Fixed removed workaround for rollback msg
+
+2010-12-17 11:27  source
+
+	* Fixed must not return error during rollback on killed txn
+
+2010-12-16 19:47  source
+
+	* Fixed sparql select (1) { { ?:sss ?p ?o } optional { ?s1 ?p1 ?o1 }}
+	  (t1.S=sss condition was lost before)
+
+2010-12-15 15:25  source
+
+	* Fixed index_only on partial can return has data even if main row
+	  does not
+
+2010-12-15 12:47  source
+
+	* Added small optimizations
+
+2010-12-15 12:19  source
+
+	* Added optimization to look at GS index only
+
+2010-12-15 10:42  source
+
+	* Added support for define input:inference in SAPRQL DESCRIBE
+
+2010-12-14 19:18  source
+
+	* Added JSON format for /.well-known/host-meta
+
+2010-12-14 13:22  source
+
+	* Fixed cxml generation options
+
+2010-12-14 13:22  source
+
+	* Fixed compiler warning
+
+2010-12-14 12:10  source
+
+	* Fixed use CURI to make smaller footprint
+
+2010-12-14 12:07  source
+
+	* Fixed hreview aggreates
+	* Fixed use CURI to make smaller qrcode
+	* Fixed CRLF
+
+2010-12-13 21:32  source
+
+	* Fixed 'none' is a special case with value 1
+
+2010-12-13 15:08  source
+
+	* Fixed crash when only option inference is given without define
+
+2010-12-13 15:08  source
+
+	* Fixed cxml
+
+2010-12-13 11:17  source
+
+	* Fixed utf8_exec server issue
+
+2010-12-13 10:24  source
+
+	* Fixed comparison of VARCHAR and UNAME box whith identical content
+
+2010-12-13 10:23  source
+
+	* Added three new aggregates mostly for use with SPARQL-BI
+
+2010-12-13 10:22  source
+
+	* Added support for passing NVARCHAR arguments to thread-safe dicts
+
+2010-12-13 10:20  source
+
+	* Fixed check for mobile devices
+
+2010-12-12 18:09  source
+
+	* Added RDFa W3c validation button
+	* Added missing default XSL setting classes as view
+	* Added optional qrcode in page
+	* Added scrolling to use stop skip/N
+	* Added link to /sparql endpoint
+	* Fixed sid
+	* Fixed shortened uri if too long
+	* Fixed bookmarable urls
+
+2010-12-10 16:12  source
+
+	* Updated documentation
+
+2010-12-10 16:02  source
+
+	* Removed extra debugging
+	* Fixed comments
+
+2010-12-10 15:43  source
+
+	* Fixed minor issues
+
+2010-12-10 15:28  source
+
+	* Added new settings to execute.html
+	* Added hrefs to breadcrumbs in rdftab
+	* Added a pager for queries.
+	* Added URI shortener detection and user preference (persisted in
+	  HTML5 localStorage on compatible browsers)
+	* Changed the way results are cached.
+	  Each query owns its results store, which is passed to the RDFMini
+	  for display.
+
+2010-12-10 15:27  source
+
+	* Altered the order of preference for subject labels.
+	* Fixed rdfs:label and skos:prefLabel now take preference over
+	  foaf:name.
+	* Changed OAT.Dialog to accept a bitmap for buttons to include
+	  Should be (sort-of) backwards compatible (default value and setting
+	  to zero causes same behavior as before)
+
+2010-12-10 15:19  source
+
+	* Merged from V5
+
+2010-12-10 15:18  source
+
+	* Fixed do not do row autocommit when uploading with DAV api
+	  as this will break trigger logic
+
+2010-12-10 12:24  source
+
+	* Added new testcases
+
+2010-12-10 12:00  source
+
+	* Fixed deref of uninitialized memory
+
+2010-12-10 11:59  source
+
+	* FIxed uninitialized variable
+
+2010-12-10 11:58  source
+
+	* Fixed deref of uninited memory
+
+2010-12-09 14:00  source
+
+	* Fixed FOAF import
+
+2010-12-09 13:57  source
+
+	* Fixed convert link option
+
+2010-12-09 12:16  source
+
+	* Added hRecipe cartridge
+
+2010-12-09 09:53  source
+
+	* Fixed NULL case in patch_restricted_xml_chars()
+
+2010-12-08 16:08  source
+
+	* Fixed sparql aggregate
+
+2010-12-08 16:04  source
+
+	* Added RDFa W3c validation button
+	* Added expiration header
+	* Fixed DOI and RDFa
+	* Fixed use doi proxy if no hslookup plugin
+	* Fixed datatype for twitter
+	* Fixed tidy for overstock cartridge
+	* Fixed enable xlat iris
+	* Fixed small bugs
+
+2010-12-07 11:30  source
+
+	* Updated version of adapter
+
+2010-12-07 11:11  source
+
+	* Added 'Owns', 'Knows' and 'Social Network'
+	* Added profile security for offers, likes etc
+	* Enhanced import procedure
+	* Fixed small issues
+
+2010-12-07 10:38  source
+
+	* Added microblog template
+
+2010-12-07 10:32  source
+
+	* Added 'Knows' to the import
+	* Enhanced import procedure
+
+2010-12-06 17:10  source
+
+	* Added MinExpiration param for sponger
+
+2010-12-06 17:09  source
+
+	* Fixed minor issues
+
+2010-12-06 17:08  source
+
+	* FIxed show better message instead of error on url parse
+
+2010-12-06 10:34  source
+
+	* Fixed max dns name is 250 chars
+
+2010-12-06 10:34  source
+
+	* Added copy_list_to_array and revlist_to_array for plugins
+
+2010-12-06 10:33  source
+
+	* Fixed if we have bad fd in saved sessions, check which one and
+	  remove, to avoid busy loop on unix
+
+2010-11-30 12:34  source
+
+	* Fixed use char flags instead of bitfield
+
+2010-11-30 12:33  source
+
+	* Added optimization for case when there is no locality
+
+2010-11-30 12:33  source
+
+	* Fixed must lock mtx before reading cache
+
+2010-11-29 14:37  source
+
+	* FIxed minor issues
+
+2010-11-29 14:36  source
+
+	* Added statistics on how many remaps are free
+
+2010-11-26 21:23  source
+
+	* Fixed busy loop when no free remaps
+
+2010-11-26 10:47  source
+
+	* Added extra debugging on shared cache
+
+2010-11-26 10:46  source
+
+	* Fixed issue compiling extensions in debug mode
+
+2010-11-25 19:53  source
+
+	* Fixed must cut before print else will return wrong error
+
+2010-11-24 11:41  source
+
+	* Fixed use external bif_tidy in the crawler
+
+2010-11-24 11:36  source
+
+	* Fixed mark transaction as ended in provider if virtuoso server kills
+	  the transaction
+
+2010-11-23 19:30  source
+
+	* FIxed issue with DISTINCT and ORDER BY
+
+2010-11-23 19:28  source
+
+	* FIxed "delayed" crash in case of passing wrong argument
+
+2010-11-23 19:27  source
+
+	* Added check for tidy in crawler
+
+2010-11-23 19:26  source
+
+	* Fixed minor issue
+
+2010-11-23 10:20  source
+
+	* Fixed bad test
+
+2010-11-22 20:40  source
+
+	* Fixed issue with sparql-fed
+
+2010-11-22 20:39  source
+
+	* Fixed prevent assert on large box
+
+2010-11-22 14:26  source
+
+	* Fixed issue with bnode
+
+2010-11-22 11:28  source
+
+	* Added VirtuosoQueryEngine auto registration was added to VirtGraph
+	  static initilization
+
+2010-11-22 11:06  source
+
+	* Rebuild driver
+
+2010-11-22 11:00  source
+
+	* Rebuild drivers
+
+2010-11-22 10:59  source
+
+	* Fixed JDBC driver lost prepared data after execution query, so next
+	  execute of prepared query throws exception
+
+2010-11-20 10:57  source
+
+	* Added bif patch_restrictec_xml_chars()
+
+2010-11-19 16:50  source
+
+	* Added Likes and DisLikes
+
+2010-11-19 16:49  source
+
+	* Added group sharing
+	* Fixed extended user's select
+
+2010-11-19 16:47  source
+
+	* Updated to ckeditor version 3.4.2
+
+2010-11-19 16:45  source
+
+	* Added optimizations
+	* Added checking for rdfa dtd
+
+2010-11-19 16:43  source
+
+	* Fixed use integer for https_verity and https_cv_depth
+	* Fixed use uppercase for SSL auth
+
+2010-11-19 16:41  source
+
+	* Added setup for DET on collections
+
+2010-11-19 14:25  source
+
+	* Fixed wrong number of params
+
+2010-11-19 14:25  source
+
+	* Fixed busy loop
+
+2010-11-17 21:30  source
+
+	* Added function to get DTD identifiers
+
+2010-11-17 21:29  source
+
+	* Fixed dimension is not in triples
+
+2010-11-17 21:29  source
+
+	* Fixed page debug
+
+2010-11-17 21:28  source
+
+	* Fixed name in footer
+
+2010-11-17 21:27  source
+
+	* Added initialize query text option for /sparql
+
+2010-11-16 20:17  source
+
+	* Fixed do not try to close bad filedescriptor as windows does not
+	  like this
+
+2010-11-16 14:30  source
+
+	* Added imap client support
+
+2010-11-15 20:12  source
+
+	* Fixed if we have a qr with no params at all, exec should signal error
+
+2010-11-15 16:51  source
+
+	* Fixed issue with combination of UNION in the argument of IN causing
+	  General internal Optimized compiler error
+
+2010-11-15 16:47  source
+
+	* Fixed record the thread which entered/left the buffer in debug mode
+
+2010-11-15 10:13  source
+
+	* Fixed do not attempt to parse empty content
+
+2010-11-12 21:01  source
+
+	* Fixed only check pages in online backup
+
+2010-11-12 21:00  source
+
+	* Fixed recovery mode
+
+2010-11-12 21:00  source
+
+	* Fixed send body of 509 bandwidth error
+
+2010-11-11 16:06  source
+
+	* Updated version to 6.1.3-rc1
+
+2010-11-11 15:53  source
+
+	* Fixed check for sql disabled flag
+
+2010-11-11 12:38  source
+
+	* Fixed group editing
+	* Fixed WebID for Briefcase instances
+
+2010-11-11 12:34  source
+
+	* Added group sharing
+
+2010-11-11 11:23  source
+
+	* Added special immutable setting for inf rules
+
+2010-11-10 15:59  source
+
+	* Fixed use dsn from content-location when it exists
+
+2010-11-10 15:45  source
+
+	* Fixed pass headers as options so every cartridge can read
+
+2010-11-10 12:00  source
+
+	* Added magic key export
+
+2010-11-10 11:59  source
+
+	* Fixed stack corruption on 64bit
+
+2010-11-09 21:47  source
+
+	* Fixed memleak when error is signalled
+
+2010-11-09 21:44  source
+
+	* Fixed avoid re-define
+
+2010-11-09 21:42  source
+
+	* Fixed remove call to SP before it is defined
+
+2010-11-09 20:19  source
+
+	* Fixed https access
+	* Fixed ACL UI
+
+2010-11-09 20:18  source
+
+	* Added support for SWD
+	* Added support for Salmon
+	* Added RDFa info
+	* Fixed key removal not working
+	* Fixed bad permissions for user's home directory creation
+	* Fixed no validator at this point
+	* Fixed sync user's pages
+	* Fixed salmon api
+	* Fixed move groups from briefcase into framework
+
+2010-11-09 20:15  source
+
+	* Added initial support for Salmon protocol
+	* Fixed check for email
+	* Fixed uninstall problem
+
+2010-11-09 20:12  source
+
+	* Added signed mails
+	* Fixed https access
+
+2010-11-09 20:12  source
+
+	* Fixed move groups from briefcase into ODS framework
+	* Fixed https access
+
+2010-11-09 20:11  source
+
+	* Fixed https access
+	* Fixed labels
+
+2010-11-09 20:11  source
+
+	* Fixed https access
+
+2010-11-09 20:01  source
+
+	* Fixed properly encode the query before passing it to PivotViewer
+
+2010-11-09 19:59  source
+
+	* Fixed more labels
+
+2010-11-09 10:59  source
+
+	* Fixed split part of MTX_DEBUG into PAGE_DEBUG
+
+2010-11-08 15:42  source
+
+	* Fixed prevent bad data to crash system during deserialization
+
+2010-11-08 12:37  source
+
+	* Added http://loc.openlinksw.com/sparql as registered endpoint
+	* Fixed URIs in resultview anchors
+
+2010-11-08 12:35  source
+
+	* Fixed return string session, rather than allocate string so it will
+	  handle large resources
+	* Fixed possible double free of temp filename
+	* Fixed issue with MALLOC_DEBUG
+
+2010-11-08 12:21  source
+
+	* Fixed ACL update
+
+2010-11-08 11:46  source
+
+	* Fixed minor issue
+
+2010-11-08 11:45  source
+
+	* Added ACL settings
+	* Added new type
+	* Added CORS options
+	* Fixed layout of cert generation form
+	* Fixed label of cartridges
+
+2010-11-08 11:08  source
+
+	* Added check by entity type
+
+2010-11-05 20:23  source
+
+	* Fixed check dp before processing
+
+2010-11-05 10:57  source
+
+	* Fixed explanation of rdf inf failures
+
+2010-11-05 10:56  source
+
+	* Fixed bad condition of extension, do not push local imports
+
+2010-11-05 10:54  source
+
+	* Fixed  /sparql/ endpoint to show/hide controls
+	* Fixed show supported formats depending on configuration
+
+2010-11-05 10:53  source
+
+	* Fixed CXML desc support
+
+2010-11-04 18:18  source
+
+	* Fixed typo
+
+2010-11-02 19:14  source
+
+	* Added cxml det
+
+2010-11-02 19:12  source
+
+	* Fixed top/skip should only work for  non-multistate
+	* Fixed recover when itc is unregistered
+
+2010-11-01 14:15  source
+
+	* FIxed only skip when initialized
+
+2010-10-29 14:12  source
+
+	* Fixed when pl stats collection is enabled, the hash must be
+	  protected in order to avoid crash
+
+2010-10-29 14:11  source
+
+	* Fixed when count/sum/avg and other aggregates make columns to be the
+	  respective type e.g. int or double, except when performing min/max
+	  on string, we turn off mem_cache_only, so they can goto disk
+
+2010-10-29 14:09  source
+
+	* Fixed unbalanced } outside ifdef
+
+2010-10-29 14:08  source
+
+	* Added function alias
+
+2010-10-29 14:08  source
+
+	* Fixed when selection list contains expressions with constants do
+	  not inline OJ
+
+2010-10-27 12:59  source
+
+	* Fixed issues with sparql fed
+
+2010-10-27 12:56  source
+
+	* Added new bif functions dict_iter_hash and dict_key_eq
+
+2010-10-27 12:55  source
+
+	* Added page enter debugging
+
+2010-10-27 12:53  source
+
+	* Added support for CORS
+
+2010-10-27 12:52  source
+
+	* Fixed check all the cos in gby to be numeric types
+
+2010-10-27 12:51  source
+
+	* Added debug line pragmas
+
+2010-10-27 12:50  source
+
+	* Fixed debug assert for itc_is_registered
+
+2010-10-25 13:23  source
+
+	* Fixed compiler warnings
+
+2010-10-25 13:19  source
+
+	* Fixed rdf boxes cmp
+	* Fixed rdf inf loading
+
+2010-10-25 13:15  source
+
+	* Fixed allow all users to have user_t so they can have their own
+	  encryption keys
+
+2010-10-22 21:12  source
+
+	* Added contols to add text filters
+	* Added support for creating new ses with class iri filter
+	* Added choose type and start/continue facets browsing session to rdfdesc
+	* Fixed drop text constraint
+	* Fixed view types
+
+2010-10-22 16:34  source
+
+	* Fixed link warning
+
+2010-10-22 16:31  source
+
+	* Fixed issue with shadowing local variable in java hosting
+
+2010-10-22 14:58  source
+
+	* Fixed temporary disabled code
+
+2010-10-22 12:31  source
+
+	* Fixed single does not have a dpipe
+
+2010-10-22 10:28  source
+
+	* FIxed if dpipe before outer section, put the dpipe before the set
+	  ctr of the outer section and not after, else it may mess with the
+	  output of the dpipe
+
+2010-10-22 09:52  source
+
+	* Fixed missing symbol
+
+2010-10-22 09:50  source
+
+	* Fixed rb can be twice as it is a ref
+
+2010-10-20 16:04  source
+
+	* Fixed problem with extremely large XML doc
+
+2010-10-19 12:38  source
+
+	* Added dynamic resizing of result block
+
+2010-10-18 18:50  source
+
+	* Fixed issue with SPARQL CONSTRUCT/INSERT/DELETE/MODIFY queries
+
+2010-10-18 12:18  source
+
+	* Fixed when a page with free remap is found, indicate the trx should be killed
+	  rather than getting infinite loop
+	* Fixed extra debugging for page access
+
+2010-10-18 12:14  source
+
+	* Fixed when operation is count etc, aggregate returning a number
+	  does not do memcache only in order to avoid running out of memory
+
+2010-10-18 12:01  source
+
+	* Added new functions to ImageMagick plugin
+
+2010-10-15 11:37  source
+
+	* Fixed fct_label on v6 single
+
+2010-10-13 13:59  source
+
+	* Fixed the xe_make_copy is valid only for XMLTYPE, not for every UDT
+
+2010-10-13 13:59  source
+
+	* Fixed gpf
+
+2010-10-13 12:12  source
+
+	* Added rsh-sha256
+	* Added xenc_dsig_verify, xenc_dsig_sign and xenc_key_RDA_construct
+
+2010-10-13 12:11  source
+
+	* Removed old upgrade code
+
+2010-10-13 12:09  source
+
+	* Fixed BestBuy cartridge
+
+2010-10-13 12:07  source
+
+	* Added checks for value ranges
+	* Added paging through 'Related Collections' links
+
+2010-10-13 12:02  source
+
+	* Fixed minor issues
+
+2010-10-13 12:00  source
+
+	* Added ACL semantic ping
+	* Fixed encoding problems
+	* Fixed JS error
+
+2010-10-13 11:59  source
+
+	* Added ACL semantic ping
+	* Fixed encoding problems
+	* Optimized page load
+
+2010-10-13 11:58  source
+
+	* Fixed encoding problems
+	* Fixed and optimized users and webIDs
+	* Fixed sharings
+	* Optimized page load
+
+2010-10-13 10:36  source
+
+	* Added ACL semantic ping
+	* Fixed and optimized users and webIDs
+	* Fixed empty lists
+	* Fixed encoding problems
+	* Optimized page load
+
+2010-10-13 10:35  source
+
+	* Added ACL semantic ping
+	* Fixed encoding problems
+
+2010-10-13 10:34  source
+
+	* Added ACL semantic ping
+	* Fixed and optimized users and webIDs
+	* Fixed encoding problems
+	* Fixed empty lists
+	* Optimized page load
+
+2010-10-13 10:33  source
+
+	* Added ACL semantic ping
+	* Fixed and optimized users and webIDs
+	* Fixed JS map error
+	* Fixed JS errors
+	* Fixed tabs
+	* Fixed encoding problems
+
+2010-10-12 17:35  source
+
+	* Fixed bug when filer (num <>= (subq))
+
+2010-10-12 12:23  source
+
+	* Added support for latest tidylib
+
+2010-10-07 23:31  source
+
+	* Fixed some issues with dsig_verify
+
+2010-10-07 13:29  source
+
+	* Fixed new debug macro DK_ALLOC_BOX_DEBUG for basic integrety checks
+	  without overhead of full MALLOC_DEBUG
+
+2010-10-07 13:24  source
+
+	* Added item ACL
+	* Added ACL Inheritance
+	* Fixed update
+	* Fixed tag bug
+
+2010-10-07 13:07  source
+
+	* Fixed minor issue
+
+2010-10-07 13:00  source
+
+	* Added ACL Inheritance
+	* Fixed updated UI
+
+2010-10-07 13:00  source
+
+	* Added ACL Inheritance
+	* Fixed binding the twitter and linkedin with their API
+	* Fixed IE password field size bug
+	* Fixed must quote vars from sparql
+	* Fixed swat0
+
+2010-10-07 12:58  source
+
+	* Added ACL Inheritance
+	* Fixed optimized progress bar
+	* Fixed read/unread actions
+	* Fixed encoding problem
+	* Fixed updated UI
+	* Removed deprecated icons
+
+2010-10-07 12:56  source
+
+	* Added ACL Inheritance
+	* Fixed ACL recalc bug
+	* Fixed updated UI
+
+2010-10-07 12:55  source
+
+	* Added ACL Inheritance
+	* Fixed optimized update
+	* Fixed sharing problem
+	* Fixed updated UI
+
+2010-10-07 12:54  source
+
+	* Added ACL Inheritance
+	* Fixed ACL recalc bug
+	* Fixed optimize progress bar
+	* Removed deprecated images
+
+2010-10-07 12:53  source
+
+	* Fixed swat0
+
+2010-10-07 12:44  source
+
+	* Updated documentation
+
+2010-10-07 12:20  source
+
+	* Added option not to convert HTML pages
+
+2010-10-06 21:39  source
+
+	* Added initial attribute/property value ranges conditional
+	* Added new XML element <value-range hi="" lo="" /> for facet browser
+	* Fixed make pivot bridge link conditional
+
+2010-10-06 21:37  source
+
+	* Fixed prevent buggy IRI to hit compiler
+
+2010-10-06 09:40  source
+
+	* Fixed problem compiling certain SPARQL constructions
+
+2010-10-06 09:35  source
+
+	* Added some new functions to XPATH virtual table
+	* Added optimizations to boolean expression evaluation
+
+2010-10-06 09:27  source
+
+	* Fixed added qualifier to stored proc creation
+
+2010-10-06 09:26  source
+
+	* Fixed moved some checks to header file for macro expansion
+
+2010-10-06 09:15  source
+
+	* Added support for CSV output mode
+
+2010-10-06 09:15  source
+
+	* Fixed compatibility with openssl 0.9.7
+
+2010-10-05 09:39  source
+
+	* Fixed when enlist starts we should have new xid or not listed
+
+2010-10-04 18:39  source
+
+	* Fixed if resource is not free e.q. count = 2 we most restore as other
+	  thread can kill it in the middle
+
+2010-10-04 14:40  source
+
+	* Fixed save should happen after checks, as jump would leave members
+	  NULL
+
+2010-09-27 22:37  source
+
+	* Fixed missing text from cache
+
+2010-09-27 19:41  source
+
+	* FIxed label
+
+2010-09-27 14:45  source
+
+	* Added linkblog pages
+	* Fixed smaller tweet me button on bottom
+	* Fixed template list
+
+2010-09-27 14:44  source
+
+	* Added ACL inheritance
+
+2010-09-27 14:44  source
+
+	* Fixed date update change in events/tasks
+
+2010-09-27 14:37  source
+
+	* Rebuild drivers
+
+2010-09-27 14:29  source
+
+	* Fixed issue with connection timeout
+
+2010-09-27 14:23  source
+
+	* Fixed split uiedit into separate pages to get better response time
+	  when compiling
+	* Fixed 'Generate Certificate'
+
+2010-09-27 14:13  source
+
+	* Fixed minor issues
+
+2010-09-27 14:11  source
+
+	* Fixed ACL implementation
+
+2010-09-27 14:11  source
+
+	* Fixed take DynamicLocal into account
+
+2010-09-27 13:51  source
+
+	* FIxed client must not redefine mutex_enter as this will crash single
+
+2010-09-27 08:58  source
+
+	* Fixed use x-forwarded-for and remember it is forwarded
+
+2010-09-27 08:57  source
+
+	* Fixed use the redirect link for base when supplied
+
+2010-09-27 08:56  source
+
+	* Fixed check if m2 is a box
+
+2010-09-22 15:11  source
+
+	* Reverted patch
+
+2010-09-22 14:01  source
+
+	* Added xml_sign() for making pure XML signatures
+	* Added signature in host-meta xrd
+	* FIxed memleaks when doing xml signatures
+
+2010-09-22 13:56  source
+
+	* Fixed bad procedure name
+
+2010-09-22 13:06  source
+
+	* Fixed unified login pages
+	* Fixed upgraded ACL implementation
+	* Fixed Linkedin link
+
+2010-09-22 13:03  source
+
+	* Fixed upgraded ACL implementation
+
+2010-09-22 13:02  source
+
+	* Added archive and summary pages
+	* Added new templates to vad
+
+2010-09-22 12:50  source
+
+	* Fixed minor issues
+
+2010-09-22 12:48  source
+
+	* Fixed vcard and vcal file import
+
+2010-09-22 12:48  source
+
+	* Fixed group ACL access
+
+2010-09-21 13:12  source
+
+	* Fixed load demo vad after tutorial
+
+2010-09-21 13:11  source
+
+	* Added missing file
+
+2010-09-21 11:34  source
+
+	* Fixed focus issue
+	* Fixed typo
+	* Fixed XRDS
+
+2010-09-21 11:33  source
+
+	* Added new templates
+
+2010-09-21 11:20  source
+
+	* Fixed serialize access to connection struct
+
+2010-09-20 10:14  source
+
+	* Fixed Id
+
+2010-09-20 09:51  source
+
+	* Added RDFa doctype
+	* Added new feature of fct to show certain graph
+
+2010-09-20 09:50  source
+
+	* Fixed http://dbpedia.org/property/name is not the name of the subject
+
+2010-09-20 09:23  source
+
+	* Added new feature of fct to show certain graph when fct is installed
+
+2010-09-20 09:20  source
+
+	* Added new login and register library
+	* Added WebID to 'My Profile'
+	* Added linkedin login
+	* Added new inde on OL accounts
+	* Added twitter login page
+	* Added login with Google account
+	* Fixed WebFinder to look at sameas
+	* Fixed X.509 certificates in user pages
+	* Fixed password problem
+	* Fixed group ACL access
+	* Fixed validation ACLs
+	* Fixed openID server parameters extraction
+	* Fixed create instance defaults
+	* Fixed use of timezone
+	* Fixed Safari and Chrome bug
+	* Fixed biographical date input
+
+2010-09-20 09:14  source
+
+	* Fixed filter problem with WebID
+
+2010-09-20 09:13  source
+
+	* Added ACL support for tasks
+	* Fixed group ACL access
+	* Fixed ACL table UI
+	* Fixed private access
+	* Fixed  validation ACLs
+
+2010-09-20 09:12  source
+
+	* Fixed group ACL access
+	* Fixed ACL group select
+	* Fixed ACL UI
+	* Fixed validation ACLs
+
+2010-09-20 09:11  source
+
+	* Added ACLs
+	* Fixed group ACL access
+	* Fixed private access
+
+2010-09-20 09:09  source
+
+	* Fixed group ACL access
+	* Fixed ACL table UI
+	* Fixed private access
+	* Fixed validation ACLs
+
+2010-09-20 08:55  source
+
+	* Added refresh=clean mode, to drop cache even if it is in the middle
+	  of sponging on another threads
+	* Added scheduler task to keep volume under some limit
+
+2010-09-20 08:27  source
+
+	* Fixed ACL testing now http returns 509
+
+2010-09-17 23:11  source
+
+	* Fixed when fct is installed, use the new feature of fct to show
+	  certain graphs
+
+2010-09-17 23:10  source
+
+	* Fixed hang in prefix check if there is single dot in prefix
+
+2010-09-17 23:10  source
+
+	* Fixed check log text should always be DV_STRING
+
+2010-09-17 23:08  source
+
+	* Added support for CXML
+
+2010-09-17 23:03  source
+
+	* Added strong optimization of SPARQL arithmatic and numerical
+	  comparisons
+
+2010-09-17 22:49  source
+
+	* Added initial support for RDB2RDF
+
+2010-09-17 22:05  source
+
+	* Added improvements for SPARQL-FED esp. to let XSLT access data
+	  from remote SPARQL endpoint
+
+2010-09-17 20:49  source
+
+	* Fixed rendezvous thread should never handle any signals
+
+2010-09-17 16:50  source
+
+	* Fixed moved include file to more appropriate place
+
+2010-09-17 16:48  source
+
+	* Fixed do not try when in V6 single mode
+
+2010-09-17 16:45  source
+
+	* Added new bifs that print start element, end elemend and empty
+	  element with some number of attributes. Attribute values are
+	  checked for NULL and print only non-NULLs to eliminate numerous
+	  IF statements in Virtuoso/PL
+
+2010-09-17 16:42  source
+
+	* Added bif that checks if some value is stored in given dictionary
+	  for a given key, without returning it. This is usefull if value is
+	  potentially big as it does not copy anything.
+
+2010-09-17 16:40  source
+
+	* Fixed let some string BIFs accept UNAME arguments
+
+2010-09-17 16:35  source
+
+	* Removed deprecated repl code
+
+2010-09-17 11:18  source
+
+	* Fixed isalnum needs unsigned char as negative values might trip asserts
+	  on some systems like Windows
+
+2010-09-15 23:54  source
+
+	* Fixed handling format like 2010-09-15T14:24:28Z without fraction part
+	* Fixed set local timezone
+
+2010-09-15 08:10  source
+
+	* Fixed redirects for tcn
+	* Fixed set default to html
+	* Fixed in order of browser preference
+
+2010-09-13 16:03  source
+
+	* Fixed issue with xs_q_4/foaf.vsp demo
+
+2010-09-09 19:19  source
+
+	* Added check
+
+2010-09-09 19:18  source
+
+	* FIxed print dict in dbg_* functions
+
+2010-09-09 16:02  source
+
+	* Fixed minor issue
+
+2010-09-09 15:32  source
+
+	* Added MIME types for .NET click-once, MS Office and MS WPF applications
+	* Added additional MIME types based on apache mime.types.txt
+
+2010-09-07 21:56  source
+
+	* Added geo for dbpedia
+	* Fixed wrong var names
+	* Fixed issue with IE
+	* Fixed deprecated call to OAT.Dom.applyStyle into OAT.Style.set
+	* Removed unused background
+
+2010-09-07 21:37  source
+
+	* Added fingerpoint hook
+
+2010-09-07 21:28  source
+
+	* Added oauth+openid hybrid
+	* Added JS validation routines
+	* Added fingerpoint hooks
+	* Fixed x509 order
+	* Fixed use ssl login if accessed via https
+	* Fixed https on endpoint
+	* Fixed openid for fingerpoint
+	* Fixed seeAlso lookups via WF/FP
+	* Fixed Facebook issues
+	* Fixed validation ACLs
+	* Fixed Gallery pane
+
+2010-09-07 21:24  source
+
+	* Fixed ACL
+
+2010-09-07 21:24  source
+
+	* Added ACL
+
+2010-09-07 21:23  source
+
+	* Fixed private access error
+
+2010-09-07 21:23  source
+
+	* Fixed private access error
+	* Fixed typo
+
+2010-09-07 19:55  source
+
+	* Minor fixes
+
+2010-09-07 19:55  source
+
+	* Added XRD meta
+
+2010-09-07 19:54  source
+
+	* Added attribution ontology
+
+2010-09-01 10:15  source
+
+	* Added support headers from url rewrite for static resources such
+	  as files
+
+2010-09-01 10:11  source
+
+	* Fixed link headers
+
+2010-08-31 12:12  source
+
+	* Added missing function
+
+2010-08-31 12:12  source
+
+	* Added support for IUD ops to XMLA endpoint
+
+2010-08-31 12:09  source
+
+	* Fixed return appropriate message based on the type of ACL result
+
+2010-08-31 11:45  source
+
+	* Added support for host-meta
+
+2010-08-30 13:46  source
+
+	* Updated documentation
+
+2010-08-30 13:37  source
+
+	* Fixed use short representations to make sorted by
+
+2010-08-30 13:35  source
+
+	* Fixed missing prototype
+
+2010-08-30 12:34  source
+
+	* Fixed use webfinger to do ssl authentication
+
+2010-08-30 12:21  source
+
+	* Fixed error message generation in execute
+	* Fixed encoding issue in directory listings generated from
+	  filesystem-hosted virtual directories
+
+2010-08-26 22:49  source
+
+	* FIxed i18n support for subject and address list
+
+2010-08-26 22:41  source
+
+	* Fixed typo
+
+2010-08-26 22:40  source
+
+	* Added Evri cartridge and ontology
+	* Added hNews cartridge
+
+2010-08-26 22:34  source
+
+	* Added support for acct: scheme
+
+2010-08-26 22:33  source
+
+	* Added support for webfinger + OpenID
+	* Fixed login with webfinger
+	* Fixed login popup page
+	* Fixed sameAs validation values
+	* Fixed Facebook link
+	* Fixed iframe number
+	* Fixed certificate generator
+
+2010-08-26 22:30  source
+
+	* Fixed application settings page url
+
+2010-08-26 18:04  source
+
+	* Added support for host-meta
+
+2010-08-26 18:03  source
+
+	* Fixed if position is not valid, skip the iob and go to next
+
+2010-08-24 22:34  source
+
+	* Fixed set to NULL after free
+
+2010-08-22 16:04  source
+
+	* Added option for to validate in hours
+
+2010-08-22 13:06  source
+
+	* Added new SQL optimization trick to convert
+	  sprintf ('format', col0, col1, ..., colN) = exnp
+	  into more index friendly:
+	  ( col0 = sprintf_inverse ('format', expn, 2)[0] and
+	    col1 = sprintf_inverse ('format', expn, 2)[1] and ...
+	    colN = sprintf_inverse ('format', expn, 2)[N] )
+
+2010-08-20 10:12  source
+
+	* Fixed typo in BIF name
+	* Fixed SPARQL resultset output if some objects of an RDF storage are
+	  corrupted
+
+2010-08-20 10:10  source
+
+	* Fixed error on INSERT DATA with literals of non-default types
+
+2010-08-20 10:09  source
+
+	* Fixed issue with ill formed SPARQL requests send by SPARQL SERVICE
+	  clause with dynamic parameters
+
+2010-08-20 10:07  source
+
+	* Fixed issue parsing sparql function calls with zero arguments
+
+2010-08-18 08:41  source
+
+	* Fixed check dirsallowed before loading file
+
+2010-08-17 21:40  source
+
+	* Fixed use webfinger to do SSL authentication
+
+2010-08-17 18:29  source
+
+	* Added support to use webfinger for SSL authentication
+	* Disabled rel=me tweak
+
+2010-08-17 18:05  source
+
+	* Added Google Book cartridge
+
+2010-08-17 18:05  source
+
+	* Fixed use foaf ssl procedure
+
+2010-08-17 18:01  source
+
+	* Added get-certificate_info (10,cert,type, pass, 'subject field name
+	  e.g. emailAddress, OU etc.')
+
+2010-08-17 11:06  source
+
+	* FIxed sparql parse bug with NOT FROM NAMED queries like
+	  select distinct ?g ?p not from named virtrdf: where
+	  { graph ?g { ?s ?p ?o }}
+
+2010-08-17 10:23  source
+
+	* Fixed security issue in SPARQL
+	  A compiled and cached query may stay in its old state (not
+	  recompiled) after global security changes like
+	  DB.DBA.RDF_DEFAULT_USER_PERMS_SET ('nobody', 0) that should
+	  recompile most of queries cached for all users but it does not.
+
+2010-08-17 10:22  source
+
+	* Fixed build rules
+
+2010-08-17 09:25  source
+
+	* Fixed moved constant declarations of commonly used UNAMEs into
+	  separate file
+
+2010-08-16 10:10  source
+
+	* Added webfinger protocol
+	* Fixed cert gen on firefox with .net addon
+
+2010-08-16 10:09  source
+
+	* Fixed bug in re-install
+
+2010-08-16 10:07  source
+
+	* Fixed labels
+
+2010-08-16 10:07  source
+
+	* FIxed missing data for interval column
+
+2010-08-11 11:07  source
+
+	* Added support for define output:format "NT"
+
+2010-08-11 10:53  source
+
+	* Fixed issue with sparql subcode gen
+
+2010-08-10 18:47  source
+
+	* Fixed should not use escape here
+
+2010-08-10 18:45  source
+
+	* Added WebID share
+	* Fixed secure sponged VD setup
+
+2010-08-10 14:52  source
+
+	* Fixed wrong URL
+
+2010-08-09 20:08  source
+
+	* Fixed some URL links
+
+2010-08-09 19:44  source
+
+	* Fixed support for source_uri attribute in sticker
+
+2010-08-08 11:55  source
+
+	* Fixed enhanced type recognition
+	* Fixed return errors when loading fails
+
+2010-08-08 11:55  source
+
+	* Fixed TOP has argument order of offset, limit
+
+2010-08-06 10:29  source
+
+	* Fixed issues with Rename
+	* Fixed issues with Upstreaming
+
+2010-08-06 10:03  source
+
+	* Added support for SSL and WebID
+
+2010-08-06 09:46  source
+
+	* Fixed skip constant ssl returned from temp table output
+
+2010-08-04 18:50  source
+
+	* Fixed clear conn vars after trx replay
+
+2010-08-04 09:34  source
+
+	* Updated documentation
+
+2010-08-04 07:37  source
+
+	* Added UI for rdb2rdf
+
+2010-08-04 07:37  source
+
+	* Fixed use subseq to handle blobs
+
+2010-08-04 07:35  source
+
+	* Fixed Activity log
+	* Fixed /about virtual dir
+	* Fixed rewrite http header in cert output
+
+2010-08-04 07:33  source
+
+	* Fixed Activity log
+	* Fixed file view
+	* Fixed filenames with .acl extension properties editing
+
+2010-08-04 07:32  source
+
+	* Fixed encoding problem
+
+2010-08-04 07:30  source
+
+	* Fixed Activity log
+
+2010-08-04 07:30  source
+
+	* Fixed Activity log
+	* Fixed uninstall DET folders
+	* Fixed 'ResFolder' type filters
+
+2010-08-04 07:10  source
+
+	* Added persistent xmlns UI
+
+2010-08-04 07:03  source
+
+	* Added WebID based ACL support via https
+
+2010-08-04 07:02  source
+
+	* Fixed Tesco cartridge
+
+2010-08-04 06:58  source
+
+	* Fixed avoid errors later in process
+
+2010-08-04 06:53  source
+
+	* FIxed use X-Forwarded-Host when the instance is behind gateway
+
+2010-08-02 11:31  source
+
+	* Fixed when result from authentication is negative then return
+	  else WebID fals
+	* Fixed http auth checks
+
+2010-08-02 11:25  source
+
+	* Fixed keep mime hash in sync
+
+2010-08-02 11:23  source
+
+	* Fixed do not allow sponger to change log mode explicitly to no-lock and
+	  row-autocommit
+
+2010-08-02 11:20  source
+
+	* Added support for POP3 over SSL
+
+2010-08-02 07:40  source
+
+	* Added global X509 CA repository
+
+2010-07-29 16:25  source
+
+	* Updated documentation
+
+2010-07-29 16:17  source
+
+	* Fixed dynlocal format must be replaced by host as in host header
+
+2010-07-29 16:14  source
+
+	* Added common api FOAF_SSL_WEBID_GET
+	* Added setting for online certificate service
+	* Added https link in header
+	* Fixed online accounts
+	* Fixed WebID
+	* Fixed alt name can have multiple values
+
+2010-07-28 12:26  source
+
+	* Fixed size of res column to fit side menu on smaller screens like
+	 iPhone
+
+2010-07-28 12:10  source
+
+	* Fixed minor issues
+
+2010-07-26 21:01  source
+
+	* Fixed when http auth fails, must keep the http status as 401
+
+2010-07-26 12:59  source
+
+	* Fixed alt names can have multiple values
+	* Fixed paths creation
+	* Fixed users select
+	* Fixed renamed User Login to Identify Yourself
+
+2010-07-26 12:58  source
+
+	* Fixed path creation
+	* Fixed URLs
+	* Fixed users select
+
+2010-07-26 12:58  source
+
+	* Fixed path creation
+	* Fixed URLs
+
+2010-07-23 19:44  source
+
+	* Fixed bug with WebDAVFS client
+
+2010-07-23 19:43  source
+
+	* Added continue handler to catch missing graph group signal
+
+2010-07-23 19:42  source
+
+	* Fixed URL after login
+	* FIxed view.vsp not found problem
+
+2010-07-23 19:39  source
+
+	* Adde additional endpoint
+	* Fixed splash screen
+	* Fixed error message when JavaScript is not available
+	* Fixed geo location
+
+2010-07-23 19:36  source
+
+	* Added new lock icon ref
+	* Fixed online services validation
+	* Fixed IE UI profile view
+	* Fixed multiple certificates in UI profile
+	* Fixed issue with "Creator of"
+	* Fixed image button for users pages
+	* Fixed browser related problems
+	* Fixed labels
+
+2010-07-23 19:31  source
+
+	* Removed deprecated files
+
+2010-07-23 15:56  source
+
+	* Fixed auth bug with WebDAVFS client
+
+2010-07-20 13:08  source
+
+	* Fixed minor issues
+
+2010-07-20 13:01  source
+
+	* Fixed WebKit problems with UI profile
+
+2010-07-20 13:01  source
+
+	* Fixed sync security profile
+
+2010-07-19 14:50  source
+
+	* Added discussion page rewrite rules
+	* Fixed change Member ID to User ID
+	* Fixed ODS to Digest in Login/Register form
+	* Fixed X.509 page for IE
+
+2010-07-19 14:48  source
+
+	* Fixed URLs
+
+2010-07-19 14:39  source
+
+	* Fixed missing dependency
+
+2010-07-19 14:39  source
+
+	* Fixed ordering to work with IE 7/8
+
+2010-07-19 07:12  source
+
+	* Fixed version
+
+2010-07-19 07:11  source
+
+	* Fixed some issues with sparql queries returning strings instead of IRIs
+
+2010-07-19 07:08  source
+
+	* Added explain if params are copied
+
+2010-07-19 07:08  source
+
+	* Fixed dir listing to use UTF-8 to show chars other than latin1
+
+2010-07-19 06:59  source
+
+	* Fixed issue with inferencing
+
+2010-07-19 06:59  source
+
+	* Fixed compiler warnings
+
+2010-07-14 21:18  source
+
+	* Fixed following checkpoint kill recovery remap extents may have
+	  allocated pages with no correspoinding logical page because recovery
+	  performs unremap. Therefor if em remap page is allocated in em but
+	  free in dbs freemap, disregards and reset em allocation, if no logical
+	  page. If logical page, concider the dbs freeset in errror and mark page
+	  as allocated.
+
+2010-07-09 15:57  source
+
+	* Updated version to 6.1.2 for final release
+
+2010-07-09 15:57  source
+
+	* Fixed version string ODBC driver
+
+2010-07-09 15:36  source
+
+	* Updated debian packaging files
+
+2010-07-09 15:29  source
+
+	* Fixed free data in wrong order
+
+2010-07-09 14:17  source
+
+	* Rebuild drivers
+
+2010-07-09 14:16  source
+
+	* Fixed performance issue loading LANG/TYPE info from empty db
+
+2010-07-09 13:32  source
+
+	* Fixed do not run tpc-h create on vad install
+
+2010-07-09 13:01  source
+
+	* Added UI support for SSL/TLS connection to LDAP server
+
+2010-07-09 12:59  source
+
+	* Added new tutorials
+
+2010-07-08 20:41  source
+
+	* Fixed application URLs
+
+2010-07-08 20:40  source
+
+	* Fixed application URL rewrite rules
+
+2010-07-08 13:40  source
+
+	* FIxed OpenID and SSL login
+
+2010-07-08 13:37  source
+
+	* Fixed VTIMEZONE component in export
+
+2010-07-08 13:27  source
+
+	* Fixed minor issue
+
+2010-07-08 13:23  source
+
+	* Added optimization for large descriptions
+
+2010-07-08 13:21  source
+
+	* Fixed add escape to CR/LF in JSON format
+
+2010-07-07 18:53  source
+
+	* Fixed openid to work with personal iri
+
+2010-07-07 18:42  source
+
+	* Updated documentation
+
+2010-07-07 12:43  source
+
+	* Fixed create list of unique graphs
+
+2010-07-06 23:07  source
+
+	* Added Tumblr cartridge
+
+2010-07-06 23:06  source
+
+	* Added description for property value in offers
+
+2010-07-06 23:04  source
+
+	* Added shared files using FOAF+SSL
+
+2010-07-06 22:58  source
+
+	* Fixed minor issue
+
+2010-07-06 14:30  source
+
+	* Updated version to 6.1.2-rc3
+
+2010-07-06 14:24  source
+
+	* Added new setting WideAsUTF16 to ODBC driver to return UTF-16LE
+	  when using SQLWCHAR
+	* Fixed setting for UTF-8 when db keeps UTF-8 in varchars
+
+2010-07-06 14:06  source
+
+	* Fixed declaration after statement
+
+2010-07-06 10:40  source
+
+	* Fixed yac_list_keys output is changed
+
+2010-07-06 10:39  source
+
+	* Fixed examine lastmod ts before updating
+
+2010-07-06 10:34  source
+
+	* Fixed as col_default is always a serialized value, zero can appear
+	  as default integer zero
+
+2010-07-06 09:56  source
+
+	* Fixed move alloc/free of descriptor handles into SQLAllocStmt
+
+2010-07-05 19:30  source
+
+	* Added information for building on Mac OS X 10.6
+
+2010-07-05 19:25  source
+
+	* Added missing test for memcpy
+
+2010-07-05 15:01  source
+
+	* Fixed wikiWord ("." is not yet part of the name)
+
+2010-07-05 14:59  source
+
+	* Fixed when importing keys, let user decide which on to use as his
+	  webid for ODBC/SQL login
+
+2010-07-05 14:48  source
+
+	* Added support for FOAF+SSL authentication
+
+2010-07-05 14:11  source
+
+	* Updated documentation
+
+2010-07-05 14:05  source
+
+	* Fixed upgrade procedure, more checks
+
+2010-07-05 14:04  source
+
+	* Moved to conductor
+
+2010-07-05 13:24  source
+
+	* Fixed handling multiple certs
+
+2010-07-05 13:23  source
+
+	* FIxed can have many certs in FOAF
+
+2010-07-05 13:17  source
+
+	* Mover ACL UI into conductor
+	* Fixed dependency on ODS Framework
+
+2010-07-05 13:04  source
+
+	* Fixed use label ontology to extract geo coordinates
+
+2010-07-05 12:42  source
+
+	* Added driver versioning
+	* Fixed issue with batch commit
+
+2010-07-05 12:41  source
+
+	* Added driver versioning
+	* FIxed issue with batch commit
+
+2010-07-05 12:40  source
+
+	* Rebuild driver
+
+2010-07-05 12:40  source
+
+	* Added driver versioning
+	* Fixed force jena's lazy initialization when Graph is created
+	* Fixed ignore warning on Binding.add NULL value
+
+2010-07-05 12:21  source
+
+	* Rebuild drivers
+
+2010-07-05 12:16  source
+
+	* Added driver versioning
+
+2010-07-05 08:30  source
+
+	* Added more assertations to facets ontology
+
+2010-07-05 08:29  source
+
+	* Added label as IPF
+
+2010-07-05 08:29  source
+
+	* Remove tags from comment, label etc
+
+2010-07-05 08:26  source
+
+	* Added support for multiple certificates in user profile
+	* Added semantic pingback log
+	* Fixed GoodsRelation SIOC data
+	* Fixed Offers
+
+2010-07-05 08:25  source
+
+	* FIxed JS error showing unlogged users
+
+2010-07-05 08:20  source
+
+	* Fixed RSS data
+
+2010-07-05 08:13  source
+
+	* Fixed minor issue
+
+2010-07-01 11:52  source
+
+	* Fixed namespace issues
+
+2010-07-01 11:49  source
+
+	* Fixed IE problem with negative size on box
+	* Fixed do not rewrite existing href on a++ links
+
+2010-06-30 14:32  source
+
+	* Fixed handing of items in alt name
+
+2010-06-30 14:31  source
+
+	* Fixed UI profile edit
+	* Fixed Favorites
+
+2010-06-30 14:29  source
+
+	* Fixed when distinct, should use one or the other ssl depending on which
+	  is non null
+
+2010-06-30 09:58  source
+
+	* Fixed minor issues
+
+2010-06-30 09:47  source
+
+	* Added UI semantic ping
+
+2010-06-30 09:47  source
+
+	* Fixed handling of items in alt name
+
+2010-06-29 22:55  source
+
+	* Fixed handling of alt name
+
+2010-06-29 12:50  source
+
+	* Fixed semantic pingback
+
+2010-06-29 11:53  source
+
+	* Updated version to 6.1.2-rc2
+
+2010-06-28 11:14  source
+
+	* Fixed ontology label
+
+2010-06-28 10:34  source
+
+	* Fixed sparql union selections, added ANY decl on relevant section
+	  list bits
+
+2010-06-28 10:30  source
+
+	* Rebuild driver
+
+2010-06-28 10:19  source
+
+	* Added support for creating ruleset
+	* Fixed handling of quotes in literals
+
+2010-06-28 10:14  source
+
+	* Added support for using VirtuosoDataSource
+	* Fixed handling of quote chars in literals
+
+2010-06-28 09:49  source
+
+	* Updated documentation
+
+2010-06-28 09:48  source
+
+	* Added new images
+
+2010-06-28 09:35  source
+
+	* Added new RDF framework
+	* Added JS XPATH library
+	* Added browser checks
+	* Added logging/debugging helper functions
+	* FIxed rdftabs navigation and maps cosmetics
+	* Fixed DOM parser initialization issue with IE
+
+2010-06-28 09:23  source
+
+	* Added support for new RDF framework
+	* Fixed cosmetics
+	* Fixed extraneous comma in object def for IE7 compatibility
+	* Fixed small bugs
+
+2010-06-28 09:08  source
+
+	* Updated Favorites
+
+2010-06-28 09:07  source
+
+	* Added Semantic Pingback client/server
+
+2010-06-28 09:06  source
+
+	* Updated to CKEditor v3.3.1
+
+2010-06-25 16:41  source
+
+	* Added support for following http redirects automatically
+
+2010-06-25 16:39  source
+
+	* Fixed compiler warnings
+
+2010-06-25 11:22  source
+
+	* Added extra functions for graph diff, iteration over dictionary and
+	  obtaining biggest possible IRI_ID on given 32/64bit platform
+
+2010-06-25 11:19  source
+
+	* Added etsy cartridge
+	* Fixed minor issues
+
+2010-06-25 11:18  source
+
+	* Added new Link headers
+
+2010-06-25 11:16  source
+
+	* Fixed ACL file to have some permissions using foaf+ssl
+	* Fixed check it is not det
+
+2010-06-25 11:11  source
+
+	* Added OpenID 2.0 login and registration
+
+2010-06-25 11:10  source
+
+	* Added downstream using PSH subscription
+
+2010-06-25 10:46  source
+
+	* Fixed text
+
+2010-06-25 10:45  source
+
+	* Fixed problem with latest versions of libtool
+
+2010-06-24 23:08  source
+
+	* Updated documentation
+
+2010-06-24 15:34  source
+
+	* Fixed text labels
+
+2010-06-24 15:34  source
+
+	* Added more properties for inference
+
+2010-06-24 15:13  source
+
+	* Fixed check proxy and remove if host is an exception
+
+2010-06-24 08:20  source
+
+	* Fixed listener serialization
+	* Fixed hash
+
+2010-06-24 08:14  source
+
+	* Fixed reorganized rdf tab
+
+2010-06-22 15:50  source
+
+	* Fixed rdfa failing to parse both rel/rev
+
+2010-06-22 15:50  source
+
+	* Fixed normalize_modulus
+
+2010-06-18 11:08  source
+
+	* Fixed url rewrite should happen before parsing parameters in order
+	  to check if we are dealing with php or proxy page when we use raw
+	  request body
+
+2010-06-16 10:50  source
+
+	* Added more properties for inferencing
+
+2010-06-16 10:50  source
+
+	* Fixed minor UI issue
+
+2010-06-15 20:06  source
+
+	* Fixed merged missing file
+
+2010-06-15 20:00  source
+
+	* Fixed calling wrong pl
+
+2010-06-12 12:59  source
+
+	* Fixed do not free on SQL_SUCCESS, as this will be done at end of loop
+
+2010-06-12 12:57  source
+
+	* Fixed do not explicitly set header if it is already set; in proxy
+	  remove content-type as it will be set from sparql
+
+2010-06-11 12:48  source
+
+	* Fixed bad condition check
+
+2010-06-10 18:48  source
+
+	* FIxed ignore special properties such as virt:xx when printing
+
+2010-06-10 18:46  source
+
+	* Fixed fd can be 0 in background mode
+
+2010-06-10 12:41  source
+
+	* Fixed RDF trx replication UI
+
+2010-06-09 13:42  source
+
+	* Added ACL rules
+	* Added FOAF+SSL based authentication using ACL
+	* Added PubSubHub Feeds support
+
+2010-06-09 13:40  source
+
+	* Added PubSubHub Feeds support
+
+2010-06-09 13:29  source
+
+	* Added FOAF+SSL based authentication
+
+2010-06-09 13:28  source
+
+	* Fixed minor issues
+
+2010-06-09 12:31  source
+
+	* Added check for automatic repair
+
+2010-06-09 12:30  source
+
+	* Added check for automatic repair
+	* Fixed when taking a dp from extent map, must decrease the free
+	  pages accordingly
+
+2010-06-09 10:15  source
+
+	* Fixed VDB/DB2 stats procedure
+
+2010-06-08 21:58  source
+
+	* Added EAV and SPO labeling modes
+
+2010-06-07 13:29  source
+
+	* Fixed missing label
+	* Fixed label consistency
+	* Fixed check for iri type
+	* Fixed limit the result set
+
+2010-06-07 13:27  source
+
+	* Fixed use explicit format if supplied
+
+2010-06-07 13:26  source
+
+	* Fixed ODATA feed title locality
+
+2010-06-07 10:59  source
+
+	* Added wine cartridge
+	* Added youtube cartridge
+	* Fixed minor issues
+
+2010-06-07 10:58  source
+
+	* Added support for ODATA formats
+	* Fixed webcal/feed in rewrite rules
+
+2010-06-01 15:26  source
+
+	* Added support for odata/json in describe and construct
+
+2010-06-01 14:06  source
+
+	* Fixed issues with variable binding
+	* Fixed examples
+
+2010-05-31 23:20  source
+
+	* Commented out old tutorial pages
+
+2010-05-31 23:18  source
+
+	* Added extra tutorials
+
+2010-05-31 22:04  source
+
+	* Updated version to 6.1.2-rc1
+
+2010-05-31 21:55  source
+
+	* Added common PubSubHub procedures
+	* Fixed use notify services for PubSubHub settings
+	* Fixed publish atom feed too
+	* Fixed PHP ssl
+
+2010-05-31 21:53  source
+
+	* Fixed link re=hub
+	* Fixed check individual settings
+
+2010-05-31 21:49  source
+
+	* Added support for PubSubHub
+
+2010-05-31 20:49  source
+
+	* Added setting for GatewayIpAddress
+
+2010-05-31 20:48  source
+
+	* Fixed missing external
+
+2010-05-31 20:47  source
+
+	* Fixed incomplete check condition as locks with pos at end do not
+	  count
+
+2010-05-31 20:45  source
+
+	* Fixed use request line for ID
+
+2010-05-31 14:27  source
+
+	* Merged enhancements from sesame2
+
+2010-05-31 14:26  source
+
+	* Rebuild driver
+
+2010-05-31 14:26  source
+
+	* Fixed isue with variable binding
+
+2010-05-31 11:08  source
+
+	* Added initial support for OData atom serialization
+	* Use CBG describe for OData format
+	* Use EMD types for generic types
+
+2010-05-31 11:00  source
+
+	* Added option DensePageAllocation which offers up some near page
+	  locality so resulting db uses less disk space
+
+2010-05-31 11:00  source
+
+	* Fixed issue with ?? with sparql compiler inside sql query
+
+2010-05-29 12:25  source
+
+	* Fixed when traverse foreigh sites, check if they add something
+	  more, such as redirects back to origin
+
+2010-05-29 12:09  source
+
+	* Rebuild driver
+
+2010-05-29 12:07  source
+
+	* Added check for inline string flag
+
+2010-05-29 12:00  source
+
+	* Fixed minor issues
+
+2010-05-28 16:56  source
+
+	* Fixed small issues
+
+2010-05-26 21:48  source
+
+	* Fixed use distinct as many graphs can be in same rule
+	* Minor UI tweaks
+
+2010-05-26 21:41  source
+
+	* Fixed report proper version
+	* Fixed compatibility with later JRE
+	* Fixed buffer length
+
+2010-05-26 21:37  source
+
+	* Fixed RM_XLAT_CONCAT
+
+2010-05-26 15:23  source
+
+	* Added Vimeo cartridge
+	* Fixed Tesco cartridge
+	* Fixed html2 cartridge
+
+2010-05-26 15:21  source
+
+	* Added support to export queues
+	* Fixed view in crawler UI
+
+2010-05-26 15:21  source
+
+	* Fixed incorrect check for VDB functionality
+
+2010-05-26 08:11  source
+
+	* Added automatic FOAF+SSL
+	* Added ping service to do PubSubHub
+	* Added PubSubHub settings in ODS
+	* Fixed collecting FOAF data
+	* Fixed casemode problem
+	* Fixed bad join
+	* Fixed typo
+
+2010-05-26 08:08  source
+
+	* Fixed group IRI
+
+2010-05-26 08:07  source
+
+	* Added PubSubHub setting in ODS
+
+2010-05-26 08:07  source
+
+	* Fixed upstreaming
+
+2010-05-24 22:36  source
+
+	* Fixed memleak
+
+2010-05-24 18:02  source
+
+	* Added improvements in inference handling
+	* FIxed support for subproperties of inverse functional properties
+	* Fixed support for loading aaa ruleset from multiple contology graphs
+
+2010-05-22 19:18  source
+
+	* Added support for gunzip session
+
+2010-05-21 12:40  source
+
+	* Fixed checking return code from fd_open call
+
+2010-05-21 12:27  source
+
+	* Added automatic error correction for some common typos in
+	  decode_b32_num
+
+2010-05-21 12:26  source
+
+	* Fixed when doing log replay, we should remove old roots to free
+	  memory as at this time the grim reaper is not available
+
+2010-05-21 12:24  source
+
+	* Fixed allow reset of xslt in PP hook
+
+2010-05-19 10:19  source
+
+	* Merged b32 encoding/decoding from HEAD
+
+2010-05-19 10:13  source
+
+	* Added support for editing update interval from site settings
+
+2010-05-19 10:04  source
+
+	* Fixed urchinTracker setting
+
+2010-05-18 22:29  source
+
+	* Added support for editline
+
+2010-05-18 19:33  source
+
+	* Added Google API
+
+2010-05-18 19:22  source
+
+	* Fixed minor issue
+
+2010-05-18 19:21  source
+
+	* Added support for additional types
+	* Fixed do not decode variants as we do not know if sender encoded
+	  special symbols or not
+
+2010-05-18 19:18  source
+
+	* Added more ctypes
+
+2010-05-18 13:01  source
+
+	* Fixed dependency list
+
+2010-05-18 10:52  source
+
+	* Fixed remove FACEBOOK_OPENGRAPH from tests as it is not related
+	  to RDFA
+
+2010-05-18 10:42  source
+
+	* Added FOAF+SSL registration for users pages (jsp, php, vsp etc)
+	* Fixed FOAF+SSL registration code
+	* Fixed modulus should be cleaned from garbage
+	* Fixed function to test w/o sparql acl table
+
+2010-05-18 10:41  source
+
+	* Updated SIOC service procedures
+
+2010-05-18 10:41  source
+
+	* Fixed get responce back so it can be traced if needed
+
+2010-05-18 10:40  source
+
+	* Updated SIOC services procedures
+
+2010-05-18 10:40  source
+
+	* Added FeedManager callback
+
+2010-05-18 10:39  source
+
+	* Fixed problem with atom feed
+
+2010-05-18 10:30  source
+
+	* Added Facebook Open Graph cartridge
+
+2010-05-18 10:30  source
+
+	* Fixed minor issues
+
+2010-05-18 09:08  source
+
+	* Fixed when statement has implicit group by, do not remove order by
+
+2010-05-17 08:21  source
+
+	* Fixed error messages
+
+2010-05-17 08:21  source
+
+	* Fixed wrong dv_compare on boxes with box flags
+
+2010-05-16 18:57  source
+
+	* Fixed page footer and labels
+
+2010-05-16 18:56  source
+
+	* Added missing grant
+
+2010-05-16 17:56  source
+
+	* Fixed index for better queue ordering
+
+2010-05-13 19:38  source
+
+	* Fixed do not decode anything. We just match what is in and print
+	  it out, if source is bad encoded, the result is bad encoded,
+	  otherwise can not figure-out what was it before and what should
+	  be after, so we keep it simple
+
+2010-05-12 22:46  source
+
+	* Fixed GPF when weird (but formally legal) head of composite XML contains
+	  two declarations of external entities with different entity names but
+	  same URI to resolve
+
+2010-05-12 12:24  source
+
+	* Fixed use special cl_non_logged_write_mode used to load extrememly
+	  large datasets needs to ensure no log will be made at all. If one
+	  node dies, the rest will do same. Use this flag only in safe
+	  environment
+
+2010-05-12 12:17  source
+
+	* Fixed GPF in SPARUL INSERT optimization that happens when an
+	  auxiliary retval with vector of variables is wrapped in alias
+
+2010-05-12 12:16  source
+
+	* Fixed when looking at free set from disk must stop at last, as
+	  the dbs pages can be out of sync. Do this only when reading from
+	  disk otherwise error
+
+2010-05-11 16:53  source
+
+	* Added option to skip sponger and do RDFa along with other rdf
+	  formats
+
+2010-05-11 12:46  source
+
+	* Fixed modulus should be cleaned from garbage
+
+2010-05-11 11:15  source
+
+	* Fixed check magic to make sure data is gzip compressed
+
+2010-05-10 10:02  source
+
+	* Optimized FOAF+SSL login
+	* Updated SIOC service procedures
+	* Fixed CR/LF to make proper N3 syntax
+	* Fixed bad email in WebID
+
+2010-05-10 09:55  source
+
+	* Added Idiomag cartridge
+	* Added HTML5 Microdata cartridge
+
+2010-05-10 09:54  source
+
+	* Fixed minor issues
+
+2010-05-10 09:49  source
+
+	* Updated documentation
+
+2010-05-10 09:39  source
+
+	* Fixed keep dashes in words and use escape whenever it occurs;
+	  words starting with numbers should also be escaped
+
+2010-05-07 09:14  source
+
+	* Added new bifs for graph diff functionality, iteration over
+	 dictionary and obtaining biggest possible IRI_ID on 32/64bit
+	 platforms
+
+2010-05-03 23:54  source
+
+	* FIxed use X-Forwarded-Host to handle proxy
+
+2010-05-03 19:31  source
+
+	* Added support for logging x-forwarded-for when instance is using
+	  a proxy
+
+2010-05-03 08:54  source
+
+	* Added shortcut for debugging variables
+
+2010-04-29 10:54  source
+
+	* Fixed cleaning new schema properly
+
+2010-04-29 10:00  source
+
+	* Added type
+	* Fixed labels
+	* Minor fixes
+
+2010-04-29 09:59  source
+
+	* Fixed print string without waiting for error
+
+2010-04-29 08:29  source
+
+	* Added more properties
+
+2010-04-29 08:28  source
+
+	* Fixed About header
+
+2010-04-28 15:21  source
+
+	* Fixed if Host header is present use that, and do not add port as may be
+	  behind proxy
+
+2010-04-26 14:41  source
+
+	* Fixed when a signal error arrives, pop the bad instruction so the
+	  free is not confused by dk_set when IS_NULL
+
+2010-04-26 07:57  source
+
+	* Fixed crawling of RDFa
+
+2010-04-26 07:56  source
+
+	* Added FOAF+SSL client demo
+
+2010-04-26 07:53  source
+
+	* Fixed if no DefaultGraph, do not assume anything about /dataspace
+
+2010-04-26 07:51  source
+
+	* Fixed minor issue
+
+2010-04-24 14:01  source
+
+	* Added import/export support using Yahoo Contacts API
+
+2010-04-24 13:56  source
+
+	* Fixed obj2json function
+
+2010-04-23 20:03  source
+
+	* Fixed do not continue when missing part of key, as it is uninitialized
+	  and needs to be dropped before causing a gpf
+
+2010-04-23 20:02  source
+
+	* Fixed only serialize box flags for dependant part
+
+2010-04-22 14:12  source
+
+	* Added cset to render function to recode string results
+
+2010-04-22 12:41  source
+
+	* FIxed url must end in slash or hash
+
+2010-04-22 12:40  source
+
+	* Fixed unicode handling in isql and sparql UI
+
+2010-04-22 12:35  source
+
+	* Fixed minor issue
+
+2010-04-22 12:35  source
+
+	* Removed debugging
+
+2010-04-22 11:12  source
+
+	* Fixed http header ends with proper CRLF sequence
+
+2010-04-21 16:18  source
+
+	* Fixed when doing something that may reference the control_exp
+	  private elements set the so_df_private_elts, otherwise may get a
+	  new df which is in global so df hash
+
+2010-04-21 12:44  source
+
+	* Fixed treat sort read node like a ts in tracking ssl refs, else
+	  partitioned top oby goes wrong
+
+2010-04-20 19:27  source
+
+	* Fixed resize map width to width of result div
+
+2010-04-20 19:24  source
+
+	* Fixed when gby serialize box flag if any
+
+2010-04-17 23:23  source
+
+	* Fixed can have uninitialized null flag in hash temp; can be extra
+	  nulls in gby or hash join
+
+2010-04-16 12:35  source
+
+	* Added hook to execute secondary statement
+
+2010-04-16 12:33  source
+
+	* FIxed missing definition for bigint
+
+2010-04-16 11:40  source
+
+	* Fix for <![CDATA[ inside <script> in HTML and dirty HTML modes.
+
+2010-04-15 18:46  source
+
+	* Fixed export to Del.icio.us
+
+2010-04-15 18:42  source
+
+	* Fixed use global list of prefixes for advanced query helper as well
+	  as other parts
+
+2010-04-15 18:24  source
+
+	* Fixed minor issues
+
+2010-04-15 18:23  source
+
+	* Fixed support for foaf:maker
+
+2010-04-15 18:20  source
+
+	* Updated CSS for buttons
+
+2010-04-15 18:20  source
+
+	* Updated toolbar
+
+2010-04-15 14:05  source
+
+	* Fixed memleak when error in bif and no error var given
+
+2010-04-15 14:03  source
+
+	* Fixed memleak when client drops conneciton before prepare
+
+2010-04-14 13:47  source
+
+	* Added initial support for bif_python_exec
+
+2010-04-14 13:19  source
+
+	* Fixed export check to call in plugins
+
+2010-04-14 10:48  source
+
+	* Fixed support for bigint in parameter marshalling
+
+2010-04-14 10:47  source
+
+	* Fixed UI profile
+
+2010-04-13 12:19  source
+
+	* Fixed issue with ckeditor
+
+2010-04-13 12:18  source
+
+	* Fixed login with non WebDav accounts
+
+2010-04-13 12:17  source
+
+	* Updated CKEditor to version 3.2.1
+
+2010-04-12 19:42  source
+
+	* Added possibility to do URL encoding in TCN rules
+
+2010-04-12 19:41  source
+
+	* FIxed odata cartridge
+
+2010-04-12 19:39  source
+
+	* Fixed extra replacements
+
+2010-04-12 19:39  source
+
+	* Minor fix
+
+2010-04-12 12:37  source
+
+	* Fixed use UTF-8 as source and dest charsets when doing urls
+
+2010-04-12 07:28  source
+
+	* Fixed check for third argument
+
+2010-04-12 07:26  source
+
+	* Fixed query string for product description from BestBuy API
+	* Minor fixes
+
+2010-04-09 14:46  source
+
+	* Fixed use default MaxMemPoolSize of 200000000
+	* Fixed double MaxMemPoolSize on 64bit systems
+
+2010-04-09 14:43  source
+
+	* Fixed if we got a single ts as first and it is outer, put a dummy in
+	  front
+
+2010-04-09 14:36  source
+
+	* Fixed problem with Chrome browser and JS loading
+
+2010-04-09 14:34  source
+
+	* Fixed problem with Chrome browser and JS loading
+	* Fixed Relation ontology data
+
+2010-04-09 13:01  source
+
+	* Added Relation ontology
+	* Updated UI profile for vsp, php etc
+
+2010-04-09 13:01  source
+
+	* Fixed check for unique email address
+
+2010-04-08 14:40  source
+
+	* Added CSV parser mode option
+	* Fixed error reporting
+
+2010-04-08 14:30  source
+
+	* Added CSV parser lax mode
+	* FIxed log errors from loading
+
+2010-04-07 21:48  source
+
+	* Fixed issue with tab and space handling
+
+2010-04-07 19:27  source
+
+	* Fixed abnormal long RDFa parsing of document with i18n URIs
+
+2010-04-07 19:25  source
+
+	* Fixed memleak
+
+2010-04-07 19:25  source
+
+	* Fixed release it_maps as it is allocated dynamic
+
+2010-04-07 07:56  source
+
+	* Fixed wrong TTL output of CONSTRUCT of wierd IRIs
+
+2010-04-06 16:47  source
+
+	* Fixed shortcut comparing version numbers during package upgrade
+
+2010-04-06 16:41  source
+
+	* Updated documentation
+
+2010-04-06 16:33  source
+
+	* Added photo and audio upload for jtml, vsp, php and jsp pages
+
+2010-04-06 16:31  source
+
+	* Added CSV cartridge
+	* Fixed odata cartridge
+	* Fixed webcal support
+	* Fixed geo coords
+
+2010-04-06 16:29  source
+
+	* Added support for encodings
+	* Added support for gz and zip compressed CSV
+	* Fixed view to have col names
+	* Fixed catch db nulls
+	* Fixed crawling opts
+
+2010-04-06 14:43  source
+
+	* Fixed find const iri when nested call of i2id is used
+
+2010-04-06 13:47  source
+
+	* Rebuild driver
+
+2010-04-06 13:46  source
+
+	* Added additional support for inferencing
+	* Added new inferencing sample
+
+2010-04-06 13:38  source
+
+	* Added rdftabs timeline support for ical properties
+	* Added ical:summary as one of recognized title properties
+	* Added support for ATOM feeds
+	* Fixed copy of defaults
+	* Fixed url encoding
+	* Fixed move OAT.Dom.decodeImage to OAT.Formobject
+	* Fixed use new OAT.Dom.create (..., {className:"XXX"}) method
+	* Fixed JSON serialize/deserialize
+	* Fixed rename find to indexOf
+
+2010-04-06 12:16  source
+
+	* Added support for listing content of zip file
+	* Fixed memleak in unzip_file
+
+2010-04-01 10:44  source
+
+	* Rebuild provider
+
+2010-04-01 10:43  source
+
+	* Added support for inference graph
+	* Added support for inference and query execution
+	* Added support for QueryEngine interface, so now Jena provider support
+	  next query execution mode:
+	   a) parse and execute query via ARQ
+	   b) parse query via ARQ and execute query directly via Virtuoso(new mode)
+	   c) parse and execute query directly via Virtuoso
+	* Fixed small bugs
+
+2010-03-31 22:07  source
+
+	* Fixed insecure https client connections
+	* Fixed memleaks on connection error
+
+2010-03-31 22:06  source
+
+	* Fixed no value is null
+
+2010-03-30 20:52  source
+
+	* Fixed PACKAGE_VERSION
+
+2010-03-30 17:59  source
+
+	* Updated documentation
+
+2010-03-30 15:34  source
+
+	* Updated version to 6.1.1 for final release
+
+2010-03-30 15:33  source
+
+	* Fixed compiler warning
+
+2010-03-30 15:28  source
+
+	* Added import from URL
+	* Fixed use escape to handle hash based IRIs
+
+2010-03-30 13:08  source
+
+	* Fixed minor issue
+	* Removed deprecated file
+
+2010-03-30 13:07  source
+
+	* Added missing file to distribution
+
+2010-03-30 12:42  source
+
+	* Fixed extra define for linux on sparc
+
+2010-03-29 13:56  source
+
+	* Added support for oData
+
+2010-03-29 13:37  source
+
+	* Fixed skip identity columns
+
+2010-03-29 13:33  source
+
+	* Fixed changed default map to Google Maps API v3
+
+2010-03-29 13:32  source
+
+	* Added options page for parser options, preview etc
+	* Fixed IDN col
+
+2010-03-28 23:21  source
+
+	* Fixed object properties in favorites
+
+2010-03-28 23:21  source
+
+	* Fixed a++ links
+
+2010-03-26 23:08  source
+
+	* Updated documentation
+
+2010-03-26 23:02  source
+
+	* Added image
+
+2010-03-26 22:53  source
+
+	* Added user's ontologies in favorites
+	* FIxed ontology API
+
+2010-03-26 22:50  source
+
+	* Fixed image preview
+
+2010-03-26 19:46  source
+
+	* Rebuild drivers
+
+2010-03-26 19:43  source
+
+	* Fixed memory leak
+
+2010-03-26 19:43  source
+
+	* Fixed missing check for ROLLEDBACK
+
+2010-03-26 19:35  source
+
+	* Added options to CSV parser for delimiter and quote char
+
+2010-03-26 16:14  source
+
+	* Added support for CSV import
+
+2010-03-25 19:31  source
+
+	* Added csv_parse function
+
+2010-03-24 22:31  source
+
+	* Fixed preserve content-type field
+
+2010-03-24 22:21  source
+
+	* Added support for reading CSV files into tables
+
+2010-03-24 22:18  source
+
+	* Added support for setMaxRows
+	* Fixed check argument values
+
+2010-03-24 21:47  source
+
+	* Regenerated drivers
+
+2010-03-24 16:43  source
+
+	* Fixed typo
+
+2010-03-24 10:23  source
+
+	* Added options for /sparql
+	* Added function http_header_array_get to retrieve headers as an
+	  array of strings
+
+2010-03-24 01:03  source
+
+	* Added optimization of sprintf_inverse(const)
+
+2010-03-24 01:02  source
+
+	* Fixed save the jt before doing ts; this is needed because ic_after_pos
+	  expects in jt but because of in_list it can be modified
+
+2010-03-24 01:00  source
+
+	* Fixed compiler warning
+
+2010-03-23 10:07  source
+
+	* Fixed use globally known dfe for a select even in cond exp, else it
+	  ruins the dt by repeatedly adding the same items when making a second
+	  dfe for the same select
+
+2010-03-23 10:01  source
+
+	* Fixed incorrect codegen of formatter in ssg_select_known_graphs_codegen
+
+2010-03-22 22:29  source
+
+	* Updated documentation
+
+2010-03-22 22:01  source
+
+	* Added a++ otion in user's pages
+	* Fixed ontology APIs
+	* Fixed 'Creator of'
+	* Fixed nickName
+	* Fixed php POST request
+
+2010-03-22 21:48  source
+
+	* Fixed also check for ctype
+
+2010-03-22 21:46  source
+
+	* Fixed Back button
+
+2010-03-22 21:46  source
+
+	* Added support for WebID
+
+2010-03-22 21:43  source
+
+	* Fixed fetching img id
+	* Fixed issue with multiple URL params
+
+2010-03-22 13:40  source
+
+	* Fixed use sk_X509_ALGOR_* macros
+
+2010-03-22 12:36  source
+
+	* Fixed X509ClientVerify flag of 0/1/2/3 to accept self signed or
+	  optional certificates
+
+2010-03-22 12:35  source
+
+	* Added support for FOAF+SSL login for SQL connections
+
+2010-03-22 11:54  source
+
+	* Fixed do not encode default graph
+
+2010-03-22 11:54  source
+
+	* Fixed SPARQL 1.1 compatibility in result set syntax
+
+2010-03-19 14:59  source
+
+	* Fixed use newer OAT functions
+
+2010-03-19 10:08  source
+
+	* Added improved version of xsl:for-each-row for both SPARQL and SQL
+
+2010-03-19 10:05  source
+
+	* FIxed issue with backup
+
+2010-03-18 15:45  source
+
+	* Fixed when transaction is prepared but not committed before commit
+	  we must check if cpt is pending. If so we must wait as xa trx has
+	  special processing in cpt_rollback and log_cpt
+	* Fixed compiler warning
+
+2010-03-18 15:43  source
+
+	* Fixed better serialization on lt_lock_mtx
+
+2010-03-18 10:59  source
+
+	* Fixed enter mtx before truncating log
+	* Fixed when a 2pc transaction as finished, invalidate its commit
+	  flag offset since the log is rewritten already. The trx must already
+	  be in cpt state.
+
+2010-03-18 10:50  source
+
+	* Fixed use new OAT toolkit
+
+2010-03-18 10:48  source
+
+	* Fixed check if datadump is gz too
+	* Fixed the next site needs to copy all props from initial
+	* Fixed use log mode 3 as dump can be large
+
+2010-03-18 10:47  source
+
+	* Fixed deadlock retry
+
+2010-03-18 10:46  source
+
+	* Fixed missing date conversion
+
+2010-03-18 10:45  source
+
+	* Fixed alert text
+	* Fixed typo in styles path
+	* Fixed use new API functions
+	* Fixed support for Google map v3
+
+2010-03-18 10:20  source
+
+	* Fixed rebuild driver
+
+2010-03-18 09:58  source
+
+	* Fixed user's login
+	* Fixed UI buttons
+	* Fixed unique name message
+	* Fixed wishlist UI pages
+	* Fixed rename FOAF+SSL to WebID
+
+2010-03-18 09:56  source
+
+	* Fixed rename FOAF+SSL to WebID
+
+2010-03-17 14:54  source
+
+	* Fixed check proper prefetch value
+
+2010-03-16 23:53  source
+
+	* Fixed check lt
+
+2010-03-16 18:21  source
+
+	* Fixed when txn error remove trx from global pool. It cannot be
+	  committed anyway
+
+2010-03-16 18:20  source
+
+	* Fixed properly set lt_threads
+
+2010-03-16 11:39  source
+
+	* Fixed when writing log entries always check the mtx
+
+2010-03-16 11:39  source
+
+	* Fixed when setting up a XA trx wait for any checkpoint in progress
+	  to finish before proceeding
+
+2010-03-16 10:54  source
+
+	* Fixed if not box or dfe false, skip rest
+
+2010-03-16 10:51  source
+
+	* Added virtuoso.ttl to sesame jar
+	* Added csl pages for Sesame HTTP repository configuration
+	* Rebuild driver
+
+2010-03-16 10:26  source
+
+	* Added support for vad_version
+	* FIxed use new OAT toolkit
+	* Removed debug code
+
+2010-03-16 10:24  source
+
+	* FIxed encoding of URL params
+
+2010-03-15 16:46  source
+
+	* Fixed resume waiting
+
+2010-03-15 15:51  source
+
+	* Fixed check array index not out of bound
+
+2010-03-15 15:50  source
+
+	* Fixdd FOAF+SSL user pages
+
+2010-03-15 15:49  source
+
+	* FIxed removed debugging code
+
+2010-03-15 15:27  source
+
+	* Fixed use new OAT toolkit
+	* Fixed version check for ODS Framework
+
+2010-03-15 13:16  source
+
+	* Fixed missing case for LT_PREPARE_PENDING
+
+2010-03-12 14:04  source
+
+	* Fixed invitation problem with multiple users
+
+2010-03-12 13:34  source
+
+	* Merged new version of OAT toolkit
+	* Fixed Google Maps v3 support
+
+2010-03-12 13:34  source
+
+	* FIxed IRIs
+
+2010-03-12 09:13  source
+
+	* Merged newer version of OAT toolkit
+	* Fixed dependency to later version of ODS Framework
+	* Fixed SIOC subscriptions
+
+2010-03-12 09:13  source
+
+	* Merged newer version of OAT toolkit
+	* Fixed dependency to later version of ODS Framework
+
+2010-03-12 09:12  source
+
+	* Merged new version of OAT toolkit
+	* Fixed icons - delete and add
+	* Fixed dependency to later version of ODS framework
+
+2010-03-12 09:10  source
+
+	* Added Register to vsp, php etc users pages
+	* Added X.509 create certificate to users pages
+	* Merged new version of OAT toolkit
+	* Fixed UI profile
+	* Fixed delete action
+	* Fixed new foaf+ssl schema support
+
+2010-03-12 09:04  source
+
+	* Added uStream cartridge
+	* Fixed PPTX cartridge to work with latest description.vsp
+
+2010-03-12 09:01  source
+
+	* Merged new version of OAT toolkit
+	* Added location macro support
+	* Fixed numerous issues
+
+2010-03-11 17:02  source
+
+	* Merged new version of OAT toolkit
+
+2010-03-10 20:28  source
+
+	* Fixed JSON support
+
+2010-03-10 15:09  source
+
+	* Fixed wide character when getting procedure columns information
+
+2010-03-10 15:08  source
+
+	* Added OPTIONS for http server
+	* Added trace method
+
+2010-03-10 14:43  source
+
+	* Fixed support of old and new schema for FOAF+SSL
+
+2010-03-10 10:34  source
+
+	* Fixed allow nulls, DV_C_STRING and memleak
+
+2010-03-09 20:14  source
+
+	* Added support for nvarchar to __like_min and __like_max
+
+2010-03-09 20:12  source
+
+	* Fixed possible dfe_false in context
+
+2010-03-08 20:39  source
+
+	* Fixed setting pooling params
+
+2010-03-08 20:37  source
+
+	* Rebuild driver
+
+2010-03-08 14:20  source
+
+	* Fixed allow chunked content to be read as strses
+
+2010-03-08 12:04  source
+
+	* Fixed typos
+
+2010-03-08 12:02  source
+
+	* Fixed typo in tag MusicianCreditsList
+
+2010-03-08 11:54  source
+
+	* Added wide char support to set_qualifier
+
+2010-03-08 11:53  source
+
+	* Fixed issue when no content len is give but content is sent as
+	  http/1.0 protocol e.g. with connection-close
+
+2010-03-08 09:21  source
+
+	* Fixed typo in scovo:dimension
+
+2010-03-07 08:20  source
+
+	* Fixed typo
+
+2010-03-07 08:18  source
+
+	* Fixed SERVICE parameter passing
+	* Fixed (!ask(...)) in filters
+
+2010-03-04 23:49  source
+
+	* Added tests
+
+2010-03-04 23:44  source
+
+	* Fixed improved codegen for FILTER (?local = IRI(?:global)) .
+
+2010-03-04 23:43  source
+
+	* Added support for fractions of second in bif_dateadd
+
+2010-03-04 23:38  source
+
+	* Fixed tests
+
+2010-03-04 20:45  source
+
+	* Updated docs
+
+2010-03-04 16:39  source
+
+	* Fixed memory leaks
+	* Fixed read memory after free
+	* Fixed when one connection does prepare and then uses another
+	  connection to commit/rollback, must reset 1st cli's trx
+	* Fixed when writing to log enter mutex to avoid concurrent writing
+
+2010-03-04 14:15  source
+
+	* Fixed typo
+
+2010-03-04 13:39  source
+
+	* Added initial support for JDBC hibernate
+
+2010-03-04 12:18  source
+
+	* Rebuild driver
+
+2010-03-04 12:18  source
+
+	* Fixed driver version
+
+2010-03-04 12:12  source
+
+	* Fixed connection pooling
+
+2010-03-04 12:11  source
+
+	* Fixed remove xa transaction
+
+2010-03-03 22:55  source
+
+	* Fixed do not setup unknown for special methods
+
+2010-03-03 09:21  source
+
+	* Rebuild driver
+
+2010-03-03 09:20  source
+
+	* Fixed problem with jar packaging
+
+2010-03-02 10:01  source
+
+	* Added OPTIONS support for http server
+
+2010-03-01 21:05  source
+
+	* Added initial support for basic SPARQL federation
+
+2010-03-01 20:46  source
+
+	* Added DefaultServiceMap and DefaultServiceStorage
+
+2010-03-01 20:42  source
+
+	* Fixed support for positional and named parameters from exec() or
+	  similar in SPARQL, as if they where global variables of other
+	  sorts
+
+2010-03-01 10:26  source
+
+	* Fixed use unzip_file function
+
+2010-03-01 10:18  source
+
+	* Fixed Import
+
+2010-03-01 10:16  source
+
+	* Fixed CSS
+
+2010-03-01 10:15  source
+
+	* Fixed minor issues
+
+2010-03-01 10:12  source
+
+	* Fixed compatiblity with jdk1.5
+
+2010-03-01 10:07  source
+
+	* Upgraded to Jena 2.6.2
+	* Fixed backward compatiblity with jdk 1.5
+
+2010-03-01 10:06  source
+
+	* Fixed make sesame2 backward compatible with jdk1.5
+
+2010-03-01 09:31  source
+
+	* Regenerated driver
+
+2010-03-01 09:17  source
+
+	* Rebuild driver
+
+2010-03-01 01:03  source
+
+	* Added immortal IRI for uname_virtrdf_ns_uri_DefaultServiceStorage
+
+2010-03-01 01:01  source
+
+	* Added support for unzip_file ()
+
+2010-03-01 00:50  source
+
+	* Updated documentation
+
+2010-03-01 00:39  source
+
+	* Upgraded to Sesame 2.3.1
+
+2010-03-01 00:38  source
+
+	* Fixed typo
+
+2010-03-01 00:35  source
+
+	* Added swapguard option
+
+2010-03-01 00:28  source
+
+	* Added columns for api type and id
+
+2010-03-01 00:03  source
+
+	* Added support for saving history to disk
+
+2010-02-28 23:58  source
+
+	* Fixed geo:point matching
+	* Fixed regex to remove default ns from XML - single quotes are valid
+	  for enclosed attribute values
+
+2010-02-28 23:57  source
+
+	* Fixed positioned update problem on cluster
+
+2010-02-28 23:55  source
+
+	* Added refresh parameter
+
+2010-02-28 23:52  source
+
+	* Added setting for RoundRobin scheduling
+
+2010-02-27 22:21  source
+
+	* Fixed diagnosics of async_queue specific errors like aq invocation
+	  on log replay or security issues
+
+2010-02-26 17:31  source
+
+	* Fixed missing label
+
+2010-02-26 17:28  source
+
+	* Fixed use union for local automatic variables to avoid alignment
+	  problems
+
+2010-02-26 10:24  source
+
+	* Regenerated driver
+
+2010-02-26 10:05  source
+
+	* Upgraded to Sesame 2.3.1
+	* Removed deprecated file
+	* Fixed inference support
+
+2010-02-25 20:24  source
+
+	* Updated to Sesame 2.2.4
+
+2010-02-25 20:23  source
+
+	* Added support for Sesame 2 HTTP respository
+	* Updated toSesame 2.2.4
+
+2010-02-25 20:21  source
+
+	* Rebuild driver
+
+2010-02-25 16:09  source
+
+	* FIxed url param for metadata selection
+
+2010-02-25 16:09  source
+
+	* Added 'Import' to user pages (vsp, php etc)
+	* Fixed pass interface too
+
+2010-02-25 16:08  source
+
+	* Added tweet gizmo
+
+2010-02-25 16:07  source
+
+	* Fixed groups
+
+2010-02-24 20:55  source
+
+	* Added proper ASK support in web service endpoing
+	* Fixed faster loading of inference sets
+	* Fixed loading of inference sets from graph groups, not only from
+	  single graphs
+	* Fixed creation of graph groups on cluster
+
+2010-02-24 20:53  source
+
+	* Added swap guard to kill trx and log ws when swapping is over 300 pages
+
+2010-02-24 13:02  source
+
+	* Fixed use unsigned for lower parts else we risk sign extent on large
+	  numbers
+
+2010-02-23 22:35  source
+
+	* Fixed metadata
+
+2010-02-23 14:50  source
+
+	* Fixed when looking at col_preds and seeking for column, make sure cp
+	  dfe is a column
+
+2010-02-23 14:49  source
+
+	* Added prototype
+
+2010-02-23 14:49  source
+
+	* Fixed when unbox iri make sure value is of type DV_IRI_ID
+
+2010-02-23 14:48  source
+
+	* FIxed 2pc file name does not change with log file if log trail on
+
+2010-02-23 10:44  source
+
+	* Fixed rewriting of group patterns with filters replaced with restrictions on
+	  equivs
+
+2010-02-23 10:21  source
+
+	* Fixed stop compilation where comp time over run time
+
+2010-02-19 00:22  source
+
+	* Fixed when doing a log replay, mark prepared XA trx as such
+
+2010-02-19 00:22  source
+
+	* Fixed more macros for 64bit fs
+
+2010-02-18 21:37  source
+
+	* Use macros for file calls for 64bit fs
+
+2010-02-18 21:36  source
+
+	* Merged XA fixes from HEAD
+
+2010-02-18 20:46  source
+
+	* FIxed mem leak
+
+2010-02-18 14:22  source
+
+	* Fixed minor issue
+
+2010-02-18 14:13  source
+
+	* Fixed if avail always use ro_id for hash
+
+2010-02-18 14:12  source
+
+	* Fixed text for NOT pred
+
+2010-02-18 10:57  source
+
+	* Fixed use separate macro for COL_DOTTED
+
+2010-02-18 10:01  source
+
+	* Fixed SIOC subscriptions
+	* Fixed bad item descriptions
+
+2010-02-18 10:00  source
+
+	* Fixed groups
+	* Fixed bookmarklet
+	* Fixed typo
+
+2010-02-17 22:06  source
+
+	* Fixed order must be greater than 0
+
+2010-02-17 16:58  source
+
+	* Fixed remove null in gby as it is not needed
+	* Fixed jts to check for call
+
+2010-02-17 16:56  source
+
+	* Fixed do not print default port for http and https in urls
+
+2010-02-17 10:21  source
+
+	* Fixed labels and added new columns
+
+2010-02-16 15:03  source
+
+	* Fixed IN pred as iterator before index path
+
+2010-02-16 13:49  source
+
+	* Added slidesix cartridge
+	* Fixed run microformats independent of rdfa
+
+2010-02-16 13:48  source
+
+	* Fixed owl:sameAS is not a:id
+
+2010-02-16 13:48  source
+
+	* Fixed minor issues
+
+2010-02-16 13:48  source
+
+	* Rolled back fix for GR data
+
+2010-02-16 12:47  source
+
+	* Fixed leave semaphore before jump
+
+2010-02-16 11:58  source
+
+	* Fixed detection of n3 and nt formats
+
+2010-02-15 21:23  source
+
+	* Fixed use macro
+
+2010-02-15 19:46  source
+
+	* FIxed GPF when 2nd argument is not a string
+
+2010-02-15 19:46  source
+
+	* Fixed inx int not applicable to keys with no pk ref
+
+2010-02-15 10:05  source
+
+	* Fixed problem with shared files
+
+2010-02-12 22:14  source
+
+	* Fixed bad array index check
+
+2010-02-12 22:13  source
+
+	* Added option for user WebID
+
+2010-02-12 22:12  source
+
+	* Fixed table editing fields
+
+2010-02-12 20:05  source
+
+	* Fixed NT serializations (_:_ is not a valid bnode in NT so it is
+	  replaced with _:ResultSet2053 )
+
+2010-02-12 13:00  source
+
+	* Updated version to 3127
+
+2010-02-12 12:56  source
+
+	* Rebuild driver
+
+2010-02-12 12:56  source
+
+	* Fixed use bitmask check
+
+2010-02-12 11:53  source
+
+	* Fixed combination of RDF_OBJ_OF_LONG(RDF_LONG_OF_SQLVAL(string))
+	  that screwed up RDF_DELETE_TRIPLES_AGG()
+
+2010-02-12 11:20  source
+
+	* Added "Create New Resource" option
+
+2010-02-12 11:20  source
+
+	* Fixed always refresh robot status
+
+2010-02-12 10:34  source
+
+	* Regenerated drivers
+
+2010-02-12 10:26  source
+
+	* Fixed issues with Literal data
+	* Small bugfixes
+
+2010-02-11 23:23  source
+
+	* Updated documentation
+
+2010-02-11 23:17  source
+
+	* Fixed serialize ha_hits hash lookups
+
+2010-02-11 16:25  source
+
+	* Fixed bug with ITF-8 encoded strings in box
+
+2010-02-11 14:00  source
+
+	* Fixed codegen in LIMIT ?:global-variable and OFFSET ?:global-variable
+
+2010-02-11 13:19  source
+
+	* Added new demo queries
+
+2010-02-11 13:16  source
+
+	* Added 'create file' action
+
+2010-02-11 13:15  source
+
+	* Fixed removed status bar
+
+2010-02-10 22:18  source
+
+	* Fixed DAV path normalize
+	* Fixed Feeds rights
+	* Fixed UI Profile JS
+	* Fixed UI Profile pages
+
+2010-02-10 22:17  source
+
+	* Fixed WebID selection
+	* Fixed calling proc from packages other than Framework
+
+2010-02-10 22:09  source
+
+	* Fixed Anotea, CSS
+	* Fixed Annotation SIOC Data
+
+2010-02-10 16:10  source
+
+	* Fixed move assignment of oplval_len before jump since we know
+	  oplval_strval is a string box already
+
+2010-02-10 16:09  source
+
+	* Fixed whitespace
+
+2010-02-10 16:08  source
+
+	* Fixed compiler warning about possible uninitialized vars
+
+2010-02-10 16:05  source
+
+	* Fixed typo in if expression
+
+2010-02-10 16:05  source
+
+	* Fixed use err_ret
+
+2010-02-10 16:04  source
+
+	* Fixed should use int64 type
+
+2010-02-10 14:05  source
+
+	* Fixed SPARQL_SELECT_KNOWN_GRAPHS
+
+2010-02-10 14:04  source
+
+	* Fixed define dpipe before anything else is called
+
+2010-02-10 12:58  source
+
+	* Fixed check for array boundary
+
+2010-02-10 12:57  source
+
+	* Fixed compiler warnings
+
+2010-02-10 11:03  source
+
+	* Added DKS box serialization flag DKS_TO_HA_DISK_ROW to preserve
+	  box flags in procedure views temp tables
+
+2010-02-10 11:03  source
+
+	* Fixed missing initialization in calculation of cost and cardinality
+
+2010-02-09 17:38  source
+
+	* Fixed workaround for non-iri g1
+
+2010-02-09 17:37  source
+
+	* Fixed check to include iri_to_id
+
+2010-02-09 16:11  source
+
+	* Fixed bug with UTF-8 encoded strings
+
+2010-02-09 15:13  source
+
+	* Added new SPARQL endpoints
+	* Added missing file
+	* FIxed missing execute permalink
+	* Fixed css to make tab effect more consistent
+
+2010-02-09 15:11  source
+
+	* Fixed do not make an artm op 0-n for neg literal -n
+
+2010-02-09 14:47  source
+
+	* Fixed check against abnormally big number of distinct datatypes
+	  or languages
+
+2010-02-09 14:34  source
+
+	* Fixed version number in http headers
+
+2010-02-09 14:33  source
+
+	* Fixed check trans node max mem when reading rows
+
+2010-02-09 14:23  source
+
+	* Fixed mem leaks in client
+
+2010-02-09 11:39  source
+
+	* Fixed memory leak in trans node compilation
+
+2010-02-08 21:24  source
+
+	* Added protection against abnormally bif number of distinct datatypes
+	  or languages
+
+2010-02-08 21:22  source
+
+	* Fixed SQL codegen for NOT() retval expression
+
+2010-02-08 21:22  source
+
+	* Fixed memory leak
+
+2010-02-08 12:38  source
+
+	* FIxed gpf in serializer when using default constand
+	* Fixed gpf when type is bad or zero
+
+2010-02-08 12:34  source
+
+	* Fixed log replay for rdfs_load_schema on cluster
+
+2010-02-08 12:33  source
+
+	* Fixed loading literals of type xsd:Token
+
+2010-02-03 20:49  source
+
+	* Updated version to 6.1.0 for final release
+
+2010-02-03 20:37  source
+
+	* Removed deprecated directory
+
+2010-02-03 19:39  source
+
+	* Updated version to 06.01
+
+2010-02-03 19:38  source
+
+	* Updated version number
+
+2010-02-03 19:37  source
+
+	* Updated version to 6.1.0-rc1
+
+2010-02-03 19:17  source
+
+	* Fixed missing include files
+
+2010-02-03 19:06  source
+
+	* Regenerated drivers
+
+2010-02-03 18:37  source
+
+	* Fixed comment
+
+2010-02-03 18:34  source
+
+	* Added missing file to distribution
+
+2010-02-03 18:03  source
+
+	* Fixed building with external zlib
+
+2010-02-03 17:09  source
+
+	* Fixed no need to build this dir when using external zlib
+
+2010-02-03 17:06  source
+
+	* Fixed generated by comment
+
+2010-02-03 16:58  source
+
+	* Fixed CRLF
+
+2010-02-03 16:53  source
+
+	* Fixed make clean
+
+2010-02-03 15:46  source
+
+	* Fixed changelog
+
+2010-02-03 15:44  source
+
+	* Fixed dependency
+
+2010-02-03 15:40  source
+
+	* Added correct handling of standard SPARQL (non-RDF) result sets.
+	* Server defaults are now loaded through a web service - /isparq/defaults/
+	* Resulting HTML is more valid
+	  - no <script> outside <html>, etc.
+	  - FireFox now in standards-compliance mode.
+	* Numerous layout tweaks.
+	* Fixed badly rendered toggler indicators in FireFox.
+	* Added more endpoint detection code
+
+	NOTE: sites which have multiple virtual directories hosting iSPARQL will
+	      all need the new /d efaults VHOST added manually.
+
+2010-02-03 15:28  source
+
+	* Updated version
+
+2010-02-03 15:21  source
+
+	* Fixed changelog rule
+
+2010-02-03 15:05  source
+
+	* Added support for CKEditor
+
+2010-02-03 15:05  source
+
+	* Added new examples
+
+2010-02-03 15:04  source
+
+	* Added new SKOS-trans inference rule
+
+2010-02-03 14:54  source
+
+	* Fixed do not put sort node as ks_stp if the sort node has precode that
+	  hs a dpipe part
+
+2010-02-03 13:54  source
+
+	* Fixed setting
+
+2010-02-03 10:29  source
+
+	* Added DB.DBA.BEST_LANGMATCH() and bif_langmatches_pct_http()
+
+2010-02-03 10:29  source
+
+	* Fixed bad init in trans node if multiple inputs or step output values
+
+2010-02-03 00:41  source
+
+	* Fixed CREDITS
+
+2010-02-02 23:57  source
+
+	* Fixed install LICENSE, CREDITS, AUTHORS, READMEs etc in doc dir
+
+2010-02-02 23:24  source
+
+	* Fixed redundant trailing '>' in results of TTL load when IRIs contain
+	  special chars
+
+2010-02-02 23:04  source
+
+	* Added support for Virtuoso JDBC Driver documentation
+
+2010-02-02 22:52  source
+
+	* Fixed comments
+
+2010-02-02 20:24  source
+
+	* Removed support for deprecated JDK1.0, JDK1.1 and JDK1.2
+	* Removed Virtuoso JDBC 2.0 SSL driver and JSSE runtime and
+	  added instructions how to build it if someone still needs
+	  it using JDK 1.3
+
+2010-02-02 19:38  source
+
+	* Fixed windows math.h needs this define for M_PI etc
+
+2010-02-02 17:59  source
+
+	* Fixed php, jsp and vsp users update pages
+
+2010-02-02 14:32  source
+
+	* Fixed bug in Doc and Main wiki clusters
+
+2010-02-02 14:20  source
+
+	* Fixed "option (score ...)" in a gp with multiple OPTIONAL (...)
+
+2010-02-02 14:18  source
+
+	* Fixed align buffer to sizeof pointer to avoid crash on strict
+	  checking platforms like sparc
+
+2010-02-02 14:17  source
+
+	* FIxed memleak when cache is used
+
+2010-02-02 14:16  source
+
+	* Fixed compiler warnings
+
+2010-02-02 14:15  source
+
+	* Fixed problem with rfc1808_expand_uri not using proper macros
+	  and allocate byte extra for strings
+
+2010-02-01 23:16  source
+
+	* Updated windows project file
+
+2010-02-01 23:15  source
+
+	* Updated win32 and win64 build scripts
+
+2010-02-01 23:14  source
+
+	* Fixed compiler warning
+
+2010-02-01 23:13  source
+
+	* Fixed bad cast
+
+2010-02-01 23:10  source
+
+	* Fixed typo
+
+2010-02-01 15:15  source
+
+	* Added conversion code to migrate DB to 2+3 index
+
+2010-02-01 15:10  source
+
+	* Added check for XA ROLLBACKONLY
+
+2010-02-01 14:59  source
+
+	* Rebuild drivers
+
+2010-02-01 14:58  source
+
+	* Fixed when different TZ is used, must find offset and transform via GMT
+
+2010-02-01 13:08  source
+
+	* Fixed missing prototype
+
+2010-02-01 13:02  source
+
+	* Added missing file
+
+2010-02-01 12:54  source
+
+	* Updated version to 6.0.1-pre2
+
+2010-02-01 12:53  source
+
+	* Merged 2+3 index into VOS
+	* Merged new inlined string code into VOS
+	* Added support for owl:inverseOf, owl:SymmetricProperty and
+	  owl:TransitiveProperty.
+	* Fixed graph-level security in cluster
+	* Fixed loading XMLs into single via RDF/XML
+	* Fixed SPARQL select distinct ?g where { graph ?g { ...}}
+
+2010-02-01 12:44  source
+
+	* Merged 2+3 index into VOS
+	* Added new sample queries
+	* Fixed text recoding to UTF8
+
+2010-02-01 12:40  source
+
+	* Merged 2+3 index code into VOS
+	* Fixed DB.DBA.RDF_DATATYPE_OF_OBJ and DB.DBA.RDF_LANGUAGE_OF_OBJ
+	  are now used with __ro2sq of the argument, due to new format of
+	  incomplete rdf boxes.
+	* Fixed redundant equalities in case of multiple OPTIONALs with
+	  same variable
+	* Fixed BOOLEAN_OF_OBJ in case of incomplete boxes
+
+2010-02-01 12:36  source
+
+	* Added stubs
+
+2010-02-01 12:35  source
+
+	* Fixed check db size and exit if not correct
+	* Fixed text of version mismatch messages
+
+2010-02-01 09:26  source
+
+	* Removed unused variables
+
+2010-02-01 02:45  source
+
+	* Fixed function prototypes
+
+2010-02-01 02:43  source
+
+	* Fixed xper not supported in cluster
+
+2010-02-01 02:39  source
+
+	* Improved SPARQL parsing and SQL codegen for negative numbers
+
+2010-02-01 02:36  source
+
+	* Fixed explicit rb not allowed in cl tx branch
+	* Fixed when rdf box then must take dtp1 and sizeof char one more time
+	* Fixed support of literals with languages in SPARQL INSERT DATA
+	  with data in state slot
+
+2010-02-01 02:32  source
+
+	* Added new rdf box function
+
+2010-02-01 02:18  source
+
+	* Fixed inside cpt do not notice anytimes and disconnects
+
+2010-02-01 02:16  source
+
+	* Fixed security in cluster
+
+2010-02-01 02:10  source
+
+	* Partial rollback of patch
+
+2010-02-01 02:08  source
+
+	* Fixed look up rdf lit ids in cost model to get the card
+
+2010-02-01 02:00  source
+
+	* Added initial support for owl:inverseOf, owl:SymmetricProperty
+	  and owl:TransitiveProperty
+
+2010-02-01 01:45  source
+
+	* Fixed index path outer join
+
+2010-02-01 01:45  source
+
+	* Fixed if cls rollback during cpt, it would not wait and would rb
+	  a tx while it had uncommitted state that was restored by the cpt
+	  at the end. This would make trxs in trx rc have locks which is
+	  impossible. So check for thread continues during cpt if simultaneous
+	  cpt freeze and rb. Check txns in trx rc don't get locks.
+
+2010-02-01 01:08  source
+
+	* Fixed gpf during rfwd containing XA transaction
+
+2010-02-01 01:00  source
+
+	* Fixed atomic must proceed even if uncommitted 2pc prepared
+
+2010-02-01 00:53  source
+
+	* Added function __uname
+
+2010-01-31 23:07  source
+
+	* Added new function __rdf_rng_min
+
+2010-01-31 23:06  source
+
+	* Added new implementation of log_text and log_text_array
+
+2010-01-31 23:04  source
+
+	* Fixed compiler warnings
+
+2010-01-31 20:48  source
+
+	* Fixed reading of last chunk
+
+2010-01-31 20:46  source
+
+	* Added debug flag for sponger
+
+2010-01-31 20:44  source
+
+	* Fixed declare iri to ir et all as no cluster
+
+2010-01-31 20:43  source
+
+	* Fixed missing externals
+
+2010-01-31 20:41  source
+
+	* Fixed checkpoint messages in log
+
+2010-01-31 20:37  source
+
+	* Fixed do not run dav init on cluster before cluster is up
+
+2010-01-31 20:36  source
+
+	* Fixed rdf init on dav does not need to be done on empty db, thus run
+	  only in single when update is needed
+
+2010-01-31 20:32  source
+
+	* Fixed fault tolerance
+
+2010-01-31 20:18  source
+
+	* Updated testsuite
+
+2010-01-31 16:47  source
+
+	* Updated documentation
+
+2010-01-31 12:43  source
+
+	* Fixed if negative numeric literal, do not make it 0 - litt
+
+2010-01-30 01:12  source
+
+	* Added debug flag for sponger
+	* Fixed use http_host connection var in aq mode
+
+2010-01-29 23:59  source
+
+	* Fixed whitespace
+
+2010-01-29 21:29  source
+
+	* Removed deprecated file
+
+2010-01-29 20:54  source
+
+	* Fixed for building without SSL
+
+2010-01-29 20:21  source
+
+	* Added support for ckeditor
+	* Removed deprecated rte and kupu editors
+
+2010-01-29 16:18  source
+
+	* Fixed library version
+
+2010-01-29 16:16  source
+
+	* Removed unused include file
+
+2010-01-29 15:21  source
+
+	* Fixed minor issues
+
+2010-01-29 15:09  source
+
+	* Fixed use sparql load instead of soft
+
+2010-01-29 15:07  source
+
+	* Removed support for IE 5 and 6 compatibility
+
+2010-01-29 15:00  source
+
+	* Fixed crawler pages
+
+2010-01-29 14:52  source
+
+	* Fixed use newer version of wsa
+
+2010-01-29 13:23  source
+
+	* Fixed removed deprecated samples
+
+2010-01-29 13:20  source
+
+	* Fixed build issue with md5
+
+2010-01-29 11:34  source
+
+	* Removed deprecated samples/demos
+
+2010-01-29 02:41  source
+
+	* Fixed uploading large files
+
+2010-01-29 01:56  source
+
+	* Fixed use MD5 from OpenSSL when possible
+
+2010-01-29 00:15  source
+
+	* Fixed build to use generate script
+	* Removed deprecated file
+
+2010-01-28 17:08  source
+
+	* Fixed make sure version is intact as changes to .ttl file must
+	  reflect in sparql.sql
+
+2010-01-28 14:33  source
+
+	* Fixed non-portable sleep argument
+
+2010-01-28 14:19  source
+
+	* Fixed API rename
+
+2010-01-28 14:19  source
+
+	* Fixed typo
+
+2010-01-28 13:36  source
+
+	* Fixed missing qualification of aggregate
+
+2010-01-28 01:14  source
+
+	* Fixed make new aqt in io sect
+	* Fixed return error when no cli
+	* Fixed if aq called and no aq thread available, signal error
+
+2010-01-28 01:11  source
+
+	* Fixed automatically allocate bufs
+
+2010-01-28 00:36  source
+
+	* Added option BuffersAllocation
+	* Added option AsyncQueueMaxThreads
+
+2010-01-28 00:31  source
+
+	* Fixed default sitemap crawling functions
+	* Fixed wrong variable
+	* Fixed wait before update
+
+2010-01-28 00:30  source
+
+	* Updated php, jsp and vsp user pages
+
+2010-01-27 20:43  source
+
+	* Added FOAF+SSL groups
+
+2010-01-27 20:31  source
+
+	* Added support for Google Base items types 'wanted ads', 'business
+	  location' and 'product catalogs'
+
+2010-01-27 20:31  source
+
+	* Fixed virtrdf_label
+
+2010-01-27 12:55  source
+
+	* Fixed use DV_SHORT_STRING_SERIAL tag when serializing short strings
+
+2010-01-27 12:54  source
+
+	* Fixed varlgrind warning about using uninitialized memory read
+
+2010-01-27 12:52  source
+
+	* Fixed in getting page_row reset rd leaf if not a leaf.
+
+2010-01-27 12:51  source
+
+	* Fixed do not POST when no post parameters
+
+2010-01-27 01:29  source
+
+	* Fixed read after allocated memory
+
+2010-01-25 23:46  source
+
+	* Removed deprecated files
+
+2010-01-25 22:42  source
+
+	* Fixed copyright and license clarification
+
+2010-01-25 20:45  source
+
+	* Fixed must commit before aq_wait
+
+2010-01-25 16:20  source
+
+	* Updated documentation
+
+2010-01-25 16:10  source
+
+	* Added php, jsp and vsp users update
+	* Fixed problem with activity pages
+
+2010-01-25 16:09  source
+
+	* FIxed copyright
+
+2010-01-25 16:09  source
+
+	* Fixed SSL check
+
+2010-01-25 16:05  source
+
+	* Fixed bug in permissions
+
+2010-01-25 15:42  source
+
+	* Fixed problem with MaxMempoolSize
+	* Fixed problem with driver properties
+
+2010-01-25 15:41  source
+
+	* Fixed shortened long URLs in the crawlers view to avoid UI breakage
+
+2010-01-25 15:12  source
+
+	* Fixed support for Google Base 'products' item type
+	* Fixed headers
+
+2010-01-25 14:57  source
+
+	* Fixed use pipeline client in crawler
+
+2010-01-25 10:39  source
+
+	* Fixed accept different headers in pipeline request; add header only if
+	  it contains something
+
+2010-01-15 13:47  source
+
+	* Fixed crash when timeout was sent using dv_array_of_long
+
+2010-01-15 13:02  source
+
+	* Fixed small lang conversion issue
+
+2010-01-15 12:16  source
+
+	* Rebuild driver
+
+2010-01-15 12:15  source
+
+	* Fixed issue with disconnect
+	* Fixed issue with XA exception
+
+2010-01-14 16:21  source
+
+	* Fixed bug calculating todays date
+
+2010-01-14 16:06  source
+
+	* Fixed use current OAT API function names
+	* Fixed bug in query execute permalink encoding
+	* Removed explicit reference to ymaps
+	* Temp fix for DESCRIBE popup query
+
+2010-01-14 16:04  source
+
+	* Added new popup calendar based on OAT
+	* Fixed use current OAT API function names
+	* FIxed explicit references to ymaps, gmaps
+
+2010-01-14 15:57  source
+
+	* Added LICENSE and COPYING from OAT project
+	* Removed custom map loaders
+	* Fixed use current OAT API function names instead of backward compat
+
+2010-01-13 15:05  source
+
+	* Fixed non-rfc method to make URL
+
+2010-01-13 15:02  source
+
+	* Fixed missing type cast
+
+2010-01-13 08:51  source
+
+	* Fixed user UI login pages
+	* Fixed user UI pages
+	* Fixed user home page field size
+
+2010-01-12 23:21  source
+
+	* Fixed decoding unicode escape sequences in post request
+
+2010-01-12 12:19  source
+
+	* Fixed automated labels extraction
+
+2010-01-12 12:15  source
+
+	* Fixed memory leak
+
+2010-01-12 11:06  source
+
+	* Added doap:name for labeling
+
+2010-01-11 16:02  source
+
+	* Fixed primary topic from Offering to Product
+
+2010-01-11 14:19  source
+
+	* Fixed missing dcterms:publisher
+
+2010-01-07 17:09  source
+
+	* Imported docbook-xsl-1.75.2
+
+2010-01-07 16:56  source
+
+	* Fixed copyright year to 2010
+
+2010-01-07 16:55  source
+
+	* Fixed sync Contact UI with Profile UI
+	* Fixed copyright year to 2010
+
+2010-01-07 16:55  source
+
+	* Added VSP and REST implementation for user API
+	* Added new API functions
+	* Fixed users paths to physical location
+	* Fixed API bug with tag rules
+	* Updated copyright year to 2010
+	* Fixed issue mising quoted and unquoted identifiers
+
+2010-01-06 21:33  source
+
+	* Updated documentation
+
+2010-01-06 17:33  source
+
+	* Fixed bad transformation in feed when author has no name
+	* Fixed process media:contain properly re images
+
+2010-01-06 16:49  source
+
+	* Added flag (DuplicateCheckpointRemaps) which should ONLY be used
+	  in recovery mode when a bad db can have cpt remap page which links
+	  back to itself. In this situation as last chance to recover we can
+	  look if remap already is registered and at that point stop looking.
+	  Further DBA must check for inconsistencies.
+
+2010-01-06 16:47  source
+
+	* Fixed default log mode in SPARUL MDW operations to distinquish
+	  between NULL and 0 log mode
+
+2010-01-06 16:45  source
+
+	* Fixed check if qi is actually available in this context
+
+2010-01-06 12:12  source
+
+	* Fixed handling of default graph URI param
+
+2010-01-05 19:12  source
+
+	* Added extra tests
+
+2010-01-05 18:24  source
+
+	* Fixed moved commit work else async exec might generate new rdf_obj
+
+2010-01-04 11:54  source
+
+	* Fixed if null box then use 0 to prevent core dump
+
+2010-01-04 11:47  source
+
+	* Fixed dependency
+
+2010-01-04 11:42  source
+
+	* Removed deprecated file
+
+2010-01-04 11:25  source
+
+	* Fixed typo
+
+2010-01-04 08:33  source
+
+	* Fixed issue mixing quoted and unquoted identifiers
+
+2009-12-31 12:45  source
+
+	* Added VSP and REST implementation for user API
+	* Added new API functions
+	* Fixed users paths to physical location
+
+2009-12-30 12:19  source
+
+	* FIxed compiler warning
+
+2009-12-30 11:23  source
+
+	* Minor enhancements
+
+2009-12-29 13:10  source
+
+	* Added feed admin rights
+
+2009-12-28 09:39  source
+
+	* Fixed removed redundant comparision codegen. Now if (for COST rvr
+	  on equiv) short valmode comparison is done then the fill comparison
+	  is not printed.
+
+2009-12-24 14:04  source
+
+	* Removed duplicate check
+
+2009-12-24 14:01  source
+
+	* Fixed remove check
+
+2009-12-24 14:00  source
+
+	* FIxed if there is an invariant cond in a query and a precode gets
+	  shifted to before this cond, then shift the dpipe of the precode
+	  also, else we get the wrong exec order
+
+2009-12-24 13:58  source
+
+	* Fixed dynamic local support
+
+2009-12-24 13:53  source
+
+	* Added revyu cartridge
+	* Fixed cnet double awol:content
+
+2009-12-24 13:52  source
+
+	* Fixed issues with dynamic local
+	* Fixed use chache for speedup
+
+2009-12-24 13:36  source
+
+	* Fixed dav initialization
+
+2009-12-23 16:22  source
+
+	* FIxed merge of many '=' and 'IN' inside OR into single 'IN'
+
+2009-12-23 16:19  source
+
+	* Improved speed of big insert/deletes in SPARUL
+
+2009-12-23 16:15  source
+
+	* Fixed checking for connection state
+	* Fixed XA state checking
+	* Updated version number
+
+2009-12-23 14:39  source
+
+	* Rebuild JDBC drivers
+
+2009-12-22 15:59  source
+
+	* Fixed handling of out of disk situation
+
+2009-12-22 15:52  source
+
+	* Rebuild drivers
+
+2009-12-22 15:45  source
+
+	* Fixed version
+
+2009-12-22 15:42  source
+
+	* Rebuild driver
+
+2009-12-22 15:41  source
+
+	* Fixed exception handling
+
+2009-12-22 15:35  source
+
+	* Moved dbpedia.org up in list of default endpoints
+	* Fixed queries with changed endpoint or default graph are no longer
+	  picked up from cache
+	* Removed "This page is about ..."
+	* Minor cleanups
+
+2009-12-22 15:34  source
+
+	* Added special data structure for point coordinates, for search,
+	  duplicate removal etc.
+	* Fixed missing mode from markers
+	* Fixed missing path from markers generated by type-based selection
+
+2009-12-22 13:08  source
+
+	* Fixed minor issues
+
+2009-12-22 10:38  source
+
+	* Fixed no offering
+	* Fixed back to go out icon
+
+
+2009-12-22 10:28  source
+
+	* Added new tests
+
+2009-12-22 02:29  source
+
+	* Added Feed Admin Rights
+	* Fixed uninstall problem
+	* Fixed UI Profile (Favorites)
+
+2009-12-22 01:12  source
+
+	* Added support for sponging
+
+2009-12-21 23:31  source
+
+	* Fixed if all buffers are wired for multiset gb or such, make it an
+	  out of disk situation instead of a hang
+
+2009-12-21 23:19  source
+
+	* Fixed input card from dfe_arity_with_supers; do not turn off hash
+	  join of short tables
+
+2009-12-21 21:37  source
+
+	* Added mem bashed hash join for small tables
+
+2009-12-21 21:10  source
+
+	* Fixed check for minimum db engine
+
+2009-12-21 09:51  source
+
+	* Added RoundRobin connection support
+
+2009-12-19 15:19  source
+
+	* FIxed if this is text index may reference bad or null data
+
+2009-12-17 22:46  source
+
+	* Fixed alignment issues
+
+2009-12-17 22:37  source
+
+	* Fixed query permalink
+	* DIsabled popup on hover in map view
+
+2009-12-17 22:07  source
+
+	* Added options to enable/disable marker popups
+
+2009-12-17 14:20  source
+
+	* Fixed failure to return result for case insensitive Regex SPARQL query
+
+2009-12-17 14:11  source
+
+	* Added dbpedia in list of endpoints
+	* Added use of MARKER_MODE_AUTO in rdftab
+	* Fixed permalinks to point to /isparql/view
+	* Fixed handling of errors in backend
+
+2009-12-17 14:05  source
+
+	* Added initial support for different marker modes
+
+2009-12-17 10:50  source
+
+	* Fixed admin access
+
+2009-12-17 09:15  source
+
+	* Fixed nullpointer exception on connection close
+
+2009-12-16 21:45  source
+
+	* Fixed https urls
+
+2009-12-16 21:12  source
+
+	* Fixed if text pred looks like a not but it is not to be treated for
+	  const cond like a not
+
+2009-12-16 21:10  source
+
+	* Fixed if serializing rb box w/o id as string, it can be longer than
+	  50 chars
+
+2009-12-15 23:21  source
+
+	* Added build-in predicate IsRef()
+	* Fixed replace lost filters with equivs that have no spog vars and
+	  no "good" subequivs.
+
+2009-12-15 23:12  source
+
+	* Fixed minor issues
+	* FIxed whitespace/indentation
+
+2009-12-15 22:50  source
+
+	* Fixed whitespace/indentation
+
+2009-12-15 22:41  source
+
+	* Added ithalia ontology
+
+
+2009-12-15 22:39  source
+
+	* Fixed URL rewrite rules
+
+2009-12-15 22:12  source
+
+	* Fixed create/delete user from Conductor
+
+2009-12-15 21:58  source
+
+	* Fixed bug preventing forms from loading
+
+2009-12-14 14:51  source
+
+	* Added new variant of QUIETCAST sorting for ANY cols
+
+2009-12-14 14:46  source
+
+	* Added files to distribution
+
+2009-12-14 14:42  source
+
+	* Added Yelp categories
+	* Fixed NYT api lookup quality
+	* Moved data files into separate directory
+	* Minor fixes
+
+2009-12-13 23:28  source
+
+	* Fixed upstreaming
+
+2009-12-13 23:24  source
+
+	* Added Bookmarklet
+
+2009-12-12 23:31  source
+
+	* Fixed issue withclosing gzip session
+
+2009-12-11 14:24  source
+
+	* Added new variant of QUIETCAST sorting for ANY cols
+
+2009-12-11 14:23  source
+
+	* Fixed wrong assert
+
+2009-12-09 21:37  source
+
+	* Added new sort funcs
+
+2009-12-09 21:32  source
+
+	* Fixed buf_stats would screw up if buffers changed dp during sort,
+	  so copy the dps and check for sortable data changed during qsort
+	  so as not to get overruns of result buffer
+
+2009-12-09 16:46  source
+
+	* Fixed only show debug information when DEBUG is defined
+
+2009-12-09 16:12  source
+
+	* Add comment to generated file
+
+2009-12-09 16:12  source
+
+	* Added copyright header
+
+2009-12-09 16:03  source
+
+	* Add comment to generated files
+
+2009-12-09 14:11  source
+
+	* Fixed attribution of IMAGEGEN and WGEN as part of TPC-W
+
+2009-12-09 13:48  source
+
+	* Removed unused file
+
+2009-12-09 13:46  source
+
+	* Fixed copyright header to clarify attribution
+
+2009-12-09 13:35  source
+
+	* Fixed headers and copyright
+
+2009-12-09 11:17  source
+
+	* Fixed DAV RES IRI creation
+
+2009-12-09 10:56  source
+
+	* Added rdf box id only serialization; stays compatible with 5/6
+
+2009-12-09 10:52  source
+
+	* Updated version
+
+2009-12-09 10:51  source
+
+	* Fixed only serialize as rdf box when client is recent
+
+2009-12-09 10:43  source
+
+	* Added flag to limit bandwidth
+
+2009-12-09 09:48  source
+
+	* Rebuild driver
+
+2009-12-09 09:27  source
+
+	* Fixed cleanup old test tables and procedures
+
+2009-12-08 23:25  source
+
+	* FIxed problems with DynamicHost
+
+2009-12-08 23:25  source
+
+	* FIxed IE JS error
+
+2009-12-08 23:15  source
+
+	* Fixed description field view
+
+2009-12-08 21:01  source
+
+	* Added rating
+
+2009-12-08 20:58  source
+
+	* Added permalinks for mini RDF viewer
+	* Removed initialization of Schemas in QueryExec initialization
+	* Fixed generation of Query permalink
+
+2009-12-08 20:54  source
+
+	* Added message OAT.MSG.RDFMINI_VIEW_CHANGED to mini rdf view when
+	  view type changes
+
+2009-12-08 20:50  source
+
+	* Fixed composing parse tree of option list for
+	  FROM <graph> OPTION (...) clause
+
+2009-12-08 10:13  source
+
+	* Fixed clear cache at end of loop otherwise it could hit free mem
+
+2009-12-07 21:24  source
+
+	* Fixed DESCRIBE through proxy
+	* Removed icon overload clutter on execute page
+	* Fixed Hidden query opts, endpoint etc dialogs in result page
+
+2009-12-07 21:05  source
+
+	* Fixed write number of bytes sent when using gz compression
+	* Fixed do not write -1 in log file
+
+2009-12-07 16:23  source
+
+	* Fixed column and tabl labels
+	* Fixed http cartridge to link to document
+
+2009-12-07 15:41  source
+
+	* Fixed duplicate connection
+
+2009-12-07 13:02  source
+
+	* Fixed build issue when java has not been configured
+
+2009-12-07 12:41  source
+
+	* Added refresh button
+
+2009-12-07 12:31  source
+
+	* Fixed version calculation
+
+2009-12-07 12:30  source
+
+	* Added bookmarklet
+
+2009-12-07 12:30  source
+
+	* Fixed bookmarklet
+
+2009-12-07 09:57  source
+
+	* Fixed timeout to 10 sec
+
+2009-12-07 08:58  source
+
+	* FIxed issue with double rollback
+
+2009-12-04 16:55  source
+
+	* Fixed proxy problems
+	* Fixed bug causing busy loop in browser
+	* Fixed browser compatibility for non HTML 5.0 browsers (like opera)
+
+2009-12-04 16:54  source
+
+	* Fixed should not sent content-length
+
+2009-12-04 15:24  source
+
+	* Fixed problem with SPARQL_CLEAN
+
+2009-12-04 10:54  source
+
+	* Fixed serialization of XML in SPARQL output formats
+
+2009-12-03 21:24  source
+
+	* Fixed list of all distinct graphs in SPARQL
+
+2009-12-03 17:41  source
+
+	* Fixed delete/create instance UI error
+	* Fixed API procedure for OAUTH
+
+2009-12-03 17:38  source
+
+	* FIxed handle external rdf desc
+
+2009-12-03 17:37  source
+
+	* Fixed support for log mode instead of intermediate "commit work"
+	  in SPARUL
+
+2009-12-03 17:35  source
+
+	* FIxed check length as encoded len is double size
+
+2009-12-03 17:34  source
+
+	* Fixed set member to NULL after being freed
+
+2009-12-03 17:33  source
+
+	* Fixed missing keyword
+
+2009-12-03 17:21  source
+
+	* Fixed add debug cookie in async mode
+
+2009-12-03 17:19  source
+
+	* Added support for serialization of endpoint in permalinks
+
+2009-12-03 15:29  source
+
+	* Fixed version
+
+2009-12-02 21:33  source
+
+	* Fixed Query Permalink generation when run as execute.html
+
+2009-12-02 14:49  source
+
+	* Fixed when in atomic and maintenance mode, do not rewrite at all,
+	  the user will only see maint.page
+
+2009-12-02 14:37  source
+
+	* Added support for sql export linked tables
+
+2009-12-02 14:33  source
+
+	* Fixed API methods
+
+2009-12-02 03:21  source
+
+	* Fixed allow sponger task to run in background eliminating async
+	  rollback
+
+2009-12-01 22:38  source
+
+	* Added support for SPARQL INSERT DATA / DELETE DATA
+	* Added support for SPARQL HAVING
+	* Added special codegen for
+	  sparql select distinct ?g where { graph ?g { ?s ?p ?o }}
+
+2009-12-01 22:18  source
+
+	* Fixed memory leak when session closed during gzip
+
+2009-12-01 20:53  source
+
+	* Fixed return an error to avoid jump into unknown context
+
+2009-12-01 17:31  source
+
+	* Fixed NTRIPLES serialization of triples
+
+2009-12-01 14:31  source
+
+	* More files to ignore
+
+2009-12-01 14:21  source
+
+	* Updated API commands
+
+2009-12-01 14:19  source
+
+	* Added API commands
+
+2009-12-01 14:18  source
+
+	* Removed deprecated files
+
+2009-11-30 23:56  source
+
+	* Fixed minor issues
+
+2009-11-30 23:50  source
+
+	* Updated documentation
+
+2009-11-30 23:44  source
+
+	* Added debug log to meta cartridges
+
+2009-11-30 23:40  source
+
+	* Added debug log to meta cartridges
+
+2009-11-30 23:39  source
+
+	* Fixed button alignment
+
+2009-11-30 16:53  source
+
+	* Fixed current proc name extension
+
+2009-11-30 16:52  source
+
+	* Fixed 304 must have no body
+	* Fixed when no etag use the last load date
+
+2009-11-30 16:51  source
+
+	* Fixed woing input card from dfe-arity_with_supoers, do not turn off
+	  hash join of short tables
+
+2009-11-30 16:46  source
+
+	* FIxed issue with rollback failed transaction
+
+2009-11-26 20:37  source
+
+	* Fixed build issue
+
+2009-11-26 14:36  source
+
+	* Moved Briefcase API from ODS, adding new commands
+
+2009-11-26 14:32  source
+
+	* Fixed handling of proc names with dots
+	* Fixed losing grants after editing procedure
+
+2009-11-26 14:28  source
+
+	* Fixed when remote table in outer join place at same order
+
+2009-11-26 14:28  source
+
+	* Added _ to format modifier
+
+2009-11-25 22:13  source
+
+	* Fixed minor issue
+
+2009-11-25 22:12  source
+
+	* Fixed replication check
+
+2009-11-25 22:10  source
+
+	* FIxed bad test
+
+2009-11-25 22:07  source
+
+	* Fixed check if ods/sioc is installed
+
+2009-11-25 22:05  source
+
+	* Added the R format char to sprintf, replace left padded spaces with
+	  modifier
+
+2009-11-25 20:46  source
+
+	* Fixed no proxy for https
+
+2009-11-25 20:46  source
+
+	* Fixed parsing sequences in TTL
+
+2009-11-25 16:37  source
+
+	* Fixed move briefcase API to ODS Briefcase
+	* Fixed always use local:
+	* Fixed do not use dynamiclocal
+	* Fixed problem updating security profile
+
+2009-11-25 16:35  source
+
+	* Fixed sharings
+
+2009-11-25 16:09  source
+
+	* FIxed checks in http kill
+
+2009-11-25 15:07  source
+
+	* Updated documentation
+
+2009-11-25 14:29  source
+
+	* Fixed thalia rdfview demo
+
+2009-11-25 14:28  source
+
+	* Fixed localize using URIQADefaultHost
+
+2009-11-25 13:54  source
+
+	* Added initial support for dumping xml entity data
+
+2009-11-24 17:39  source
+
+	* Fixed always convert URIQADefaultHost to local: even if current host
+	  is different
+
+2009-11-20 23:15  source
+
+	* Fixed files to ignore
+
+2009-11-20 23:14  source
+
+	* Fixed make clean
+
+2009-11-20 17:11  source
+
+	* Fixed WebAccess Triggers
+	* Fixed indentation
+
+2009-11-20 17:10  source
+
+	* FIxed handling of multipart names
+
+2009-11-20 17:10  source
+
+	* Fixed cannot install conductor when dynamic local iris are used
+
+2009-11-20 17:09  source
+
+	* Fixed missing end tag
+
+2009-11-20 17:00  source
+
+	* Fixed move/rename WebAccess
+
+2009-11-20 15:11  source
+
+	* Updated version
+
+2009-11-20 14:44  source
+
+	* Fixed error reporting
+
+2009-11-20 12:09  source
+
+	* Improved recovery of lists in DB.DBA.RDF_AUDIT_METADATA()
+
+2009-11-19 22:20  source
+
+	* Fixed move cleanups until after db has been created successfully
+
+2009-11-19 22:15  source
+
+	* Updated version to 6.0.1-pre1
+
+2009-11-19 20:16  source
+
+	* FIxed memory leaks
+
+2009-11-19 19:24  source
+
+	* Added tests for rdf boxes
+
+2009-11-19 19:24  source
+
+	* Disabled LDAP test
+
+2009-11-19 15:29  source
+
+	* Fixed catch signal on error in ssg_make_sql_query_text and re-signal
+	  in order to free session
+
+2009-11-19 13:51  source
+
+	* Updated ontologies API
+	* Fixed registration issue
+
+2009-11-19 13:40  source
+
+	* Fixed when reading from ws_session, we need to touch the ws_req_len
+	  in order to avoid hang when calling http_body_read next
+
+2009-11-19 10:04  source
+
+	* Fixed version
+
+2009-11-19 10:04  source
+
+	* FIxed bad external
+
+2009-11-19 10:03  source
+
+	* Fixed minor issue
+
+2009-11-18 22:45  source
+
+	* Added Web access
+
+2009-11-18 14:34  source
+
+	* Fixed memory leak in dump strings
+
+2009-11-18 14:34  source
+
+	* Added bif_dict_zip
+	* Fixed bug adding many graph keywords in one operation
+
+2009-11-18 12:44  source
+
+	* Fixed write past end of buffer
+
+2009-11-17 21:43  source
+
+	* Added support for OpenSearch
+	* Added feature to focus full text search on a property more directly
+	* Fixed lang filter
+
+2009-11-17 21:38  source
+
+	* Fixed static
+
+2009-11-17 21:19  source
+
+	* Fixed oreilly cartridge
+
+2009-11-17 21:02  source
+
+	* Merged from HEAD
+
+2009-11-17 21:01  source
+
+	* FIxed testsuite
+
+2009-11-17 20:58  source
+
+	* Fixed as we are reading the disk, there could be buffers still not
+	  written, so we read free set from disk and use it to make stats
+
+2009-11-17 20:58  source
+
+	* Fixed max column count increased
+
+2009-11-10 15:54  source
+
+	* FIxed tsuite
+
+2009-11-10 13:43  source
+
+	* Fixed group by to expand automatically when col is not referenced
+
+2009-11-10 13:43  source
+
+	* Fixed smaller hash sz as box has limit
+
+2009-11-09 22:45  source
+
+	* Fixed minor issues
+
+2009-11-09 22:19  source
+
+	* FIxed bad content after rewrite
+
+2009-11-09 22:19  source
+
+	* Fixed mem only chase must be off when op is HA_FILL
+
+2009-11-09 22:18  source
+
+	* Fixed missing headers in result
+
+2009-11-09 22:18  source
+
+	* Fixed warnings
+
+2009-11-06 17:17  source
+
+	* Fixed use absolute uri whenever possible
+
+2009-11-06 17:10  source
+
+	* Fixed ignore lists
+
+2009-11-06 17:08  source
+
+	* Fixed box flags
+
+2009-11-06 16:09  source
+
+	* Fixed Zillow cartridge
+
+2009-11-06 12:09  source
+
+	* Fixed memory leak
+
+2009-11-06 12:09  source
+
+	* Added support for half-legal 'Thu, 24 Jul 2008 17:11:59 +0200' and
+	  'Thu, 24 Jul 2008 17:11:59 +02:00' datetime syntax
+
+2009-11-05 19:59  source
+
+	* Added special case handling for xsd:dateTime literals in fct
+	  when choosing/generating filters
+	* Added dumping of query upon error in facet browser
+	* Added session handling stubs
+	* Fixed problem which caused page not to load when sparql_query
+	  connection var was null
+	* Fixed bugs in URL generation and main facet page
+
+2009-11-05 19:50  source
+
+	* Merged from HEAD
+
+2009-11-05 19:45  source
+
+	* Fixed XA transaction exception
+
+2009-11-05 10:22  source
+
+	* Updated documentation
+
+2009-11-05 08:47  source
+
+	* Reverted previous patch
+
+2009-11-04 22:26  source
+
+	* Fixed broken check
+	* Fixed warnings
+
+2009-11-04 09:56  source
+
+	* Removed duplicate lines
+
+2009-11-04 09:45  source
+
+	* Fixed comparison of the two char codes
+	* Added MS Docs cartridges
+	* Minor fixes
+
+2009-11-04 09:38  source
+
+	* Added common folder for OPML uploads
+	* Improved OPML import
+	* Fixed scot tags data
+	* Fixed delete instance problem with remain tags data
+
+2009-11-04 09:36  source
+
+	* Fixed http://delicious.com/ import
+
+2009-11-04 09:36  source
+
+	* Fixed broken FOAF generation
+
+2009-11-04 01:50  source
+
+	* Added more checks for CN, hostname and keys
+
+2009-11-04 01:22  source
+
+	* Fixed function declaration
+
+2009-11-04 01:19  source
+
+	* Fixed problem with uploading large files using HTTP
+
+2009-11-03 22:52  source
+
+	* Fixed version number of engine
+
+2009-11-03 22:52  source
+
+	* Fixed prototypes
+
+2009-11-03 22:51  source
+
+	* Minor cleanups
+
+2009-11-03 22:49  source
+
+	* Fixed move typedef to header file
+
+2009-11-03 22:47  source
+
+	* Fixed prototype
+
+2009-11-03 07:39  source
+
+	* Added optimization daq delete for many dels with all key columns known
+
+2009-11-03 07:38  source
+
+	* Added strcontains(), starts_with() and ends_with()
+
+2009-11-03 07:37  source
+
+	* Fixed check ref count to avoid double free etc
+
+2009-11-02 09:37  source
+
+	* Fixed box flags of IRIs
+
+2009-11-02 09:31  source
+
+	* Fixed problem with uploading large files using HTTP
+	* Fixed compiler warnings
+
+2009-11-02 09:24  source
+
+	* Fixed support for define output:format "JSON"
+
+2009-10-29 21:06  source
+
+	* Fixed UI profile full name
+	* Fixed UI profile address
+	* Fixed suggestions lookup
+	* Fixed SIOC user's profile refresh data
+	* Fixed foaf+ssl login re V6 dynamic local behaviour
+
+2009-10-29 20:21  source
+
+	* Updated documentation
+
+2009-10-29 20:15  source
+
+	* Fixed rd_sink upload
+
+2009-10-29 20:14  source
+
+	* Update version
+
+2009-10-29 20:14  source
+
+	* Added missing if clause rendering in usage
+	* Fixed rendering of URL params in usage.vsp
+	* Fixed do not set sid=(null) or any other value when sid is not available
+	* Fixed facet result page to better accomodate narrowwer screens
+
+2009-10-29 20:10  source
+
+	* Fixed limited support for IE
+	  QBE tab will display dialog explaining missing SVG support and offering
+	  download links for other browsers
+
+2009-10-29 20:08  source
+
+	* Fixed listener UI
+	* Fixed clear cache after execution
+
+2009-10-29 20:03  source
+
+	* Added shared qr cache cleaner
+
+2009-10-29 20:00  source
+
+	* Added rule for bin objects
+
+2009-10-28 21:34  source
+
+	* Rebuild drivers
+
+2009-10-28 21:34  source
+
+	* Fixed null pointer exception instead of sql exception
+
+2009-10-28 21:32  source
+
+	* Merged from HEAD
+
+2009-10-28 21:30  source
+
+	* Fixed eBay support
+	* Added support for content resizing
+	* Fixed crunch base lookups
+	* Fixed navigation
+	* Fixed scheme support for feed
+
+2009-10-28 21:20  source
+
+	* Fixed problems with UI of RDF views
+	* Fixed PKI buttons
+	* Fixed https vs http
+
+2009-10-28 21:16  source
+
+	* Fixed separate drop statements for rdf views in separate call
+
+2009-10-28 21:15  source
+
+	* Fixed compilin with mtx debug
+
+2009-10-28 11:56  source
+
+	* Fixed dkt_requests could be null if there are no threads avail
+
+2009-10-28 11:02  source
+
+	* Fixed indentation
+
+2009-10-28 10:58  source
+
+	* Fixed enabled draft code in xslt
+
+2009-10-27 13:36  source
+
+	* Fixed issue with broken IRI
+
+2009-10-27 11:10  source
+
+	* Added support for define output:maxrows
+	* Fixed memory leak
+
+2009-10-26 20:46  source
+
+	* Added xsl:for-each-row loop
+	* Fixed support for XMLLiteral
+	* Fixed support for SPARQL queries with sponge and subqueries in one
+	* Fixed support for sameAs sponge and and subqueries in one
+	* Fixed behaviour of sponge on unusal protocols
+
+2009-10-26 20:44  source
+
+	* Added support for comparison of XML trees
+
+2009-10-26 09:29  source
+
+	* Added missing image
+
+2009-10-26 09:26  source
+
+	* Fixed menus
+	* Fixed inference / sameas settings
+	* Fixed page layout
+
+2009-10-26 09:23  source
+
+	* Fixed problem if opts.endpoint has not been initialized
+	* Fixed use local image
+	* Fixed extra comma at end of variable list for IE
+
+2009-10-26 09:19  source
+
+	* Added RDFa export
+
+2009-10-26 09:19  source
+
+	* Fixed missing cast
+
+2009-10-26 09:18  source
+
+	* Added bif_isvector()
+
+2009-10-26 09:17  source
+
+	* Fixed minimum ServerThreadSize to 60k
+
+2009-10-20 10:44  source
+
+	* FIxed use Node.NULL instead of null
+
+2009-10-20 10:43  source
+
+	* Regenerated driver
+
+2009-10-19 20:20  source
+
+	* Fixed new rules for special chars in names
+
+2009-10-18 22:15  source
+
+	* Fixed if del with given key, do not run trigs, else they could
+	  read another key outside of partition and this single key del
+	  needs to be within partition
+
+2009-10-18 22:13  source
+
+	* Fixed initialize all nodes when running a subq in a proc
+
+2009-10-18 22:12  source
+
+	* Fixed cost for TOP 1 since log(1) is 0
+
+2009-10-18 22:11  source
+
+	* Fixed syntax of IRI parts to match SPARQL1.0 W3C recommendation
+
+2009-10-16 17:45  source
+
+	* Updated version to 6.0.0 for final release

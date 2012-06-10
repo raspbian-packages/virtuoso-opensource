@@ -1,0 +1,26 @@
+<refentry id="vc_after_data_bind">
+  <refmeta>
+  <refentrytitle>after-data-bind</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>after-data-bind</refname>
+  <refpurpose>Container for code that should be executed after data bind.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_after_data_bind">
+    <funcprototype id="vc_proto_after_data_bind">
+      <funcdef>
+            &lt;<function>after-data-bind</function>&gt;(EventHandler)&lt;/<function>after-data-bind</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_after_data_bind">
+  <title>Description</title>
+  <para>
+The code contained in this element is executed after the default data bind processing on the returning edge of recursion.
+The context has self as the page, control as the control with this handler, event as the vspx_event which caused the page invocation.
+Any return value from the code is ignored.
+</para>
+  </refsect1>
+ </refentry>

@@ -1,0 +1,21 @@
+<refentry id="vc_on_post_container">
+  <refmeta>
+  <refentrytitle>on-post-container</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>on-post-container</refname>
+  <refpurpose>This is identical to v:on-post.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_on_post_container">
+    <funcprototype id="vc_proto_on_post_container">
+      <funcdef>
+            &lt;<function>on-post-container</function>&gt;(EventHandler)&lt;/<function>on-post-container</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_on_post_container">
+  <title>Description</title>
+  </refsect1>
+ </refentry>

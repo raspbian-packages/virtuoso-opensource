@@ -1,0 +1,186 @@
+<refentry id="vc_local_variable">
+  <refmeta>
+  <refentrytitle>local-variable</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>local-variable</refname>
+  <refpurpose>Local variable - an invisible control to store a temporary value.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_local_variable">
+    <funcprototype id="vc_proto_local_variable">
+      <funcdef>
+            &lt;<function>local-variable</function> <attribute>
+          <parameter>name</parameter> (required) </attribute>
+        <attribute>
+          <parameter>annotation</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>initial-enable</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>enabled</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>instantiate</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>control-udt</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>xsd-stub-xhtml</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>width</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>height</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>value</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-value</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-place</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-path</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-params</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-update-path</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>element-update-params</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>fmt-function</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>cvt-function</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcfile</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcline</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-log</parameter> (optional) </attribute>
+ /&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_local_variable">
+  <title>Description</title>
+  <para>
+This tag declares a control that can store a temporary value that can be accessed from other controls.
+Usually it is an intermediate value that is used by a group of controls of the same form. E.g. if
+controls of a form display various data stored in a complex object then it may be convenient to obtain this object once and place it
+into value of a local-variable control that is the first child control of a form. The rest of child controls may access the value
+from the first child to calculate their values.
+</para>
+  </refsect1>
+  <refsect1 id="vc_attrs_local_variable">
+  <title>Attributes</title>
+  <formalpara>
+   <title>name = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>A page level unique name identifying a control.</para>
+  </formalpara>
+  <formalpara>
+    <title>annotation</title>
+    <para>A human readable comment.</para>
+  </formalpara>
+  <formalpara>
+   <title>initial-enable = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is initially visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>enabled = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>instantiate = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines whether a control instantiate its children. It is true by default. It could be data-bound to an SQL expression. Unlike most of calcucateable attributes, the value of this attribute for a control is calcluated before calling &#39;on-init&#39; event handler of the control; other values are calculated before calling &#39;before-data-bind&#39; event handler.</para>
+  </formalpara>
+  <formalpara>
+   <title>control-udt = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>At run time every control is represented as an instance of some user-defined type (UDT). VSPX compiles selects the UDT to use depending on name of the XML element that represents the control and maybe some of its attributes. In some specific cases the application developer may instruct VSPX compiler to use some other UDT, e.g. an application-specific UDT that is derived from the preset one. If specified, the value of &#39;control-udt&#39; attribute should be equal to the name of the desired target UDT.</para>
+  </formalpara>
+  <formalpara>
+    <title>xsd-stub-xhtml</title>
+    <para>This attribute is for internal use only. It has no effect if added to the source VSPX file.</para>
+  </formalpara>
+  <formalpara>
+    <title>width</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>height</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+   <title>value = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Data bindable value of control, represents value of HTML control to be drawn.
+The calculated value of this attribute is stored in the control in ufl_value field.
+</para>
+  </formalpara>
+  <formalpara>
+   <title>element-value = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>An XML entity that contains a value to be displayed by an HTML control.
+The calculated value is stored in ufl_element_value field of the control.
+This value is used only if ufl_value is null (e.g. if the &#39;value&#39; attribute is not set at all), and the method vc_get_value_from_element() will be used to calculate ufl_value based on ufl_element_value, ufl_element_path and ufl_element_place.
+</para>
+  </formalpara>
+  <formalpara>
+   <title>element-place = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>The place of actual data inside an XML element. The calculated value of this attribute is stored in ufl_element_place field of the control. This is to process XMLSchema-compatible data without writing extra code for handling NULL values. The XML element can contain the value to be bound in either attribute or in an inner text node. XMLSchema treats missing attributes as NULL values. missing text node as an empty string value and if &#39;xsi:nil&#39; attribute is &#39;true&#39; then inner text value is NULL no matter if there are any text nodes. These self-evident rules are convenient for XQuery data retrieval but not for data update: an result of some XQuery expression can point to data but not to a place where data should occur in the future.
+The use of &#39;element-place&#39; allows to eliminate the problem. Attributes &#39;element-value&#39;, &#39;element-path&#39; and &#39;element-update-path&#39; may locate an element that is always present whereas &#39;element-place&#39; describes where the desired datum will occur in the element.
+The value of this attribute should be a string of syntax &#39;@attributename&#39; or &#39;text()&#39;. If this is &#39;@attributename&#39; then the effective bound value is a value of the specified attribute or NULL if the specified attribute is missing. On update, either the attribute is created/edited in order to set non-NULL value or the attribute is deleted in order to set NULL.
+If text() is specified then both text value of the element and the value of its &#39;xsi:nil&#39; are properly handled on both data bind and update.</para>
+  </formalpara>
+  <formalpara>
+   <title>element-path = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This is the path inside the entity that comes from &#39;element-value&#39; attribute. The default path is &#39;self::node()&#39;. This path is used to point precisely to an subentity that should actually be used for data binding. The calculated value of this attribute should be a string in XQuery syntax, and it is saved in ufl_element_path member of the control.</para>
+  </formalpara>
+  <formalpara>
+   <title>element-params = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This is the vector of parameter values of the path specified by &#39;element-path&#39; attribute. The default is NULL indicating no parameters. The attribute is calculated but not used if &#39;element-path&#39; attribute is missing. The calculated value of this attribute should be either NULL or a vector of even length whose items are parameter names and parameter values; refer to the description of xquery_eval() function for more details. The value of the attribute is saved in ufl_element_params member of the control.</para>
+  </formalpara>
+  <formalpara>
+   <title>element-update-path = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Like the value of &#39;element-path&#39;, this is the path inside the entity that comes from &#39;element-value&#39; attribute. The difference is that &#39;element-path&#39; is used inside &#39;vc_get_value_from_element() during data-bind to set ufl_value based on ufl_element_value whereas &#39;element-update-path&#39; is used during data update inside &#39;vc_put_value_to_element() in order to save data inside the document that is referenced by ufl_element_value. The default path for update is equal to the path for data bind, i.e. it is the value of the calculated &#39;element-path&#39; attribute or &#39;self::node()&#39;. The calculated value of &#39;element-update-path&#39; should be a string in XQuery syntax, and it is saved in ufl_element_update_path member of the control.</para>
+  </formalpara>
+  <formalpara>
+   <title>element-update-params = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This is the vector of parameter values of the path specified by &#39;element-update-path&#39; attribute. The default is NULL indicating no parameters. The attribute is calculated but not used if &#39;element-update-path&#39; attribute is missing (e.g. you should not try to specify &#39;element-path&#39; without &#39;element-update-path&#39; and both &#39;element-params&#39; and &#39;element-update-params&#39; in hope that values from &#39;element-update-params&#39; will be passed to &#39;element-path&#39; on update). The calculated value of this attribute should be either NULL or a vector of even length whose items are parameter names and parameter values; refer to the description of xquery_eval() function for more details. The value of the attribute is saved in ufl_element_update_params member of the control.</para>
+  </formalpara>
+  <formalpara>
+   <title>fmt-function = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This is to convert the value that is bound to the control into a string to use during the rendering. The value of this attribute should be a name of function that takes a single argument of the type that matches the type of ufl_value and returns a string. If this is used then the value of &#39;cvt-function&#39; should probably be a name of function that converts the string back to the desired data type.
+If a control supports &#39;format&#39; attribute then the format is applied to the result of &#39;fmt-function&#39;, so the value returned by fmt-function may be e.g. an integer to be formatted by &#39;%d&#39; format.
+The calculated value of this attribute is stored in ufl_fmt_fn field of the control.</para>
+  </formalpara>
+  <formalpara>
+   <title>cvt-function = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This is to convert a user input of type varchar into a value that should be stored in ufl_value (and e.g. placed into some database column by an update).
+The calculated value of this attribute is stored in ufl_cvt_fn field of the control.
+For more details, see the description of &#39;fmt_function&#39; attribute above.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcfile</title>
+    <para>URI of the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcline</title>
+    <para>Line number in the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-log</title>
+    <para>This defines what sort of data are saved to the debugging log.
+</para>
+  </formalpara>
+  </refsect1>
+</refentry>

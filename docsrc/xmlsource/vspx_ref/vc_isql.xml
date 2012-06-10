@@ -1,0 +1,209 @@
+<refentry id="vc_isql">
+  <refmeta>
+  <refentrytitle>isql</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>isql</refname>
+  <refpurpose>An interactive SQL control that allows the user to type an SQL statement and to see the result of its execution.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_isql">
+    <funcprototype id="vc_proto_isql">
+      <funcdef>
+            &lt;<function>isql</function> <attribute>
+          <parameter>name</parameter> (required) </attribute>
+        <attribute>
+          <parameter>annotation</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>initial-enable</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>enabled</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>instantiate</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>control-udt</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>xsd-stub-xhtml</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>width</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>height</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>isolation</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>timeout</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>maxrows</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>user</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>password</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcfile</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcline</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-log</parameter> (optional) </attribute>
+ /&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_isql">
+  <title>Description</title>
+  </refsect1>
+  <refsect1 id="vc_attrs_isql">
+  <title>Attributes</title>
+  <formalpara>
+   <title>name = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>A page level unique name identifying a control.</para>
+  </formalpara>
+  <formalpara>
+    <title>annotation</title>
+    <para>A human readable comment.</para>
+  </formalpara>
+  <formalpara>
+   <title>initial-enable = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is initially visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>enabled = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>instantiate = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines whether a control instantiate its children. It is true by default. It could be data-bound to an SQL expression. Unlike most of calcucateable attributes, the value of this attribute for a control is calcluated before calling &#39;on-init&#39; event handler of the control; other values are calculated before calling &#39;before-data-bind&#39; event handler.</para>
+  </formalpara>
+  <formalpara>
+   <title>control-udt = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>At run time every control is represented as an instance of some user-defined type (UDT). VSPX compiles selects the UDT to use depending on name of the XML element that represents the control and maybe some of its attributes. In some specific cases the application developer may instruct VSPX compiler to use some other UDT, e.g. an application-specific UDT that is derived from the preset one. If specified, the value of &#39;control-udt&#39; attribute should be equal to the name of the desired target UDT.</para>
+  </formalpara>
+  <formalpara>
+    <title>xsd-stub-xhtml</title>
+    <para>This attribute is for internal use only. It has no effect if added to the source VSPX file.</para>
+  </formalpara>
+  <formalpara>
+    <title>width</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>height</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>isolation</title>
+    <para>Transaction isolation level to be used.</para>
+   <table>
+      <title>Allowed values of the &#39;isolation&#39; attribute</title>
+    <tgroup cols="2">
+     <tbody>
+      <row>
+            <entry>uncomitted</entry>
+       <entry>
+              <para>&#39;uncomitted&#39; transaction isolation level</para>
+       </entry>
+      </row>
+      <row>
+            <entry>committed</entry>
+       <entry>
+              <para>&#39;committed&#39; transaction isolation level</para>
+       </entry>
+      </row>
+      <row>
+            <entry>repeatable</entry>
+       <entry>
+              <para>&#39;repeatable&#39; transaction isolation level</para>
+       </entry>
+      </row>
+      <row>
+            <entry>serializable</entry>
+       <entry>
+              <para>&#39;serializable&#39; transaction isolation level</para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </formalpara>
+  <formalpara>
+   <title>timeout = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Query time-out in seconds (currently not supported)</para>
+  </formalpara>
+  <formalpara>
+   <title>maxrows = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Maximum number of rows to be displayed.</para>
+  </formalpara>
+  <formalpara>
+   <title>user = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>SQL user account to perform the query, if not specified
+	    the SQL account used to run the VSPX page will be used.
+	  </para>
+  </formalpara>
+  <formalpara>
+   <title>password = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>When the &#39;user&#39; attribute is supplied, this is
+	    the user&#39;s password.
+	  </para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcfile</title>
+    <para>URI of the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcline</title>
+    <para>Line number in the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-log</title>
+    <para>This defines what sort of data are saved to the debugging log.
+</para>
+  </formalpara>
+  </refsect1>
+  <refsect1 id="vc_udt_isql">
+  <title>Declaration of type vspx_isql</title>
+  <para>
+ A isql control
+</para>
+  <screen>
+create type vspx_isql under vspx_form
+as
+ (
+   -- parameters
+   isql_custom_exec integer default 0,  -- do nothing to allow vspx code to perform actual exec (i.e. dataset open)
+   isql_explain integer default 0,  -- explain instead of execute
+   isql_maxrows integer default 20,
+   isql_chunked integer default 0,
+   isql_current_stmt varchar default null,
+   isql_current_state any default null,
+   isql_current_meta any default null,
+   isql_current_pos int default 0,
+   isql_current_row int default 0,
+   isql_rows_fetched int default 0,
+   isql_user varchar default null,
+   isql_password varchar default null,
+   isql_isolation varchar default &#39;committed&#39;,
+   isql_timeout integer default 60,
+   isql_text varchar default &#39;&#39;, -- sql text to execute
+   --results
+   --also used vc_error_message as vector(vector(&#39;sqlstate&#39;,&#39;sqlmessage&#39;), ... ) for multiple statements
+   isql_mtd any default null, --as vector(mtd, ... ) for multiple statements
+   isql_res any default null,  --as vector(res, ... ) for multiple statements
+   isql_stmts any default null -- array of statements to be executed on render as cursors
+ )
+   temporary self as ref
+  constructor method vspx_isql (name varchar, parent vspx_control),
+  method isql_exec () returns any
+</screen>
+  </refsect1>
+</refentry>

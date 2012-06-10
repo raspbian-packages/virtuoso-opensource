@@ -1,0 +1,24 @@
+<refentry id="vc_on_init">
+  <refmeta>
+  <refentrytitle>on-init</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>on-init</refname>
+  <refpurpose>Container for code that should be executed at the end of control instantiation.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_on_init">
+    <funcprototype id="vc_proto_on_init">
+      <funcdef>
+            &lt;<function>on-init</function>&gt;(EventHandler)&lt;/<function>on-init</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_on_init">
+  <title>Description</title>
+  <para>The code contained in this element is executed at the end of the control&#39;s constructor.
+	This is expected to have additional initialization checking etc.
+</para>
+  </refsect1>
+ </refentry>
