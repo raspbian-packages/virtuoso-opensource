@@ -85,24 +85,26 @@ libutil_la_SOURCES = \
 	virt_mbsnrtowcs.c \
 	virt_wcrtomb.c \
 	virt_wcs_mask.c \
-	virt_wcsnrtombs.c \
-	pcrelib/pcre_chartables.c \
-	pcrelib/pcre_compile.c \
-	pcrelib/pcre_config.c \
-	pcrelib/pcre_dfa_exec.c \
-	pcrelib/pcre_exec.c \
-	pcrelib/pcre_fullinfo.c \
-	pcrelib/pcre_get.c \
-	pcrelib/pcre_globals.c \
-	pcrelib/pcre_newline.c \
-	pcrelib/pcre_ord2utf8.c \
-	pcrelib/pcre_study.c \
-	pcrelib/pcre_tables.c \
-	pcrelib/pcre_try_flipped.c \
-	pcrelib/pcre_ucd.c \
-	pcrelib/pcre_valid_utf8.c \
-	pcrelib/pcre_version.c \
-	pcrelib/pcre_xclass.c
+	virt_wcsnrtombs.c
+# From above:
+# Debian maintainer: Replaced by external PCRE
+#	pcrelib/pcre_chartables.c \
+#	pcrelib/pcre_compile.c \
+#	pcrelib/pcre_config.c \
+#	pcrelib/pcre_dfa_exec.c \
+#	pcrelib/pcre_exec.c \
+#	pcrelib/pcre_fullinfo.c \
+#	pcrelib/pcre_get.c \
+#	pcrelib/pcre_globals.c \
+#	pcrelib/pcre_newline.c \
+#	pcrelib/pcre_ord2utf8.c \
+#	pcrelib/pcre_study.c \
+#	pcrelib/pcre_tables.c \
+#	pcrelib/pcre_try_flipped.c \
+#	pcrelib/pcre_ucd.c \
+#	pcrelib/pcre_valid_utf8.c \
+#	pcrelib/pcre_version.c \
+#	pcrelib/pcre_xclass.c
 
 
 BUILT_SOURCES = getdate.c
@@ -121,14 +123,16 @@ EXTRA_DIST = \
 	getdate.y \
 	MSG_BG.bin \
 	MSG_EN.bin \
-	pcrelib/AUTHORS \
-	pcrelib/LICENCE \
-	pcrelib/*.c \
-	pcrelib/*.h \
-	pcrelib/*.src \
 	win32/ptrlong.h \
 	win32/syslog.c \
 	win32/syslog.h \
 	winlog.mc \
 	winlog.rc
+# From above:
+# Debian maintainer: Replaced by external PCRE
+#	pcrelib/AUTHORS \
+#	pcrelib/LICENCE \
+#	pcrelib/*.c \
+#	pcrelib/*.h \
+#	pcrelib/*.src
 
