@@ -1,0 +1,94 @@
+From b01c641b917485d0e23beb98787e43cb40baae8a Mon Sep 17 00:00:00 2001
+From: VOS Maintainer <vos.admin@openlinksw.com>
+Date: Thu, 8 Mar 2012 13:52:41 +0000
+Subject: [PATCH] * Fixed use portable method for escaping symbol for gawk 3
+ and 4
+
+---
+ binsrc/cached_resources/res_to_c.awk |    8 +-------
+ binsrc/hosting/perl/pl_to_c.awk      |    2 +-
+ binsrc/hosting/python/py_to_c.awk    |    2 +-
+ binsrc/ws/wsrm/xsd2sql.awk           |    2 +-
+ libsrc/Wi/sql_to_c.awk               |    8 +-------
+ 5 files changed, 5 insertions(+), 17 deletions(-)
+
+diff --git a/binsrc/cached_resources/res_to_c.awk b/binsrc/cached_resources/res_to_c.awk
+index 8c6ddbc..f7f4989 100644
+--- a/binsrc/cached_resources/res_to_c.awk
++++ b/binsrc/cached_resources/res_to_c.awk
+@@ -30,13 +30,7 @@ BEGIN   {
+ 	}
+ 	{
+ 	  fun = $0
+-	  # was: gsub ( /\\/, "\\\\", fun)
+-	  q = "\\\\"
+-	  if (PROCINFO["version"] ~ /^4/)
+-	    gsub ( q, q q, fun)
+-	  else
+-	    gsub ( q, q, fun)
+-
++          gsub ( "\\\\", "&&", fun)
+ 	  gsub ( /"/, "\\\"", fun)
+ 	  gsub ( /\$/, "\\044", fun)
+ 	  gsub ( /.*/, "\"&\\n\",", fun)
+diff --git a/binsrc/hosting/perl/pl_to_c.awk b/binsrc/hosting/perl/pl_to_c.awk
+index 9422a4c..eb4a07d 100644
+--- a/binsrc/hosting/perl/pl_to_c.awk
++++ b/binsrc/hosting/perl/pl_to_c.awk
+@@ -42,7 +42,7 @@ END {
+     }
+ 
+   x = $0
+-  gsub (/\\/, "\\\\", x)
++  gsub ( "\\\\", "&&", x)
+   gsub (/\"/, "\\\"", x)
+   print "\"" x "\\n\""
+ }
+diff --git a/binsrc/hosting/python/py_to_c.awk b/binsrc/hosting/python/py_to_c.awk
+index 7c5b529..6ce5ff4 100644
+--- a/binsrc/hosting/python/py_to_c.awk
++++ b/binsrc/hosting/python/py_to_c.awk
+@@ -48,7 +48,7 @@ END {
+     }
+ 
+   x = $0
+-  gsub (/\\/, "\\\\", x)
++  gsub ( "\\\\", "&&", x)
+   gsub (/\"/, "\\\"", x)
+   print "\"" x "\\n\""
+ }
+diff --git a/binsrc/ws/wsrm/xsd2sql.awk b/binsrc/ws/wsrm/xsd2sql.awk
+index a97aba6..4bba030 100644
+--- a/binsrc/ws/wsrm/xsd2sql.awk
++++ b/binsrc/ws/wsrm/xsd2sql.awk
+@@ -54,7 +54,7 @@ BEGIN {
+       print "  ses := string_output ();"
+     }
+   str = $0
+-  gsub ( /\\/, "\\\\", str)
++  gsub ( "\\\\", "&&", str)
+   gsub ( /'/, "\\'", str)
+ 
+   #
+diff --git a/libsrc/Wi/sql_to_c.awk b/libsrc/Wi/sql_to_c.awk
+index 01c5add..57ef36b 100644
+--- a/libsrc/Wi/sql_to_c.awk
++++ b/libsrc/Wi/sql_to_c.awk
+@@ -343,13 +343,7 @@ BEGIN   {
+ 
+                 # does escape the symbols
+ 		fun = $0
+-		q = "\\\\"
+-		if (PROCINFO["version"] ~ /^4/)
+-		    gsub ( q, q q, fun)
+-		else
+-		    gsub ( q, q, fun)
+-
+-	        #WAS: gsub ( /\\/, "\\\\", fun)
++		gsub ("\\\\", "&&", fun)
+ 
+ 		# remove whitespace except when there is just a semicolon
+ 		if ((in_xsl_mode == 0) && (in_xsd_mode == 0))
+-- 
+1.7.10.4
+
