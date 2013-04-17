@@ -1,0 +1,1088 @@
+Author: Steven Chamberlain <steven@pyro.eu.org>
+Description: This patch avoids FTBFS due to wrong calculation of timeout
+ If the current minute or second wraps around past 59, the timeout
+ calculation is wrong, and may get stuck forever.  Since this happens
+ in many parts of the testsuite it meant considerable risk of FTBFS.
+
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Addressbook/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Addressbook/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Addressbook/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -102,7 +102,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -113,17 +113,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Blog/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Blog/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Blog/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -121,7 +121,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -132,17 +132,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Bookmark/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Bookmark/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Bookmark/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -106,7 +106,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -117,17 +117,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Briefcase/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Briefcase/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Briefcase/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -122,7 +122,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -133,17 +133,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Calendar/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Calendar/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Calendar/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -105,7 +105,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -116,17 +116,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Community/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Community/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Community/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -109,7 +109,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -120,17 +120,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Discussion/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Discussion/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Discussion/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -119,7 +119,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -130,17 +130,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-FeedManager/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-FeedManager/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-FeedManager/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -105,7 +105,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -116,17 +116,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Framework/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Framework/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Framework/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -147,7 +147,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -158,17 +158,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Framework/oauth/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Framework/oauth/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Framework/oauth/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -197,7 +197,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -208,17 +208,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ virtuoso_shutdown() {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Gallery/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Gallery/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Gallery/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -109,7 +109,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -120,17 +120,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Polls/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Polls/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Polls/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -104,7 +104,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -115,17 +115,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-WebMail/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-WebMail/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-WebMail/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -105,7 +105,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -116,17 +116,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Wiki/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/appsrc/ODS-Wiki/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/appsrc/ODS-Wiki/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -140,7 +140,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true 
++  for i in $(seq 1 15) 
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -151,17 +151,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/b3s/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/b3s/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/b3s/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -213,7 +213,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -224,17 +224,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ virtuoso_shutdown() {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/bpel/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/bpel/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/bpel/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -263,7 +263,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -274,17 +274,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ virtuoso_shutdown() {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/hosting/mono/tests/tclrsrv.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/hosting/mono/tests/tclrsrv.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/hosting/mono/tests/tclrsrv.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -221,7 +221,7 @@
+       rm -f *.lck
+       $SERVER +foreground -c tclr.ini $* 1>/dev/null & 
+       stat="true"
+-      while true 
++      for i in $(seq 1 15) 
+ 	do
+ 	  sleep 4
+ 	      stat=`netstat -an | grep "[\.\:]$PORT " | grep LISTEN` 
+@@ -231,20 +231,9 @@
+ 		    LOG "PASSED: Virtuoso Server successfully started on port $port"
+ 		    return 0
+ 	      fi
+-		
+-	  nowh=`date | cut -f 2 -d :`
+-          nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    
+-          nowh=`expr $nowh - $starth`
+-          nows=`expr $nows - $starts`
+-    
+-          nows=`expr $nows + $nowh \*  60`
+-          if test $nows -ge $timeout
+-          then
++        done
+               LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+               return 1
+-          fi
+-        done
+ }
+ 
+ WAITALL ()
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/isparql/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/isparql/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/isparql/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -126,7 +126,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -137,17 +137,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/rdf_mappers/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/rdf_mappers/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/rdf_mappers/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -258,7 +258,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -269,17 +269,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ virtuoso_shutdown() {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/demo/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -124,7 +124,7 @@
+       "$SERVER" +wait
+   fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -135,17 +135,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/mkdemo.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/demo/mkdemo.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/mkdemo.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -153,7 +153,7 @@
+   starth=`date | cut -f 2 -d :`
+   starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+-  while true
++  for i in $(seq 1 10)
+     do
+       sleep 6
+       if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null)
+@@ -161,19 +161,9 @@
+ 	  ECHO "Virtuoso server started"
+ 	  return 0
+ 	fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout
+-        then
++  done
+ 	  ECHO "***WARNING: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	  return 1
+-	fi
+-  done
+ }
+ 
+ STOP_SERVER()
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/mkdoc.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/demo/mkdoc.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/demo/mkdoc.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -174,7 +174,7 @@
+        starth=`date | cut -f 2 -d :`
+        starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+-       while true
++       for i in $(seq 1 10)
+        do
+            sleep 6
+            if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null)
+@@ -182,19 +182,9 @@
+        	ECHO "Virtuoso server started"
+        	return 0
+            fi
+-           nowh=`date | cut -f 2 -d :`
+-           nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-           nowh=`expr $nowh - $starth`
+-           nows=`expr $nows - $starts`
+-
+-           nows=`expr $nows + $nowh \*  60`
+-           if test $nows -ge $timeout
+-           then
++       done
+        	ECHO "***WARNING: Could not start Virtuoso DOC Server within $timeout seconds"
+        	return 1
+-           fi
+-       done
+    fi
+ }
+ 
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/sparql_demo/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/sparql_demo/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/sparql_demo/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -123,7 +123,7 @@
+     fi
+ 
+     stat="true"
+-    while true
++    for i in $(seq 1 15)
+     do
+ 	sleep 4
+ 	echo "Waiting $SERVER start on port $PORT..."
+@@ -134,17 +134,9 @@
+ 	    LOG "PASSED: $SERVER successfully started on port $PORT"
+ 	    return 0
+ 	fi
+-	nowh=`date | cut -f 2 -d :`
+-	nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-	nowh=`expr $nowh - $starth`
+-	nows=`expr $nows - $starts`
+-	nows=`expr $nows + $nowh \*  60`
+-	if test $nows -ge $timeout
+-	then
++    done
+ 	    LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+ 	    return 1
+-	fi
+-    done
+ }
+ 
+ 
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/xpath/files2dav.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/xpath/files2dav.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/xpath/files2dav.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -104,7 +104,7 @@
+   starth=`date | cut -f 2 -d :`
+   starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+-  while true 
++  for i in $(seq 1 10) 
+     do
+       sleep 6
+       if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null) 
+@@ -112,19 +112,9 @@
+ 	  ECHO "Virtuoso server started"     
+ 	  return 0
+ 	fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout 
+-        then
++  done
+ 	  ECHO "***WARNING: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	  return 1
+-	fi
+-  done
+ }
+ 
+ STOP_SERVER()
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/xquery/files2dav.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/samples/xquery/files2dav.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/samples/xquery/files2dav.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -104,7 +104,7 @@
+   starth=`date | cut -f 2 -d :`
+   starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+-  while true 
++  for i in $(seq 1 10) 
+     do
+       sleep 6
+       if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null) 
+@@ -112,19 +112,9 @@
+ 	  ECHO "Virtuoso server started"     
+ 	  return 0
+ 	fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout 
+-        then
++  done
+ 	  ECHO "***WARNING: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	  return 1
+-	fi
+-  done
+ }
+ 
+ STOP_SERVER()
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/sync/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/sync/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/sync/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -113,7 +113,7 @@
+       virtuoso +wait
+   fi
+   stat="true"
+-  while true 
++  for i in $(seq 1 15) 
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -124,17 +124,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/biftest/thook.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/tests/biftest/thook.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/biftest/thook.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -136,7 +136,7 @@
+ 	      rm $LOCKFILE
+           fi
+ 	RUN $SERVER +foreground $* &
+-	while true
++	for i in $(seq 1 12)
+ 	do
+             sleep 5
+ 	    stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
+@@ -145,19 +145,9 @@
+ 		LOG "PASSED: Virtuoso Server successfully started on port $port"
+ 		return 0
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
+-	    then
++	done
+ 		LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+ 		return 1
+-	    fi
+-	done
+ }
+ echo "STARTED : thook.sh"
+ echo "STARTED : thook.sh" > $OUTPUT
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/suite/test_fn.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/tests/suite/test_fn.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/suite/test_fn.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -315,7 +315,7 @@
+ 	then
+ 	    return
+ 	fi
+-	while true
++	for i in $(seq 1 60)
+ 	do
+ 	    stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
+ 	    if [ "z$stat" != "z" ]
+@@ -324,25 +324,15 @@
+ 		return 0
+ 	    fi
+             sleep 1
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
+-	    then
++	done
+ 		LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+ 		return 1
+-	    fi
+-	done
+ }
+ 
+ CHECK_PORT()
+ {
+   port=$1
+-  while true
++  for i in $(seq 1 60)
+   do
+     stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
+     if [ "z$stat" = "z" ]
+@@ -351,19 +341,9 @@
+ 	return 0
+     fi
+     sleep 1
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done  
+ 	LOG "***FAILED: Port $port is not freed during $timeout seconds"
+ 	exit 1
+-    fi
+-  done  
+ }
+ 
+ STOP_SERVER()
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/suite/tpc-d/tpcd.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/tests/suite/tpc-d/tpcd.sh	2009-04-16 21:15:22.000000000 +0100
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/tests/suite/tpc-d/tpcd.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -207,7 +207,7 @@
+       rm -f *.lck
+       $SERVER +foreground -c tpcd.ini $* 1>/dev/null & 
+       stat="true"
+-      while true 
++      for i in $(seq 1 15) 
+ 	do
+ 	  sleep 4
+ 	      stat=`netstat -an | grep "[\.\:]$PORT " | grep LISTEN` 
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/tutorial/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/tutorial/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/tutorial/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -113,7 +113,7 @@
+       "$SERVER" +wait
+       fi
+   stat="true"
+-  while true
++  for i in $(seq 1 15)
+   do
+     sleep 4
+     echo "Waiting $SERVER start on port $PORT..."
+@@ -124,17 +124,9 @@
+       LOG "PASSED: $SERVER successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/vsp/admin/debug/make_vad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/vsp/admin/debug/make_vad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/vsp/admin/debug/make_vad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -79,7 +79,7 @@
+ 	  virtuoso +wait
+   fi
+   stat="true"
+-  while true 
++  for i in $(seq 1 15) 
+   do
+     sleep 4
+     echo "Waiting Virtuoso Server start on port $PORT..."
+@@ -90,17 +90,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command_safe () {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/vspx/suite/vspx_suite.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/vspx/suite/vspx_suite.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/vspx/suite/vspx_suite.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -48,7 +48,7 @@
+   rm -f *.lck
+   $SERVER
+   stat="true"
+-  while true 
++  for i in $(seq 1 15) 
+   do
+     sleep 4
+     LOG "CHECKING: Is Virtuoso Server successfully started on port $PORT?"
+@@ -59,17 +59,9 @@
+       LOG "PASSED: Virtuoso Server successfully started on port $PORT"
+       return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
+-    then
++  done
+       LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+       return 1
+-    fi
+-  done
+ }
+ 
+ do_command() {
+Index: virtuoso-opensource-6.1.4+dfsg1/binsrc/yacutia/mkvad.sh
+===================================================================
+--- virtuoso-opensource-6.1.4+dfsg1.orig/binsrc/yacutia/mkvad.sh	2013-02-05 00:24:04.000000000 +0000
++++ virtuoso-opensource-6.1.4+dfsg1/binsrc/yacutia/mkvad.sh	2013-02-05 00:24:53.000000000 +0000
+@@ -161,7 +161,7 @@
+   starth=`date | cut -f 2 -d :`
+   starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+-  while true
++  for i in $(seq 1 10)
+     do
+       sleep 6
+       if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null)
+@@ -169,19 +169,9 @@
+     ECHO "Virtuoso server started"
+     return 0
+   fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout
+-        then
++  done
+     ECHO "***WARNING: Could not start Virtuoso Server within $timeout seconds"
+     return 1
+-  fi
+-  done
+ }
+ 
+ STOP_SERVER()
