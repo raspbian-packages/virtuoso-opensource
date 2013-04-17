@@ -4750,7 +4750,11 @@ gz_init_ses (dk_session_t * ses_out)
   level = 6;
 
   err = deflateInit2 (&(s->stream), level,
-      Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
+      Z_DEFLATED, -MAX_WBITS, 9, strategy);
+      // Debian maintainer: was:
+      //Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
+      // DEX_MEM_LEVEL hardcoded at 9, which is the value that
+      // results from upstream shipped zlib build anyway
 
   s->stream.next_out = s->outbuf = (Byte *) dk_alloc (Z_BUFSIZE);
   if (err != Z_OK || s->outbuf == Z_NULL)
