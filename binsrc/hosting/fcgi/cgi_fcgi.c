@@ -55,7 +55,7 @@ typedef struct vfc_fcgi_srv_s
   dk_mutex_t *mtx;
   caddr_t uri;
   int n_servers;
-  char bind_path [MAXPATHLEN];
+  char *bind_path;
 
   int next_req_id;
   dk_set_t requests;
@@ -111,6 +111,7 @@ vfc_fcgi_server_allocate (const char *base_uri, const char *bind_file, char *err
 {
   vfc_fcgi_srv_t *srv = (vfc_fcgi_srv_t *) dk_alloc (sizeof (vfc_fcgi_srv_t));
   caddr_t md5_val = NULL;
+  char *aux;
 
   vfc_printf (("vfc_fcgi_server_allocate base_uri=[%s] bind_file=[%s]\n",
 	base_uri,bind_file));
@@ -122,8 +123,9 @@ vfc_fcgi_server_allocate (const char *base_uri, const char *bind_file, char *err
   if (!bind_file)
     md5_val = md5 (srv->uri);
   vfc_printf (("vfc_fcgi_server_allocate md5_val=[%s] \n", md5_val));
-  snprintf (srv->bind_path, sizeof (srv->bind_path), "%s/%s",
-      fcgi_socket_path, bind_file ? bind_file : md5_val);
+  aux = bind_file ? bind_file : md5_val;
+  srv->bind_path = malloc(strlen(fcgi_socket_path) + strlen(aux) + 2);
+  sprintf (srv->bind_path, "%s/%s", fcgi_socket_path, aux);
   id_hash_set (vfc_server_hash, (caddr_t) &srv->uri, (caddr_t) &srv);
   dk_free_box (md5_val);
   vfc_printf (("vfc_fcgi_server_allocate ret =%p\n",
