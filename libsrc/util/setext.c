@@ -46,9 +46,24 @@
 char *
 setext (const char *path, const char *ext, int mode)
 {
-  static char name[MAXPATHLEN];
+  static char *name = NULL;
+  static size_t name_size = 0;
+  size_t new_size;
   char *slash;
   char *dot;
+
+  /* Avoid a call to realloc, whenever possible */
+  new_size = strlen(path) + strlen(ext) + 2;
+  if (name_size < new_size)
+    {
+      /* Ask more than enough space to store the result */
+      /* (realloc of NULL behaves like malloc) */
+      dot = realloc(name, new_size);
+      if (dot == NULL)
+        return NULL;
+      name_size = new_size;
+      name = dot;
+    }
 
   strcpy (name, path);
 
