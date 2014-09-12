@@ -1,0 +1,21 @@
+<refentry id="vc_before_render_container">
+  <refmeta>
+  <refentrytitle>before-render-container</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>before-render-container</refname>
+  <refpurpose>This is identical to v:before-render.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_before_render_container">
+    <funcprototype id="vc_proto_before_render_container">
+      <funcdef>
+            &lt;<function>before-render-container</function>&gt;(EventHandler)&lt;/<function>before-render-container</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_before_render_container">
+  <title>Description</title>
+  </refsect1>
+ </refentry>

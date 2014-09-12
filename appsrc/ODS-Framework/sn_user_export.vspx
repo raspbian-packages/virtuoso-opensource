@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="blog-home-page" xmlns:vm="http://www.openlinksw.com/vspx/ods/" xmlns:v="http://www.openlinksw.com/vspx/" style="index.xsl" doctype="-//W3C//DTD XHTML 1.0 Transitional//EN"  doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <vm:page>
+    <vm:header>
+      <vm:title>User Profile</vm:title>
+    </vm:header>
+    <vm:pagewrapper>
+      <vm:body>
+        <vm:login redirect="index.vspx"/>
+    </vm:body>
+    </vm:pagewrapper>
+  </vm:page>
+  <?vsp
+     declare visb, arr, tmp, str any;
+     declare uid, ufid, own integer;
+     declare ufname varchar;
+
+     uid := self.u_id;
+     ufid := cast(get_keyword ('ufid', self.vc_event.ve_params) as integer);
+     ufname := cast(get_keyword ('ufname', self.vc_event.ve_params) as varchar);
+     if ( ufid = uid) own := 1;
+     else own := 0;
+     visb := WA_USER_VISIBILITY(ufname);
+     arr := WA_GET_USER_INFO(uid, ufid, visb, own);
+
+     http_rewrite ();
+     http_request_status ('HTTP/1.1 200 OK');
+     http_header (sprintf ('Content-Type: text/x-vcard\r\nContent-Disposition: inline; filename="%s.vcf"\r\n', ufname));
+     http ('BEGIN:VCARD\r\n');
+     http ('VERSION:2.1\r\n');
+     http (sprintf ('FN:%s\r\n', coalesce(arr[3],'')));
+     http (sprintf ('EMAIL;PREF;INTERNET:%s\r\n', coalesce(arr[4],'')));
+     http (sprintf ('N:%s;%s\r\n', coalesce(arr[1],''), coalesce(arr[2],'')));
+     http (sprintf ('NICKNAME:%s\r\n', ufname));
+     tmp := coalesce(arr[6],'');
+     if (tmp is not null and __tag (tmp) = 211)
+       http (sprintf ('BDAY:%s\r\n', date_iso8601 (tmp)));
+
+     str := ';';
+     tmp := coalesce(arr[15][0],'');
+       str := str || '' || tmp;
+     tmp := coalesce(arr[15][1],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[16][0],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[16][1],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[15][2],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[16][2],'');
+       str := str || ';' || tmp;
+
+
+     http (sprintf ('ADR;TYPE=HOME:%s\r\n', str));
+
+     tmp := coalesce(arr[18][0],'');
+     if (isstring(tmp))
+     http (sprintf ('TEL;TYPE=HOME;VOICE:%s\r\n', tmp));
+
+     str := ';;';
+     tmp := coalesce(arr[22][0],'');
+       str := str || '' || tmp;
+     tmp := coalesce(arr[22][1],'');
+       str := str || ' ' || tmp;
+     tmp := coalesce(arr[23][0],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[23][1],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[22][2],'');
+       str := str || ';' || tmp;
+     tmp := coalesce(arr[23][2],'');
+       str := str || ';' || tmp;
+
+
+     http (sprintf ('ADR;TYPE=WORK:%s\r\n', str));
+
+     tmp := coalesce(arr[25][0],'');
+     if (isstring(tmp))
+     http (sprintf ('TEL;TYPE=WORK;VOICE:%s\r\n', tmp));
+
+     tmp := coalesce(arr[25][1],'');
+     if (isstring(tmp))
+     http (sprintf ('TEL;TYPE=CELL;VOICE:%s\r\n', tmp));
+
+     tmp := coalesce(arr[17],'');
+     if (tmp is not null)
+     http (sprintf ('TZ:%s\r\n', tmp));
+
+     tmp := coalesce(arr[7],'');
+     if (tmp is not null)
+       http (sprintf ('URL:%s\r\n', tmp));
+
+     tmp := coalesce(arr[20],'');
+     if (tmp is not null)
+       http (sprintf ('ORG:%s\r\n', tmp));
+     http ('END:VCARD\r\n');
+     return;
+  ?>
+</v:page>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="user_edit_buss"
+  doctype="-//W3C//DTD XHTML 1.0 Transitional//EN"
+  fast-render="1" xmlns:v="http://www.openlinksw.com/vspx/"
+  style="index.xsl"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:vm="http://www.openlinksw.com/vspx/ods/"
+  xmlns:v="http://www.openlinksw.com/vspx/">
+
+    <br />
+    <div id="b" class="c1">
+      <div class="tabs">
+      <v:url name="b_url_0" value="Main" url="--sprintf('uiedit_bz.vspx?page=2&tabNo=0')" xhtml_class="--case when self.tabNo = 0 then 'tabX activeTabX' else 'tabX' end"/>
+      <v:url name="b_url_1" value="Address" url="--sprintf('uiedit_bz.vspx?page=2&tabNo=1')" xhtml_class="--case when self.tabNo = 1 then 'tabX activeTabX' else 'tabX' end"/>
+      <v:url name="b_url_2" value="Online Accounts" url="--sprintf('uiedit_bz.vspx?page=2&tabNo=2')" xhtml_class="--case when self.tabNo = 2 then 'tabX activeTabX' else 'tabX' end"/>
+      <v:url name="b_url_3" value="Messaging Services" url="--sprintf('uiedit_bz.vspx?page=2&tabNo=3')" xhtml_class="--case when self.tabNo = 3 then 'tabX activeTabX' else 'tabX' end"/>
+      </div>
+      <div class="contents">
+      <v:template name="buss_template_0" type="simple" enabled="-- equ (self.tabNo, 0)">
+        <v:include url="uiedit_buss_0.vspx"/>
+      </v:template>
+      <v:template name="buss_template_1" type="simple" enabled="-- equ (self.tabNo, 1)">
+        <v:include url="uiedit_buss_1.vspx"/>
+      </v:template>
+      <v:template name="buss_template_2" type="simple" enabled="-- equ (self.tabNo, 2)">
+        <v:include url="uiedit_buss_2.vspx"/>
+      </v:template>
+      <v:template name="buss_template_3" type="simple" enabled="-- equ (self.tabNo, 3)">
+        <v:include url="uiedit_buss_3.vspx"/>
+      </v:template>
+        </div>
+    </div>
+</v:page>

@@ -1,0 +1,45 @@
+<!--
+ -  
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -  
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -  
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -  
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -  
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -  
+ -  
+-->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry id="RI-S-1">
+  <refmeta>
+    <refentrytitle>SPARQL Import</refentrytitle>
+    <refmiscinfo>tutorial</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>Importing RDF data using SPARQL query</refname>
+    <refpurpose>RDF data import using SPARQL sponger.</refpurpose>
+  </refnamediv>
+  <refsect1 id="RI-S-1a">
+    <title>VSPX page invoking the SPARQL sponger</title>
+    <para>
+       This demo presents a VSPX-based form for entering an URL. The form's
+       submit (button click) will perform a SPARQL query with sponge parameters and
+       will ping pingthesemanticweb.com upon success.
+    </para>
+    <para>
+	Note that pinging the service is not needed if [SPARQL] INI section have 
+	PingService = http://rpc.pingthesemanticweb.com/ setting. 
+    </para>
+  </refsect1>
+</refentry>

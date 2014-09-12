@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:login name="odrive_login" realm="wa" mode="url" xmlns:v="http://www.openlinksw.com/vspx/" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <v:template name='inl' type='if-no-login'/>
+  <v:after-data-bind>
+    <![CDATA[
+      declare domain_id integer;
+      declare page_name, path, ods_path varchar;
+      declare params any;
+
+        set_qualifier ('DB');
+      page_name := ODRIVE.WA.page_name ();
+      if (page_name = 'error.vspx')
+        return;
+
+      if ((self.account_role = 'expire') and not is_empty_or_null (self.sid))
+      {
+        self.vc_redirect (sprintf ('/ods/error.vspx?__PAGE=%U&__SQL_STATE=%U&__SQL_MESSAGE=%U', 'home.vspx', '23023', 'You have no access rights for the application!'));
+        return;
+      }
+
+      params := self.vc_page.vc_event.ve_params;
+        domain_id := ODRIVE.WA.session_domain (params);
+      path := rtrim (case when (domain_id <> -1) then ODRIVE.WA.iri_fix (ODRIVE.WA.forum_iri (domain_id)) else HTTP_REQUESTED_URL() end, '/');
+      if ((page_name = 'home.vspx') and (get_keyword ('id', params, '') <> '') and (lcase (get_keyword ('what', params)) = 'c') and (domain_id <> -1))
+      {
+        self.vc_redirect (sprintf ('%s/home.vspx?dir=%U', path, DB.DBA.DAV_SEARCH_PATH (atoi(get_keyword ('id', params)), 'C')));
+        return;
+      }
+      if ((page_name = 'home.vspx') and (get_keyword ('id', params, '') <> '') and (domain_id <> -1))
+      {
+        self.vc_redirect (sprintf ('%s/view.vsp?file=%U&mode=download', path, DB.DBA.DAV_SEARCH_PATH (atoi(get_keyword ('id', params)), 'R')));
+        return;
+      }
+      ods_path := ODRIVE.WA.host_url () || '/ods/';
+      if ((page_name = 'home.vspx') and (get_keyword('URL', params, '') <> ''))
+      {
+        self.vc_redirect (sprintf ('%slogin.vspx?URL=%U', ods_path, sprintf ('%s?URI=%s&TITLE=%V', path, get_keyword ('URL', params, ''), get_keyword ('TITLE', params, ''))));
+        return;
+      }
+      if (self.account_role = 'expire')
+      {
+        self.vc_redirect (sprintf ('%slogin.vspx?URL=%U', ods_path, path));
+        return;
+      }
+      if (ODRIVE.WA.check_grants2 (self.account_role, page_name))
+        return;
+
+      if (page_name <> 'home.vspx')
+          self.vc_redirect('home.vspx');
+    ]]>
+  </v:after-data-bind>
+</v:login>

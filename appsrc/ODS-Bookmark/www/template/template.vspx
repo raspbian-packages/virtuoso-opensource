@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:v="http://www.openlinksw.com/vspx/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://internetalchemy.org/2003/02/profile">
+    <base href="<?V BMK.WA.host_url () || http_path () ?>" /><![CDATA[<!--[if IE]></base><![endif]-->]]>
+    <?vsp
+      declare domainName varchar;
+
+      domainName := BMK.WA.domain_name (self.domain_id);
+      http (sprintf('<link rel="foaf" type="application/rdf+xml" title="FOAF" href="%s" />', BMK.WA.foaf_url (self.account_id)));
+      if (BMK.WA.domain_is_public(self.domain_id))
+      {
+        http(sprintf('\n<link rel="meta" type="application/rdf+xml" title="SIOC" href="%s" />', BMK.WA.sioc_url (self.domain_id)));
+      http (sprintf ('\n    <link rel="search" type="application/opensearchdescription+xml" title="%s OpenSearch Description" href="%sexport.vspx?mode=opensearchdescription" />', domainName, BMK.WA.bookmarks_url (self.domain_id)));
+      }
+      http (sprintf ('\n    <link rel="alternate" type="application/rss+xml" title="%V RSS" href="%s" />', domainName, BMK.WA.gems_url (self.domain_id)||'Bookmark.rss'));
+      http (sprintf ('\n    <link rel="alternate" type="application/atom+xml" title="%V Atom" href="%s" />', domainName, BMK.WA.gems_url (self.domain_id)||'Bookmark.atom'));
+      http (sprintf ('\n    <link rel="subscriptions" type="text/x-opml" title="%V Subscriptions" href="%s" />', domainName, BMK.WA.gems_url (self.domain_id)||'Bookmark.opml'));
+      http (BMK.WA.geo_url (self.domain_id, self.account_id));
+
+      SIOC..rdf_links_header (self.rdf_iri);
+      SIOC..rdf_links_head (self.rdf_iri);
+    ?>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/ods/common.css" type="text/css" />
+    <link rel="stylesheet" href="/ods/typeahead.css" type="text/css" />
+    <meta name="dc.description" content="<?V BMK.WA.utf2wide (BMK.WA.domain_description (self.domain_id)) ?>" />
+    <meta name="dc.title" content="<?V BMK.WA.utf2wide (BMK.WA.domain_description (self.domain_id)) ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <![CDATA[
+      <script type="text/javascript" src="/ods/oat/loader.js"></script>
+      <script type="text/javascript">
+        OAT.Preferences.imagePath = '/ods/images/oat/';
+        OAT.Preferences.stylePath = '/ods/oat/styles/';
+        OAT.Preferences.showAjax = false;
+
+        // DAV
+        var davOptions = {
+          imagePath: OAT.Preferences.imagePath,
+          pathHome: '/home/',
+          path: '<?V BMK.WA.dav_logical_home (self.account_id) ?>',
+          user: '<?V BMK.WA.account_name (self.account_id) ?>',
+          connectionHeaders: {Authorization: '<?V BMK.WA.account_basicAuthorization (self.account_id) ?>'}
+        };
+
+        var featureList=["ajax", "json", "anchor", "dialog", "tree", "calendar"];
+        OAT.Loader.load(featureList);
+      </script>
+      <script type="text/javascript" src="/ods/app.js"></script>
+      <script type="text/javascript" src="/ods/tbl.js"></script>
+      <script type="text/javascript" src="/ods/typeahead.js"></script>
+      <script type="text/javascript" src="/ods/validate.js"></script>
+      <script type="text/javascript" src="js/bookmark.js"></script>
+      <script type="text/javascript">
+        // publics
+        var formDialog;
+
+        function myInit() {
+          if (!OAT._loaded || !OAT.Tree) {
+            setTimeout(myInit, 50);
+            return;
+          }
+
+          if ((<?V cast (get_keyword ('app', self.settings, '0') as integer) ?> > 0) && $('app_area'))
+            generateAPP('app_area', {appActivation: "<?V case when cast (get_keyword ('app', self.settings, '1') as integer) = 2 then 'hover' else 'click' end ?>"});
+            
+      		// init tabs
+          showTab('a', 2, 0);
+          showTab('p', 3, 0);
+          showTab('s', 2, 0);
+
+          setFooter();
+          window.onresize = function() {setFooter();}
+
+          // Init left pane - tree and tags
+          BMK.initLeftPane();
+
+          OAT.MSG.send(OAT, 'PAGE_LOADED');
+        }
+        OAT.MSG.attach(OAT, 'PAGE_LOADED2', myInit);
+        window.onload = function(){OAT.MSG.send(OAT, 'PAGE_LOADED2');};
+      </script>
+    ]]>
+    <title></title>
+  </head>
+  <body>
+    <v:page xmlns:v="http://www.openlinksw.com/vspx/">
+        <v:variable persist="0" name="domain_id" type="integer" default="-1"/>
+        <v:variable persist="0" name="account_id" type="integer" default="-1"/>
+      <v:variable persist="0" name="account_rights" type="varchar" default="''" />
+      <v:variable persist="0" name="person_rights" type="varchar" default="''" />
+        <v:variable persist="0" name="settings" type="any" />
+      <v:variable persist="0" name="rdf_iri" type="varchar" default="null" />
+      <v:on-init>
+        <![CDATA[
+          set ISOLATION = 'Committed';
+          set http_charset = 'utf-8';
+
+          -- Initialize variables
+          declare aSessInfo any;
+
+          aSessInfo := BMK.WA.session_restore (params);
+          self.domain_id := cast (get_keyword('domain_id', aSessInfo, '-1') as integer);
+          self.account_id := cast (get_keyword('account_id', aSessInfo, '-1') as integer);
+          self.account_rights := get_keyword ('account_rights', aSessInfo);
+          self.person_rights := get_keyword ('person_rights', aSessInfo);
+          self.settings := vector_concat (vector ('app', DB.DBA.WA_USER_APP_ENABLE (self.account_id)), BMK.WA.settings (self.domain_id));
+
+          self.vc_add_attribute ('xmlns:foaf', 'http://xmlns.com/foaf/0.1/');
+          self.vc_add_attribute ('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
+          self.vc_add_attribute ('xmlns:dct', 'http://purl.org/dc/terms/');
+          self.vc_add_attribute ('xmlns:rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+          self.vc_add_attribute ('xmlns:rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
+          self.vc_add_attribute ('xmlns:sioct', 'http://rdfs.org/sioc/types#');
+          self.vc_add_attribute ('xmlns:sioc', 'http://rdfs.org/sioc/ns#');
+        ]]>
+      </v:on-init>
+
+      <v:after-data-bind>
+        <![CDATA[
+          if (BMK.WA.frozen_check(self.domain_id))
+          {
+            declare freeze_page varchar;
+            freeze_page := BMK.WA.frozen_page(self.domain_id);
+            if (freeze_page is null or freeze_page = '' or freeze_page = 'default')
+            {
+              http_rewrite ();
+              http_request_status ('HTTP/1.1 404 Not found');
+              http (sprintf('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><HTML><head><TITLE>404 Not Found</TITLE></HEAD><body><H1>Not Found</H1>Resource %s not found.</BODY></HTML>', http_path (BMK.WA.page_name())));
+              http_flush();
+              return;
+            }
+            http_rewrite ();
+            http_request_status ('HTTP/1.1 302 Found');
+            http_header(sprintf('Location: %s\r\n\r\n', freeze_page));
+            http_flush();
+            return;
+          }
+        ]]>
+      </v:after-data-bind>
+
+      <v:placeholder />
+    </v:page>
+  </body>
+</html>

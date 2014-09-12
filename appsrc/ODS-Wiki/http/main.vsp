@@ -1,0 +1,627 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+{
+  set http_charset='UTF-8';
+  declare _uid integer;
+  declare _sid, _realm, _user varchar;
+  declare cookie_vec any;
+  declare _parent varchar;
+  declare _filename varchar;
+
+  _parent := get_keyword ('parent', params, '');
+  if (_parent <> '')
+    _parent := sprintf('parent=%U', _parent);
+
+  -- handle logout
+  if ({?'logout'} = 'true')
+    {
+      delete from DB.DBA.VSPX_SESSION where vs_sid = {?'sid'} and vs_realm = coalesce({?'realm'}, 'wa');
+      commit work;
+      WV.WIKI.redirect (sprintf('%s?lastop=Logout', http_path()));
+      return;
+    }
+  cookie_vec := DB.DBA.vspx_get_cookie_vec(lines);
+
+  -- Set cookie when user came from different domain
+  if (not DB.DBA.is_empty_or_null (get_keyword ('sid', params)) and DB.DBA.is_empty_or_null (get_keyword ('sid', cookie_vec)))
+    {
+      http_header (http_header_get() || sprintf ('Set-Cookie: sid=%s; path=/\r\n', get_keyword ('sid', params)));
+      WV.WIKI.redirect (sprintf('%s?%s', http_path(), WV.WIKI.BUILD_PARAMS (WV.WIKI.DROP_PARAM(params, 'sid'))));
+       return;
+    }
+    
+
+
+  _sid := coalesce ( coalesce (get_keyword('sid', cookie_vec), {?'sid'}), '');
+  if (_sid <> '')
+    params := vector_concat (params, vector ('sid', _sid, 'realm', 'wa'));
+  _realm := coalesce ({?'realm'}, 'wa');
+  connection_set ('WIKI params', params);
+
+  declare _cluster, _local_name, _attach, _base_adjust varchar;
+  declare _cmd varchar;
+  declare _topic_id varchar;
+  declare _topic WV.WIKI.TOPICINFO;
+  declare _text varchar;
+  declare _title varchar;
+  declare _uname, _md5 varchar;
+  declare _attachment varchar;
+  declare _topic_op varchar;
+  declare _rename varchar;
+  declare _is_new varchar;
+  declare _page varchar;
+  declare _error, _referer varchar;
+  declare _path_details any;
+
+  _error := null;
+  _path_details := WV.WIKI.VSPDECODEWIKIPATH (path, _page, _cluster, _local_name, _attachment, _base_adjust, lines);
+  
+  params := vector_concat (params, _path_details);
+  connection_set ('WIKIV BaseAdjust', _base_adjust);
+  _attachment := coalesce (_attachment, get_keyword ('att', params));
+  _uid := WV.WIKI.VSPXGETUID (connection_get ('vspx_user'), _realm, _sid);
+  _user := (select U_NAME from DB.DBA.SYS_USERS where U_ID = _uid);
+  connection_set('WikiUser', _user);
+  if (_user = 'WikiGuest')
+    params := WV.WIKI.VECTOR_DROP_KEYWORD (WV.WIKI.VECTOR_DROP_KEYWORD (params, 'sid'), 'realm');
+
+  _cmd := get_keyword ('command', params);
+  if (_cmd is not null)
+    _cmd := WV.WIKI.TRANSLATE_COMMAND (_cmd);
+    
+  _title := trim ({?'title'});
+  _topic_id := {?'TopicId'};
+    _text := {?'text'};
+  _topic_op := coalesce ({?'topic_rename'}, {?'topic_mv'}, {?'topic_rm'}, {?'mops_rename'});
+  _is_new := {?'is_new'};
+
+  if ({?'goto_title'} is not null)
+    {
+      _local_name := null;
+      _title := WV.WIKI.CONVERTTITLETOWIKIWORD(trim ({?'goto_title'}));
+    }  
+  
+again:
+  _topic := WV.WIKI.TOPICINFO();
+  _topic.ti_raw_title := _title;
+  _topic.ti_rev_id := cast (get_keyword ('rev', params, 0) as integer);
+  if (_topic_id is not null)
+    {
+      _topic.ti_id := cast (_topic_id as integer);
+      _topic.ti_find_metadata_by_id ();
+    }
+  else
+    {
+      _topic.ti_cluster_name := _cluster;
+      _topic.ti_fill_cluster_by_name();
+      _topic.ti_local_name := _local_name;
+      _topic.ti_find_id_by_local_name();
+      _topic.ti_find_metadata_by_id ();
+    }
+  if (_topic.ti_res_id = 0)
+    {
+      if (_title is not null)
+        {
+          _topic.ti_raw_title := _title;
+          _topic.ti_find_id_by_raw_title ();
+	  if (_topic.ti_id = 0)
+	    {
+	      _topic.ti_default_cluster := _cluster;
+              _topic.ti_raw_name := _title;
+              _topic.ti_parse_raw_name ();
+              _topic.ti_fill_cluster_by_name ();
+	      _topic.ti_find_id_by_local_name ();
+            }
+	}
+      else
+        {
+	  _topic.ti_default_cluster := _cluster;
+          _topic.ti_raw_name := _local_name;
+          _topic.ti_parse_raw_name ();
+          _topic.ti_fill_cluster_by_name ();
+	  _topic.ti_find_id_by_local_name ();
+        }
+      _topic.ti_find_metadata_by_id ();
+    }
+  if (_topic.ti_raw_title is null)
+    _topic.ti_raw_title := concat (_topic.ti_cluster_name, '.', _topic.ti_local_name);
+  if ({?'__SQL_STATE'} is not null)
+    {
+       __SQL_STATE := {?'__SQL_STATE'};
+       __SQL_MESSAGE := {?'__SQL_MESSAGE'};
+       _referer := 'Unknown';
+       goto error_report;
+    }
+  declare deadlock_cnt int;
+  deadlock_cnt := 5;
+ 
+  declare exit handler for sqlstate '*', NOT FOUND {
+major_exit_handler:
+	  if ( (__SQL_STATE = '42001') and (deadlock_cnt > 0))
+	    {
+		deadlock_cnt := deadlock_cnt - 1;
+		rollback work;
+		goto cont;
+	    }
+	  if (__SQL_STATE = 'WVRLD')
+	    {
+	      http_request_status ('HTTP/1.1 302 Found');
+        http_header (sprintf('Location: ?%V\r\n', _sid, _realm, __SQL_MESSAGE));
+	      return;
+	    }
+	  declare sql_state, sql_message varchar;
+	  if (_topic.ti_col_id <> 0)
+	    _referer :=  coalesce (http_request_header (lines, 'Referer'), 'Unknown');
+	  else 
+	    _referer := 'Unknown';
+error_report:
+	  sql_state := __SQL_STATE;
+	  sql_message := __SQL_MESSAGE;
+	  declare error_id varchar;
+	  rollback work;
+	  if (sql_state = '42WV9')
+	    {
+		sql_message := subseq (sql_message, 0, strchr (sql_message, '\n'));
+	    	error_id := sql_message;
+	    }
+	  else
+	    error_id := WV..ADD_ERROR (sql_state, sql_message);
+	  commit work;
+          http_rewrite();
+  	  http_header ('Content-Type: text/html; charset=UTF-8\r\n');
+	  WV.WIKI.VSPHEADER (path,params,lines, _topic, _base_adjust);	 
+
+	  declare _ext_params any;
+	  _ext_params := _topic.ti_xslt_vector (WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+    http_value (
+      WV.WIKI.VSPXSLT (
+        'PostProcess.xslt',
+        WV.WIKI.VSPXSLT ( 'VspReportError.xslt', XMLELEMENT ('error', XMLATTRIBUTES (error_id as "id")), _ext_params),
+      _ext_params,
+        WV.WIKI.SKIN_PARAMS (_topic.ti_cluster_id , vector())));
+	  WV.WIKI.VSPFOOTER (path,params,lines);
+	  return;
+  };
+cont:
+  if ({?'goto_title'} is not null)
+	WV.WIKI.CHECKWIKIWORD (_title);
+
+  -- later make real error check...
+  if (_topic.ti_col_id = 0)
+	WV.WIKI.APPSIGNAL (11001, 'Cluster ' || _cluster || ' does not exist, please create it before creating any page in this cluster', vector ());
+
+  if (WV.WIKI.FROZEN (_topic))
+    return;
+  if (_cmd like 'wa_redirect%')
+    {
+ 	declare sid, realm, vspx_user varchar;
+	vspx_user := (select U_NAME from DB.DBA.SYS_USERS where U_ID = _uid);
+	if (vspx_user = 'WikiGuest')
+	  {
+	    sid := '';
+	    realm := '';
+	  }
+	  
+	declare wa_home_link varchar;
+	wa_home_link := registry_get ('wa_home_link');
+	if (isinteger(wa_home_link))
+        wa_home_link :='/ods/';
+        http_request_status ('HTTP/1.1 302 Found');
+	if (_cmd = 'wa_redirect')
+        http_header (sprintf('Location: %s/uiedit.vspx?sid=%s&realm=wa\r\n', wa_home_link, sid));
+	else if (_cmd = 'wa_redirect_add_user')
+	  {
+	    http_header (sprintf('Location: %s/members.vspx?wai_id=%ld&sid=%s&realm=wa\r\n',
+	      wa_home_link, 
+	      (select WAI_ID from DB.DBA.WA_INSTANCE where WAI_NAME = {?'name'}),
+	      sid));
+	  }
+	else if (_cmd = 'wa_redirect2')
+        http_header (sprintf('Location: %s/?sid=%s&realm=wa\r\n', wa_home_link, sid));
+	else if (_cmd = 'wa_redirect_user_home')
+        http_header (sprintf('Location: %s/uhome.vspx?sid=%s&realm=wa\r\n', wa_home_link, sid));
+	return;
+    }
+  if (_cmd = 'dav_redirect')
+    {
+	if (not exists (select HP_LPATH from DB.DBA.HTTP_PATH where HP_LPATH = '/conductor'))
+	  WV.WIKI.APPSIGNAL (11001, 'Conductor package needs to be installed to perform this operation.', vector ());
+        declare sid,vspx_user varchar;
+	vspx_user := (select U_NAME from DB.DBA.SYS_USERS where U_ID = _uid);
+        sid := md5 (concat (datestring (now ()), http_client_ip (), http_path ()));
+        insert into DB.DBA.VSPX_SESSION (VS_REALM, VS_SID, VS_UID, VS_STATE, VS_EXPIRY)
+                values ('virtuoso_admin', sid, vspx_user, serialize (vector ('vspx_user', vspx_user)), now());
+        commit work;
+        http_request_status ('HTTP/1.1 302 Found');
+      http_header (sprintf('Location: /conductor/popup_browser.vspx?sid=%s&realm=virtuoso_admin&path=%s\r\n', sid, 'DAV/VAD/wiki/' || _topic.ti_cluster_name ));
+    }
+  if (_cmd like 'temp-%')
+    {
+      WV.WIKI.VSPTOPICVIEW_TEMP (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust), _cmd);
+       return;
+    }
+  if ((not _topic.ti_res_id) and (_cmd is not null) and (_cmd not in ('preview', 'save', 'edit', 'cancel')))
+    WV.WIKI.APPSIGNAL (11002, 'Topic has been removed or deleted', vector());
+  if (_topic.ti_res_id and _cmd is not null)
+     WV.WIKI.CHECKREADACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Owner of this cluster does not allow you to browse this topic');
+
+  if (_cmd = 'text')
+    {
+        http_rewrite();
+	http_header ('Content-Type: text/plain; charset=UTF-8\r\n');
+	http (_topic.ti_text);
+	return;
+    }  
+  if (_cmd = 'xml')
+    {
+        http_rewrite();
+	http_header ('Content-Type: text/xml; charset=UTF-8\r\n');
+	http ('<?xml version="1.0"?>');
+      http (serialize_to_UTF8_xml (XMLELEMENT ('topic', XMLATTRIBUTES (_topic.ti_cluster_name as "cluster", _topic.ti_local_name as "name"), _topic.ti_get_entity (null, 0))));
+	return;
+    }  
+  if (_cmd = 'plain-html')
+    {
+	WV.WIKI.VSPTOPICVIEW_PLAIN (path, lines, _topic,
+	   WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+
+	return;
+    }  
+  if (_cmd = 'ontology')
+    {
+        http_rewrite();
+	http_header ('Content-Type: text/xml; charset=UTF-8\r\n');
+	http ('<?xml version="1.0" encoding="UTF-8"?>\n');
+      http (serialize_to_UTF8_xml (xtree_doc(SWOOGLE..ONTOLOGY_TEXT(_topic.ti_text))));
+	return;
+    }  
+
+  if (_cmd = 'cancel')
+    {
+      if (_topic.ti_id <> 0)
+        WV.WIKI.RELEASELOCK (DB.DBA.DAV_SEARCH_PATH (_topic.ti_res_id, 'R'), _user);
+      else
+        _local_name := coalesce ({?'parent'}, WV.WIKI.CLUSTERPARAM (_topic.ti_cluster_name, 'index-page', 'WelcomeVisitors'));
+      _cmd := null;
+      goto again;
+    }
+  if (_cmd = 'save')
+    {
+      declare exit handler for sqlstate '42WV9' {
+	if (_user <> 'WikiGuest')
+	  goto major_exit_handler;
+  	http_rewrite();
+        WV.WIKI.redirect (sprintf ('%s/login.vspx?URL=%U',  WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || sprintf ('?command=save&text=%U', _text)));
+        return;
+      };
+
+      declare _retval any;
+
+      _text := coalesce(_text, '');
+      if ((length (_text) > 0) and (_text[length (_text)-1] = ascii('\n')))
+          _text := subseq(_text, 0, length (_text)- 2);
+
+      _text := WV.WIKI.DELETE_SYSINFO_FOR (_text, NULL);      
+      _topic.ti_text := _text;
+      _filename := coalesce ((select RES_NAME from WS.WS.SYS_DAV_RES where RES_ID = _topic.ti_res_id), concat (_topic.ti_local_name,'.txt'));
+      WV.WIKI.CHECKWRITEACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Edit is not allowed by owner of this cluster.');
+      connection_set ('HTTP_CLI_UID', _user);
+
+      declare _res int;
+
+      _res := WV.WIKI.UPLOADPAGE (_topic.ti_col_id, _filename, _text, (select COL_OWNER from WS.WS.SYS_DAV_COL where COL_ID = _topic.ti_col_id), _topic.ti_cluster_id, _user );
+      commit work;
+      if ((_topic.ti_id = 0) and ({?'ReleaseLock'} is null)) 
+	  WV.WIKI.GETLOCK (WS.WS.COL_PATH(_topic.ti_col_id) || _filename, _user);
+      if ({?'ReleaseLock'} is not null)
+	WV.WIKI.RELEASELOCK (WS.WS.COL_PATH(_topic.ti_col_id) || _filename, _user);
+      if (_topic.ti_id <> 0)
+	WV.WIKI.ADDHISTORYITEM (_topic, _filename, 'Update', '', _user);
+      else 
+	WV.WIKI.ADDHISTORYITEM (_topic, _filename, 'Create', '', _user);
+      WV.WIKI.INC_COMMITCOUNTER (_uid);
+      commit work;
+      _cmd := 'saved';
+      goto again;
+    }
+  WV.WIKI.VSPHEADER (path,params,lines, _topic, _base_adjust);
+content:
+  if (_error is not null)
+    {
+    http ('<div class="error"><span>' || _error || '</span></div>');
+  }
+  _error := null;
+  if (_cmd = 'diff')
+    {
+      WV.WIKI.VSPDIFF (path,lines,_topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto make_footer;
+    }
+  else if (_cmd = 'export_rdf')
+  {
+  	WV.WIKI.redirect (sprintf ('/sparql?default-graph-uri=%U&query=%U&format=%U', 
+  	                           sioc..get_graph (), 
+  	                           sprintf ('describe <%s>', sioc..wiki_post_iri_2 (_topic.ti_id)),
+  	                           'text/html'
+  	                 ));
+  	return;
+  }
+  else if (_cmd = 'do_attach')
+    {
+      WV.WIKI.CHECKREADACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id);
+      declare filename, filepath, mime_type varchar;
+      filename := get_keyword ('filename', get_keyword ('attr-filepath', params));
+      mime_type := get_keyword ('Content-Type', get_keyword ('attr-filepath', params), '');
+      if (mime_type = '')
+        mime_type := http_mime_type(filename);
+      if (filename is not null)
+	{
+	  declare arr any;
+	  arr := split_and_decode (filename, 0, '\0\0\\');
+	  if (arr is not null)
+	    filename := arr[length(arr)-1];
+	}
+      filepath := get_keyword ('filepath', params, null, 1);
+      if (length (filepath) = 0)
+	{
+	  _error := 'Can not attach empty file';
+	  _cmd := 'attach';
+	  goto again;
+   	}
+      WV.WIKI.ATTACH2 (_uid, filename, mime_type, _topic.ti_id, filepath, get_keyword ('comment', params));
+      if (get_keyword ('createlink', params) is not null)
+	WV.WIKI.ADDLINK (_topic, mime_type, _uid, filename, _user);
+      WV.WIKI.ADDHISTORYITEM (_topic, null, 'Attach', filename, _user);
+      _cmd := 'attach';
+    }	
+  if (_cmd = 'attach')
+    {
+      declare exit handler for sqlstate '42WV9' {
+	if (_user <> 'WikiGuest')
+	  goto major_exit_handler;
+  	http_rewrite();
+        WV.WIKI.redirect (sprintf ('%s/login.vspx?URL=%U',  WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || '?command=attach'));
+        return;
+      };
+	WV.WIKI.VSPTOPICATTACH (path, lines, _topic,
+		 WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+ 	goto make_footer;
+    }	
+  if (_attachment is not null)
+    {
+      if (_cmd = 'manage')
+        {
+        WV.WIKI.VSPATTACHMENTMANAGE (path, lines, _topic,_attachment, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+        }
+      else if (_cmd = 'delete')
+	{
+	  if ({?'submit'} = 'Yes')
+	    {
+	      WV.WIKI.CHECKWRITEACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Additional operations are not allowed by owner of this cluster');
+
+	      if ({?'dellinks'} is not null)
+		 WV.WIKI.DELETEATTACHMENTLINKS (_topic, _uid, _attachment);
+	      WV.WIKI.ADDHISTORYITEM (_topic, null, 'DeleteAttach', _attachment, _user);
+	      WV.WIKI.ATTACHMENTACTION (_uid, _topic.ti_id, _attachment, _cmd);
+	    }
+	  _cmd := 'manage';
+	  _attachment := null;
+	  goto again;
+	} 
+      else if (_cmd = 'delete_conf')
+	{
+ 	  WV.WIKI.CHECKWRITEACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Additional operations are not allowed by owner of this cluster');
+
+	  WV.WIKI.VSPHEADER (path,params,lines, _topic, _base_adjust);	 
+	  WV.WIKI.VSPDELETECONFIRM(path, lines, _topic, _attachment,
+		WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+	}
+      else
+	{
+	  WV.WIKI.VSPATTACHMENTVIEW (_uid, _topic.ti_id, _attachment);
+	  return;
+	}
+      goto do_nothing;
+    }
+
+  if (_cmd = 'showtree')
+    WV.WIKI.SETCLUSTERPARAM (_topic.ti_cluster_id, 'tree','show');
+
+  if (_cmd = 'hidetree')
+    WV.WIKI.SETCLUSTERPARAM (_topic.ti_cluster_id, 'tree','hide');
+
+  if (_cmd = 'edit')
+    {
+      declare exit handler for sqlstate '42WV9'
+      {
+	if (_user <> 'WikiGuest')
+	  goto major_exit_handler;
+
+  	http_rewrite();
+        WV.WIKI.redirect (sprintf ('%s/login.vspx?URL=%U', WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || '?command=edit&' || _parent));
+--        http_request_status ('HTTP/1.1 302 Found');
+--        http_header (http_header_get() || sprintf('Location: %s/login.vspx?URL=%U\r\n',  WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || '?command=edit&' || _parent));
+        return;
+      };
+      _topic.ti_text := _text;
+      _filename := coalesce ((select RES_NAME from WS.WS.SYS_DAV_RES where RES_ID = _topic.ti_res_id), concat (_topic.ti_local_name,'.txt'));
+      WV.WIKI.CHECKWRITEACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Edit is not allowed by owner of this cluster.');
+
+      if (_topic.ti_id = 0)
+        {
+        WV.WIKI.VSPTOPICCREATE (path, lines, _cluster, _topic.ti_raw_title, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+        }
+      else
+	{
+          if (0 = WV.WIKI.GETLOCK (WS.WS.COL_PATH(_topic.ti_col_id) || _filename, _user))
+            WV.WIKI.VSPTOPICEDIT (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+	  else
+		WV.WIKI.APPSIGNAL (11001, 'The resource &path; is locked', vector ('path', WS.WS.COL_PATH(_topic.ti_col_id) || _filename));
+	}
+      goto make_footer;
+    }
+
+  if (_cmd = 'upstream_now')
+    {
+    declare exit handler for sqlstate '42WV9'
+    {
+      if (_user <> 'WikiGuest')
+        goto major_exit_handler;
+
+      http_rewrite();
+      WV.WIKI.redirect (sprintf('%s/login.vspx?URL=%U', WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || '?command=upstream_now&' || _parent));
+      return;
+    };
+    _filename := coalesce ((select RES_NAME from WS.WS.SYS_DAV_RES where RES_ID = _topic.ti_res_id), concat (_topic.ti_local_name,'.txt'));
+    WV.WIKI.CHECKWRITEACCESS (_uid, _topic.ti_res_id, _topic.ti_cluster_id, _topic.ti_col_id, 'Upstream is not allowed by owner of this cluster.');
+    if (_topic.ti_id <> 0)
+      {
+          if (0 = WV.WIKI.GETLOCK (WS.WS.COL_PATH(_topic.ti_col_id) || _filename, _user))
+        {
+          if (WV.WIKI.VSPTOPICVIEW (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust)))
+            WV.WIKI.VSPFOOTER (path, params, lines);
+
+          http_flush();
+              commit work;
+
+          WV.WIKI.UPSTREAM_TOPIC_NOW (_topic.ti_id);
+          WV.WIKI.RELEASELOCK (WS.WS.COL_PATH(_topic.ti_col_id) || _filename, _user);
+          return;
+        }
+        else
+            {
+          WV.WIKI.APPSIGNAL (11001, 'The resource &path; is locked', vector ('path', WS.WS.COL_PATH(_topic.ti_col_id) || _filename));
+      }
+        }
+      goto make_footer;
+    }
+
+  if (_cmd = 'index')
+    {
+      if (not _topic.ti_id)
+	{
+	  _cmd := 'edit';
+	  goto content;
+	}
+      WV.WIKI.VSPCLUSTERINDEX (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto make_footer;
+    }
+
+    if (_cmd = 'members')
+    {
+      if (not _topic.ti_id)
+        {
+          _cmd := 'edit';
+          goto content;
+        }
+      WV.WIKI.VSPCLUSTERMEMBERS (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto make_footer;
+    }
+
+  if (_cmd in ('maintenance', 'web', 'doc', 'revisions', 'tags', 'tag'))
+    {
+      if (not _topic.ti_id)
+        {
+          _cmd := 'edit';
+          goto content;
+        }
+      declare _vspx, _type varchar;
+
+      _type := '';
+      if (_cmd = 'maintenance')
+      {
+        _vspx := 'ops.vspx';
+      }
+      else if (_cmd = 'web')
+      {
+        _vspx := 'export.vspx';
+      }
+      else if (_cmd = 'doc')
+      {
+        _vspx := 'export.vspx';
+        _type := 'docbook';
+      }
+      else if (_cmd = 'revisions')
+      {
+        _vspx := 'history.vspx';
+      }
+      else if (_cmd = 'tags')
+      {
+        _vspx := 'tags.vspx';
+      }
+      else if (_cmd = 'tag')
+      {
+        _vspx := 'tag.vspx';
+      }
+      WV.WIKI.VSPTOPICRESOURCE (_vspx, _type, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto do_nothing;
+    }
+
+  if (_cmd = 'preview')
+    {
+      WV.WIKI.VSPTOPICPREVIEW (path, lines, _topic.ti_id, _topic.ti_raw_title, _text, {?'is_new'}, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust), _cluster );
+      goto make_footer;
+    }
+  if (_cmd like 'refby%')
+    {
+      WV.WIKI.VSPTOPICREFERERS (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto make_footer;
+    }
+  if (_cmd = 'show_mail')
+    {
+      WV.WIKI.VSPMAILVIEW (path, lines, _topic, atoi ({?'user_id'}), atoi ({?'m_id'}), WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+      goto make_footer;
+    }
+	
+create_or_view:
+
+  if (_topic.ti_id = 0)
+    {
+      declare exit handler for sqlstate '42WV9'
+      {
+	if (_user <> 'WikiGuest')
+	  goto major_exit_handler;
+
+        _title := sprintf ('?goto_title=%U', coalesce (_title, ''));
+  	http_rewrite();
+        http_request_status ('HTTP/1.1 302 Found');
+        http_header (http_header_get() || sprintf('Location: %s/login.vspx?URL=%U\r\n',  WV..ODS_LINK(lines), 'http://' || DB.DBA.WA_GET_HOST() || http_path() || _title || '?' ||  _parent));
+
+        return;
+      };
+      WV.WIKI.VSPTOPICCREATE (path, lines, _cluster, _topic.ti_raw_title, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust));
+    }
+  else
+   {
+     if (WV.WIKI.VSPTOPICVIEW (path, lines, _topic, WV.WIKI.MAKE_PARAMS (_user, _uid, params, _base_adjust)))
+        goto make_footer;
+
+	 return;
+   }
+make_footer:    
+  WV.WIKI.VSPFOOTER (path,params,lines);
+	;
+do_nothing:
+	;
+}
+?>

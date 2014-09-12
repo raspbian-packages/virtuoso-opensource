@@ -1,0 +1,127 @@
+/*
+ *  $Id$
+ *
+ *  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ *  project.
+ *
+ *  Copyright (C) 1998-2012 OpenLink Software
+ *
+ *  This project is free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by the
+ *  Free Software Foundation; only version 2 of the License, dated June 1991.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *  General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ *
+ */
+
+@import "doc.css";
+
+@media screen, print {
+
+BODY {
+  background-image: url(leftbg.jpg);
+}
+
+#header {
+  background: navy url(logobg.jpg);
+}
+
+#searchbar {
+  padding: 1em;
+  text-align: center;
+  }
+input, form {
+  margin: 0px;
+  padding: 0px;
+  }
+#srcnavbar {
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 1em;
+  text-align: center;
+  }
+#srcnavbar a {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  font-size: 90%;
+  }
+table {
+  border-collapse: collapse;
+  }
+.cp {
+  border: 1px solid silver;
+  color: red;
+  background: inherit;
+}
+#poweredby {
+  margin-left: 240px;
+}
+#searchbox {
+	width: 180px;
+	float: left;
+	padding: 10px;
+}
+.formdata td {
+  padding-bottom: 10px;
+}
+.results td {
+  padding-bottom: 5px;
+}
+.results td.text {
+  width: 550px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid silver;
+}
+.results td.score {
+  width: 100px;
+}
+td.controls {
+  padding: 15px;
+  padding-bottom: 30px;
+  border-top: 1px solid white;
+}
+.search_button {
+  border: 1px solid #666;
+  font-family: Tahoma, sans-serif;
+  font-size: 8pt;
+  padding: 0px;
+  width: 100px;
+  vertical-align: top;
+  background: silver;
+  color: #333;
+  margin: 0px;
+  margin-right: 20px;
+}
+#searchresults {
+  text-align: center;
+  background: white;
+  color: black;
+  margin-left: 50px;
+  margin-right: 5%;
+  padding: 2em;
+  border: 1px silver solid;
+  }
+#searchresults td, #searchresults th {
+  font-size: 80%;
+  padding-right: 1em;
+  }
+#searchresults th {
+  background: #eeeeee;
+  color: black;
+  border-bottom: 1px solid silver;
+  text-align: left;
+  }
+#footer {
+  margin-top: 10px;
+  margin-left: 100px;
+  margin-right: 100px;
+  clear: both;
+  }
+}

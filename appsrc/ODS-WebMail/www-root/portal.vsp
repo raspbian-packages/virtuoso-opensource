@@ -1,0 +1,182 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+  declare errorCount, N integer;
+  declare waID, waPublic, user_id integer;
+  declare sid, realm varchar;
+  declare wa_home_title, wa_home_link, user_name, user_fullName, procName, procID, S varchar;
+  declare hParams, hLines, vOptions, geoParams, settings, app any;
+
+  declare exit handler for sqlstate '90001' { OMAIL.WA.utl_doredirect(__sql_message, waID); return;};
+  declare exit handler for sqlstate '90005' { return; }; --download
+  declare exit handler for sqlstate '42001' { http('404'); return;}; --not found
+  declare exit handler for sqlstate 'TEST'
+  {
+    OMAIL.WA.utl_doredirect(sprintf('err.vsp?sid=%s&realm=%s&err=%s&msg=%U', sid, realm, __SQL_STATE, OMAIL.WA.test_clear(__SQL_MESSAGE)));
+    return;
+  };
+  declare exit handler for SQLSTATE '40001' {
+    rollback work;
+    if (errorCount > 5)
+      resignal;
+    errorCount := errorCount + 1;
+    goto exec_start;
+  };
+
+  set ISOLATION = 'Committed';
+  set http_charset = 'utf-8';
+
+  sid := get_keyword ('sid', params, '');
+  realm := get_keyword ('realm', params, '');
+
+exec_start:;
+
+  hParams := params;
+  hLines := lines;
+	wa_home_title := case when registry_get ('wa_home_title') = 0 then 'ODS Home' else registry_get ('wa_home_title') end;
+	wa_home_link := case when registry_get ('wa_home_link') = 0 then '/ods/' else registry_get ('wa_home_link') end;
+
+  waID := null;
+  path := split_and_decode (trim (http_path (), '/'), 0, '\0\0/');
+  vOptions := http_map_get('options');
+  if (not isnull(vOptions))
+    waID := get_keyword('domain', vOptions);
+  if (isnull(waID) and (length(path) = 3))
+    waID := atoi(path[1]);
+  if (not isnull(waID))
+  {
+    declare waName, waDescription varchar;
+
+    declare continue handler for NOT FOUND goto system_error;
+
+    N  := length(path)-1;
+    select WAI_NAME, coalesce(WAI_DESCRIPTION, WAI_NAME), WAI_IS_PUBLIC into waName, waDescription, waPublic from DB.DBA.WA_INSTANCE where WAI_ID = waID;
+
+    if (is_empty_or_null(path[N]))
+      aset(path, N, 'box.vsp');
+    procName := split_and_decode(path[N],0,'\0\0.');
+    procID   := procName[0];
+    procName := concat('OMAIL.WA.omail_',procID);
+
+    if (OMAIL.WA.frozen_check (waID, sid))
+    {
+      declare freeze_page varchar;
+
+      freeze_page := OMAIL.WA.frozen_page(waID);
+      if (freeze_page is null or freeze_page = '' or freeze_page = 'default')
+      {
+        http_rewrite ();
+        http_request_status ('HTTP/1.1 404 Not found');
+        http (sprintf('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><HTML><head><TITLE>404 Not Found</TITLE></HEAD><body><H1>Not Found</H1>Resource %s not found.</BODY></HTML>', http_path (path[N])));
+        http_flush();
+        return;
+      }
+      http_rewrite ();
+      http_request_status ('HTTP/1.1 302 Found');
+      http_header(sprintf('Location: %s\r\n\r\n', freeze_page));
+      http_flush();
+      return;
+    }
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND GOTO bad_session;
+
+    SELECT U_ID,
+           U_NAME,
+           OMAIL.WA.user_name (U_NAME, U_FULL_NAME)
+      INTO user_id,
+           user_name,
+           user_fullName
+      FROM VSPX_SESSION,
+           SYS_USERS
+     WHERE VS_SID   = sid
+       AND VS_REALM = realm
+       AND VS_UID   = U_NAME;
+
+    geoParams := vector();
+    for (select WAUI_LAT, WAUI_LNG from WA_USER_INFO where WAUI_U_ID = user_id) do
+      if ((not isnull(WAUI_LNG)) and (not isnull(WAUI_LAT)))
+        geoParams := vector('latitude', sprintf('%.2f', WAUI_LAT), 'longitude', sprintf('%.2f', WAUI_LNG));
+    settings := OMAIL.WA.omail_get_settings (1, user_id, 'base_settings');
+    app := OMAIL.WA.omail_getp('app', settings);
+    params := vector_concat(params, vector('user_info', vector('user_id',       user_id,
+                                                               'user_name',     user_name,
+                                                               'user_fullname', user_fullName,
+                                                               'user_basic_authorization', OMAIL.WA.account_basicAuthorization (user_id),
+                                                               'domain_id',     waID,
+                                                               'domain_path',   OMAIL.WA.domain_sioc_url (waID),
+                                                               'description',   waDescription,
+                                                               'email',         waName,
+                                                               'base_path',     OMAIL.WA.omail_url (waID),
+                                                               'foaf',          sprintf ('%s/dataspace/%U/about.rdf', OMAIL.WA.host_url (), user_name),
+                                                               'geo',           geoParams,
+                                                               'app',           app,
+                                                               'banner',        '<![CDATA[' || OMAIL.WA.banner_links (waID, sid, realm) || ']]>')));
+    if (waPublic)
+      params := vector_concat(params, vector('sioc', replace(sprintf('%s/dataspace/%U/mail/%U/sioc.rdf', OMAIL.WA.host_url (), user_name, waName), '+', '%2B')));
+  }
+  else
+  {
+    if (get_keyword ('logout', params, ''))
+    {
+      OMAIL.WA.utl_redirect(wa_home_link || sprintf ('?logout=true&sid=%s&realm=%s', sid, realm));
+    } else {
+    OMAIL.WA.utl_redirect(wa_home_link || 'index.vspx');
+    }
+    return;
+  }
+
+  declare _page_mode, _xml varchar;
+
+  _page_mode := '';
+  if (get_keyword('return',params,'') <> '' and isnull(strstr(get_keyword('return',params,''),'.')))
+    _page_mode := concat(' mode="popup"');
+
+  _xml := call (procName)(path, lines, params);
+  _xml := sprintf('<page id="%s"%s><ods><name>%V</name><link>%s</link><bar><![CDATA[%s]]></bar></ods>%s</page>', procID, _page_mode, wa_home_title, wa_home_link, ODS.BAR._EXEC('oMail', params, lines), _xml);
+
+  -- XSL Transformation--------------------------------------------------------------
+  OMAIL.WA.utl_myhttp (_xml, null, get_keyword ('vv', params), hParams, hLines, path);
+  return;
+
+bad_session:
+  declare vh, lh, hf, ods_path any;
+
+  vh := http_map_get ('vhost');
+  lh := http_map_get ('lhost');
+  hf := http_request_header (lines, 'Host');
+
+  if (hf is not null and exists (select 1 from HTTP_PATH where HP_HOST = vh and HP_LISTEN_HOST = lh and HP_LPATH = '/ods'))
+    ods_path := 'http://' || hf || '/ods/';
+  else
+    ods_path := DB.DBA.WA_LINK (1, '/ods/');
+
+  S := HTTP_REQUESTED_URL() || '?';
+  for (N := 0; N < length(params); N := N + 2)
+    if ((params[N] <> 'sid') and (params[N] <> 'realm') and (params[N] <> 'Content') and (params[N] <> 'logout'))
+      S := S || params[N] || '=' || cast(params[N+1] as varchar) || '&';
+  http_request_status ('HTTP/1.1 302 Found');
+  http_header (sprintf ('Location: %slogin.vspx?URL=%U\r\n', ods_path, rtrim(S, '&')));
+
+system_error:
+  http('The user doesn\'t have any mail box defined');
+?>

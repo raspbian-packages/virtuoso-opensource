@@ -1,0 +1,289 @@
+/*
+ *  $Id$
+ *
+ *  Configuration Options for win32
+ *
+ *  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ *  project.
+ *
+ *  Copyright (C) 1998-2012 OpenLink Software
+ *
+ *  This project is free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by the
+ *  Free Software Foundation; only version 2 of the License, dated June 1991.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *  General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+#ifndef __MINGW32__
+#pragma warning (disable:4115) // named type definition in parentheses
+#pragma warning (disable:4201) // non-std ext used - nameless struct/union
+#pragma warning (disable:4214) // non-std ext used - bit fields other than int
+#pragma warning (disable:4514) // unreferenced inline function has been removed
+#pragma warning (disable:4996) // The POSIX name for this item is deprecated
+#endif
+
+#define MAXPATHLEN 1024
+#define DOSFS
+#define FD_SETSIZE 8192
+/* GK: hack that is placed here for compatibility with the WIN2003 Platform SDK */
+#define _WSPIAPI_H_
+#define _USE_MATH_DEFINES
+
+#include <stdio.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
+#include <setjmp.h>
+#include <process.h>
+#include <io.h>
+
+/* defined in wincrypt, conflicts with openssl */
+#undef OCSP_RESPONSE
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+/* #undef gid_t */
+
+/* Define if system calls automatically restart after interruption
+   by a signal.  */
+/* #undef HAVE_RESTARTABLE_SYSCALLS */
+
+/* Define if your struct stat has st_blksize.  */
+// #define HAVE_ST_BLKSIZE 1
+
+/* Define if your struct stat has st_blocks.  */
+// #define HAVE_ST_BLOCKS 1
+
+/* Define if your struct stat has st_rdev.  */
+// #define HAVE_ST_RDEV 1
+
+/* Define if you have <sys/wait.h> that is POSIX.1 compatible.  */
+// #define HAVE_SYS_WAIT_H 1
+
+/* Define if your struct tm has tm_zone.  */
+/* #undef HAVE_TM_ZONE */
+
+/* Define if you don't have tm_zone but do have the external array
+   tzname.  */
+#define HAVE_TZNAME 1
+
+/* Define if major, minor, and makedev are declared in <mkdev.h>.  */
+/* #undef MAJOR_IN_MKDEV */
+
+/* Define if major, minor, and makedev are declared in <sysmacros.h>.  */
+//#define MAJOR_IN_SYSMACROS 1
+
+/* Define if on MINIX.  */
+/* #undef _MINIX */
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+/* #undef mode_t */
+
+/* Define if your C compiler doesn't accept -c and -o together.  */
+/* #undef NO_MINUS_C_MINUS_O */
+
+/* Define to `long' if <sys/types.h> doesn't define.  */
+/* #undef off_t */
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME "Virtuoso Open Source Edition"
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+/* #undef pid_t */
+
+/* Define if the system does not provide POSIX.1 features except
+   with this defined.  */
+/* #undef _POSIX_1_SOURCE */
+
+/* Define if you need to in order for stat and other things to work.  */
+/* #undef _POSIX_SOURCE */
+
+/* Define as the return type of signal handlers (int or void).  */
+#define RETSIGTYPE void
+
+/* Define if the setvbuf function takes the buffering type as its second
+   argument and the buffer pointer as the third, as on System V
+   before release 3.  */
+/* #undef SETVBUF_REVERSED */
+
+/* Define to `unsigned' if <sys/types.h> doesn't define.  */
+/* #undef size_t */
+
+/* Define if the `S_IS*' macros in <sys/stat.h> do not work properly.  */
+/* #undef STAT_MACROS_BROKEN */
+
+/* Define if you have the ANSI C header files.  */
+#define STDC_HEADERS 1
+
+/* Define if you can safely include both <sys/time.h> and <time.h>.  */
+// #define TIME_WITH_SYS_TIME 1
+
+/* Define if your <sys/time.h> declares struct tm.  */
+/* #undef TM_IN_SYS_TIME */
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+/* #undef uid_t */
+
+/* Define if your processor stores words with the most significant
+   byte first (like Motorola and SPARC, unlike Intel and VAX).  */
+/* #undef WORDS_BIGENDIAN */
+
+/* Define if lex declares yytext as a char * by default, not a char[].  */
+#define YYTEXT_POINTER 1
+
+/* The number of bytes in a char.  */
+#define SIZEOF_CHAR 1
+
+/* The number of bytes in a char *.  */
+#define SIZEOF_CHAR_P 4
+
+/* The number of bytes in a double.  */
+#define SIZEOF_DOUBLE 8
+
+/* The number of bytes in a float.  */
+#define SIZEOF_FLOAT 4
+
+/* The number of bytes in a int.  */
+#define SIZEOF_INT 4
+
+/* The number of bytes in a long.  */
+#define SIZEOF_LONG 4
+
+/* The number of bytes in a long double.  */
+#define SIZEOF_LONG_DOUBLE 8
+
+/* The number of bytes in a long long.  */
+#define SIZEOF_LONG_LONG 8
+
+/* The number of bytes in a short.  */
+#define SIZEOF_SHORT 2
+
+/* The number of bytes in a unsigned.  */
+#define SIZEOF_UNSIGNED 4
+
+/* The number of bytes in a void *.  */
+#define SIZEOF_VOID_P 4
+
+/* Define if you have the fchmod function.  */
+#define HAVE_FCHMOD 1
+
+/* The windows equivalent is _commit */
+#define HAVE_FSYNC 1
+
+/* Define if you have the ftruncate function.  */
+#define HAVE_FTRUNCATE 1
+
+/* Define if you have the getpagesize function.  */
+// #define HAVE_GETPAGESIZE 1
+
+/* Define if you have the gettimeofday function.  */
+// #define HAVE_GETTIMEOFDAY 1
+
+/* Define if you have the strtok_r function.  */
+/* #undef HAVE_STRTOK_R */
+
+/* Define if you have the <dirent.h> header file.  */
+// #define HAVE_DIRENT_H 1
+
+/* Define if you have the <fcntl.h> header file.  */
+#define HAVE_FCNTL_H 1
+
+/* Define if you have the <limits.h> header file.  */
+// #define HAVE_LIMITS_H 1
+
+/* Define if you have the <malloc.h> header file.  */
+#define HAVE_MALLOC_H 1
+
+/* Define if you have the <memory.h> header file.  */
+#define HAVE_MEMORY_H 1
+
+/* Define if you have the <ndir.h> header file.  */
+/* #undef HAVE_NDIR_H */
+
+/* Define if you have the <string.h> header file.  */
+#define HAVE_STRING_H 1
+
+/* Define if you have the <sys/dir.h> header file.  */
+/* #undef HAVE_SYS_DIR_H */
+
+/* Define if you have the <sys/ndir.h> header file.  */
+/* #undef HAVE_SYS_NDIR_H */
+
+/* Define if you have the <sys/param.h> header file.  */
+//#define HAVE_SYS_PARAM_H 1
+
+/* Define if you have the <sys/select.h> header file.  */
+/* #undef HAVE_SYS_SELECT_H */
+
+/* Define if you have the <sys/sockio.h> header file.  */
+/* #undef HAVE_SYS_SOCKIO_H */
+
+/* Define if you have the <sys/time.h> header file.  */
+//#define HAVE_SYS_TIME_H 1
+
+/* Define if you have the <sys/timeb.h> header file.  */
+#define HAVE_SYS_TIMEB_H 1
+
+/* Define if you have the <unistd.h> header file.  */
+// #define HAVE_UNISTD_H 1
+
+/* Define if you have the <odbcinst.h> header file.  */
+#define HAVE_ODBCINST_H 1
+
+#define HAVE_SNPRINTF	1
+#define snprintf _snprintf
+#define HAVE_VSNPRINTF	1
+#define vsnprintf _vsnprintf
+#define HAVE_SYSLOG	1
+
+#define HAVE_WCHAR_H	1
+#define HAVE_WCSICMP	1
+#undef HAVE_WCSCASECMP
+#define HAVE_WCSDUP	1
+
+#define HAVE_WPRINTF	1
+#define HAVE_FPUTWS	1
+#define HAVE_WCSCMP	1
+#define HAVE_PUTWC	1
+#define HAVE_WCSLEN	1
+#define	HAVE_WCSNCAT	1
+#define HAVE_SWPRINTF	1
+#define HAVE_WCSNICMP	1
+#define HAVE_WCSNCMP	1
+#define HAVE_FWPRINTF	1
+#define HAVE_WPERROR	1
+#define HAVE_WCSCPY	1
+#define HAVE_WSYSTEM	1
+#define HAVE_SWSCANF	1
+#define HAVE_ISWSPACE	1
+#define HAVE_ISWDIGIT	1
+#define HAVE_WCSNCPY	1
+#define HAVE_WTOI	1
+#define HAVE_WTOL	1
+#define HAVE_WCSCHR	1
+#define HAVE_WCSRCHR	1
+#define HAVE_FGETWS	1
+#define HAVE_WCSSTR	1
+#define HAVE_WCSCAT	1
+#define HAVE_PUTWCHAR	1
+#define HAVE_PUTWS	1
+#define HAVE_WFOPEN	1
+#define HAVE_WGETENV	1
+#define HAVE_CWPRINTF	1
+#define HAVE_TOWLOWER	1
+#define HAVE_TOWUPPER	1
+#define HAVE_ISWLOWER	1
+#define HAVE_ISWUPPER	1
+#define HAVE_CHMOD	1
+#define HAVE_STRFTIME	1
+#define HAVE_STRDUP	1
+#define HAVE_MEMMOVE	1
+#define HAVE_WCSTOD	1
+#define HAVE_WCSTOL	1

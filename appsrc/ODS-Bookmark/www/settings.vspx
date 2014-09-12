@@ -1,0 +1,1049 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="preferences" decor="template/template.vspx" style="template/template.xsl" fast-render="1" xmlns:v="http://www.openlinksw.com/vspx/" xmlns:vm="http://www.openlinksw.com/vspx/macro" doctype="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <v:method name="myTags" arglist="in fieldName varchar">
+    <![CDATA[
+      if ((select count (*) from BMK.WA.TAGS where T_DOMAIN_ID = self.domain_id and T_COUNT > 0 and T_TAG <> '' order by T_TAG))
+      {
+        http ('<tr>');
+        http ('<th>My Tags</th>');
+          http ('<td>');
+            for (select T_TAG from BMK.WA.TAGS where T_DOMAIN_ID = self.domain_id and T_COUNT > 0 and T_TAG <> '' order by T_TAG) do
+            {
+              http (sprintf ('<a href="#" onclick="javascript: addTag(\'%s\', \'%s\');">%s</a> ', T_TAG, fieldName, T_TAG));
+            }
+          http ('</td>');
+        http ('</tr>');
+      }
+    ]]>
+  </v:method>
+
+  <vm:pagetitle>Preferences</vm:pagetitle>
+  <vm:pagewrapper>
+    <vm:header/>
+    <vm:variables>
+      <v:variable name="bSubAction" param-name="sa" type="varchar" default="''" />
+
+      <v:variable name="s_url" type="varchar" default="''" />
+      <v:variable name="s_tabNo" param-name="tabNo" type="varchar" default="1"/>
+
+      <v:variable name="ve_id" type="any" default="-1" />
+      <v:variable name="ve_name" type="varchar" default="''" />
+      <v:variable name="ve_type" type="varchar" default="''" />
+      <v:variable name="ve_update_type" type="integer" default="0" />
+      <v:variable name="ve_update_period" type="varchar" default="''" />
+      <v:variable name="ve_update_freq" type="integer" default="0" />
+      <v:variable name="ve_options" type="any" default="null" />
+      <v:variable name="ve_result" type="any" default="null" />
+    </vm:variables>
+    <vm:pagebody>
+      <?vsp
+        if (0)
+        {
+      ?>
+          <v:button name="command" action="simple" value="Submit">
+            <v:on-post>
+              <![CDATA[
+                declare params, action any;
+
+                params := e.ve_params;
+
+                action := get_keyword ('action', params);
+                if (action = 'settings')
+                {
+                  self.bSubAction := get_keyword ('mode', params, '');
+                }
+                else if (action = 'back')
+                {
+                  self.vc_redirect (BMK.WA.utf2wide (BMK.WA.page_url (self.domain_id)));
+                }
+                self.vc_data_bind(e);
+               ]]>
+             </v:on-post>
+          </v:button>
+      <?vsp
+        }
+      ?>
+      <table id="MTB">
+        <tr>
+          <td id="LC">
+            <div class="lc lc_close">
+              <vm:if test="self.person_rights = 'W'">
+              <span onclick="javascript: vspxPost('command', 'action', 'settings', 'mode', '');" title="Settings" class="gems2">Settings</span>
+              </vm:if>
+              <span onclick="javascript: vspxPost('command', 'action', 'settings', 'mode', 'bookmarklet');" title="Bookmarklet" class="gems2">Bookmarklet</span>
+              <vm:if test="self.person_rights = 'W'">
+              <span onclick="javascript: vspxPost('command', 'action', 'settings', 'mode', 'publishBrowse');" title="Publications" class="gems2">Publications</span>
+              <span onclick="javascript: vspxPost('command', 'action', 'settings', 'mode', 'subscribeBrowse');" title="Subscriptions" class="gems2">Subscriptions</span>
+              </vm:if>
+              <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+              <span onclick="javascript: vspxPost('command', 'action', 'back');" title="Back" class="gems2">Back</span>
+            </div>
+          </td>
+          <td id="RC">
+            <div class="form-header" style="margin-top: 6px;">
+              <?vsp
+                declare S, T varchar;
+
+                S := 'Preferences: ';
+                T := '';
+                if (self.bSubAction = '')
+                {
+                  T := 'Settings';
+                }
+                else if (self.bSubAction = 'bookmarklet')
+                {
+                  T := 'Bookmarklet';
+                }
+                else if (self.bSubAction = 'publishBrowse')
+                {
+                  T := 'Publications';
+                }
+                else if (self.bSubAction = 'publishCreate')
+                {
+                  T := 'Publications/Create';
+                }
+                else if (self.bSubAction = 'publishUpdate')
+                {
+                  T := 'Publications/Update';
+                }
+                else if (self.bSubAction = 'subscribeBrowse')
+                {
+                  T := 'Subscriptions';
+                }
+                else if (self.bSubAction = 'subscribeCreate')
+                {
+                  T := 'Subscriptions/Create';
+                }
+                else if (self.bSubAction = 'subscribeUpdate')
+                {
+                  T := 'Subscriptions/Update';
+                }
+                http (S || T);
+              ?>
+      </div>
+            <vm:if test="self.bSubAction = ''">
+              <v:text name="tabNo" xhtml_id="tabNo" type="hidden" value="--self.s_tabNo"/>
+      <div id="p" class="c1">
+        <div class="tabs">
+          &nbsp;<vm:tabCaption tab="p" tabsCount="3" tabNo="0" caption="Main" />
+          &nbsp;<vm:tabCaption tab="p" tabsCount="3" tabNo="1" caption="Links" />
+                  &nbsp;<vm:tabCaption tab="p" tabsCount="3" tabNo="2" caption="Discussion" />
+        </div>
+        <div class="contents">
+          <div id="p_content_0" class="tabContent" style="display: none;">
+            <table class="form-body" cellspacing="0">
+          <tr>
+                <th width="30%" rowspan="2" valign="top">
+                  Bookmarks view
+                </th>
+                <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('panes', self.settings, '0') as integer) = 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_panes" id="r_panes_0" value="0" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_panes_0" value="--'2-Pane view'" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('panes', self.settings, '0') as integer) <> 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_panes" id="r_panes_1" value="1" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_panes_1" value="--'3-Pane view'" />
+                </td>
+              </tr>
+              <tr>
+                <th rowspan="2" valign="top">
+                  Open bookmarks on <br /><i>(2 panes view only)</i>
+                </th>
+                <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('bookmarkOpen', self.settings, '0') as integer) = 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_bookmarkOpen" id="r_bookmarkOpen_0" value="0" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_bookmarkOpen_0" value="--'new window'" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('bookmarkOpen', self.settings, '0') as integer) <> 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_bookmarkOpen" id="r_bookmarkOpen_1" value="1" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_bookmarkOpen_1" value="--'current window'" />
+                </td>
+              </tr>
+              <tr>
+                <th rowspan="2" valign="top">
+                  Bookmark name display
+            </th>
+            <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('chars', self.settings, '0') as integer) = 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_chars" id="r_chars_0" value="0" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_chars_0" value="--'show everything'" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <?vsp
+                    declare S varchar;
+
+                    S := '';
+                    if (cast(get_keyword('chars', self.settings, '0') as integer) <> 0)
+                      S := 'checked="checked"';
+                    http(sprintf('<input type="radio" name="r_chars" id="r_chars_1" value="1" %s />', S));
+                  ?>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_chars_1" value="--'show no more than'" /><xsl:call-template name="nbsp"/>
+                  <v:text name="f_chars" null-value="--''" value="--get_keyword('chars', self.settings, '60')" xhtml_size="3"/>
+                  <xsl:call-template name="nbsp"/><vm:label for="r_chars_1" value="--'characters'" /><xsl:call-template name="nbsp"/>
+                </td>
+              </tr>
+              <tr>
+                <th />
+                <td>
+                  <v:check-box name="f_tbLabels" xhtml_id="f_tbLabels" is-boolean="1" true-value="1" false-value="0" value="--cast(get_keyword('tbLabels', self.settings, '1') as integer)" />
+                  <vm:label for="f_tbLabels" value="Show toolbar labels"/>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <v:label for="f_rows" value="Rows per page"/>
+            </th>
+            <td>
+                  <v:text name="f_rows" value="--get_keyword('rows', self.settings, '10')" xhtml_size="3"/>
+            </td>
+          </tr>
+          <tr>
+                <th>
+                  Show bookmark columns
+                </th>
+            <td>
+                  <v:check-box name="f_column_2" xhtml_id="f_column_2" is-boolean="1" true-value="1" false-value="0" value="--cast(get_keyword('column_#2', self.settings, '0') as integer)" />
+                  <vm:label for="f_column_2" value="Date Created"/>
+                </td>
+              </tr>
+              <tr>
+                <th />
+                <td>
+                  <v:check-box name="f_column_3" xhtml_id="f_column_3" is-boolean="1" true-value="1" false-value="0" value="--cast(get_keyword('column_#3', self.settings, '1') as integer)" />
+                  <vm:label for="f_column_3" value="Last Updated"/>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Atom File Version
+            </th>
+            <td>
+              <v:select-list name="f_atomVersion">
+                <v:item value="0.3" name="0.3"/>
+                <v:item value="1.0" name="1.0"/>
+                <v:before-data-bind>
+                  <![CDATA[
+                        control.ufl_value := get_keyword('atomVersion', self.settings, '1.0');
+                  ]]>
+                </v:before-data-bind>
+              </v:select-list>
+            </td>
+          </tr>
+        </table>
+      </div>
+          <div id="p_content_1" class="tabContent" style="display: none;">
+            <table class="form-body" cellspacing="0">
+              <tr>
+                <th width="30%">
+                  <v:label for="f_delicious" value="del.icio.us"/>
+                </th>
+                <th width="1%" nowrap="nowrap">
+                  <v:label for="f_deliciousUser" value="- user name"/>
+                </th>
+                <td>
+                  <v:text name="f_deliciousUser" null-value="--''" value="--get_keyword('deliciousUser', self.settings, '')" />
+                </td>
+              </tr>
+              <tr>
+                <th />
+                <th nowrap="nowrap">
+                  <v:label for="f_deliciousPwd" value="- password"/>
+                </th>
+                <td>
+                  <v:text name="f_deliciousPwd" type="password" null-value="--''" value="--get_keyword('deliciousPwd', self.settings, '')" />
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div id="p_content_2" class="tabContent" style="display: none;">
+            <table class="form-body" cellspacing="0">
+                    <v:template type="simple" enabled="--either (equ (BMK.WA.discussion_check (), 1), 0, 1)">
+                      <tr>
+                        <td class="error_text" colspan="2">
+                          <b>The Discussion feature is disabled. You need to install the ODS Discussion package in order to use it.</b>
+                        </td>
+                      </tr>
+                    </v:template>
+              <tr>
+                      <th width="30%">&nbsp;</th>
+                <td>
+                        <?vsp
+                          declare S, T varchar;
+
+                          S := '';
+                          if (not BMK.WA.discussion_check ())
+                            S := 'disabled="disabled"';
+                          T := '';
+                          if (cast(get_keyword ('conv', self.settings, '0') as integer) = 1)
+                            T := 'checked';
+                          http (sprintf ('<input type="checkbox" name="f_conv" value="1" %s %s />', T, S));
+                        ?>
+                         <vm:label for="f_conv" value="Enable discussions on this instance" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th width="30%">&nbsp;</th>
+                        <td>
+                          <?vsp
+                            declare S, T varchar;
+
+                            S := '';
+                            if (not BMK.WA.discussion_check ())
+                              S := 'disabled="disabled"';
+                            T := '';
+                            if (cast(get_keyword ('conv_init', self.settings, '0') as integer) = 1)
+                              T := 'checked';
+                            http (sprintf ('<input type="checkbox" name="f_conv_init" value="1" %s %s />', T, S));
+                          ?>
+                          <vm:label for="f_conv_init" value="Initialize the news group with existing posts" />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+              <div class="form-footer">
+        <v:button action="simple" value="Save" xhtml_class="form-button">
+          <v:on-post>
+            <![CDATA[
+              declare rows, chars any;
+                      declare conv, f_conv, f_conv_init, params any;
+
+                      params := self.vc_page.vc_event.ve_params;
+
+                      declare exit handler for SQLSTATE '*'
+                      {
+                        if (__SQL_STATE = 'TEST')
+                        {
+                          self.vc_error_message := BMK.WA.test_clear(__SQL_MESSAGE);
+                          self.vc_is_valid := 0;
+                          return;
+                        }
+                        resignal;
+                      };
+
+              rows := trim(self.f_rows.ufl_value);
+              chars := trim(self.f_chars.ufl_value);
+              if (get_keyword ('r_chars', self.vc_page.vc_event.ve_params, '-1') = '0')
+                chars := '0';
+
+              BMK.WA.test(rows, vector('name', 'Rows per page', 'class', 'integer', 'type', 'integer', 'minValue', 5, 'maxValue', 1000));
+              BMK.WA.test(chars, vector('name', 'Max name length', 'class', 'integer', 'type', 'integer', 'minValue', 0, 'maxValue', 1000));
+
+                      conv := cast (get_keyword ('conv', self.settings, '0') as integer);
+                      f_conv := cast (get_keyword ('f_conv', params, '0') as integer);
+                      f_conv_init := cast (get_keyword ('f_conv_init', params, '0') as integer);
+
+                      self.settings := BMK.WA.set_keyword ('panes', self.settings, cast(cast(get_keyword ('r_panes', params, '0') as integer) as varchar));
+                      self.settings := BMK.WA.set_keyword ('bookmarkOpen', self.settings, cast(cast(get_keyword ('r_bookmarkOpen', params, '0') as integer) as varchar));
+              self.settings := BMK.WA.set_keyword('chars', self.settings, cast(cast(chars as integer) as varchar));
+              self.settings := BMK.WA.set_keyword('rows', self.settings, cast(cast(rows as integer) as varchar));
+              self.settings := BMK.WA.set_keyword('tbLabels', self.settings, self.f_tbLabels.ufl_selected);
+              self.settings := BMK.WA.set_keyword('atomVersion', self.settings, self.f_atomVersion.ufl_value);
+              self.settings := BMK.WA.set_keyword('column_#2', self.settings, self.f_column_2.ufl_selected);
+              self.settings := BMK.WA.set_keyword('column_#3', self.settings, self.f_column_3.ufl_selected);
+              self.settings := BMK.WA.set_keyword('deliciousUser', self.settings, self.f_deliciousUser.ufl_value);
+              self.settings := BMK.WA.set_keyword('deliciousPwd', self.settings, self.f_deliciousPwd.ufl_value);
+                      self.settings := BMK.WA.set_keyword ('conv', self.settings, f_conv);
+                      self.settings := BMK.WA.set_keyword ('conv_init', self.settings, f_conv_init);
+
+                      insert replacing BMK.WA.SETTINGS(S_DOMAIN_ID, S_DATA, S_ACCOUNT_ID)
+                        values(self.domain_id, serialize (self.settings), self.account_id);
+              commit work;
+
+              BMK.WA.domain_gems_create(self.domain_id, self.account_id);
+                      if (BMK.WA.discussion_check ())
+                      {
+                        BMK.WA.nntp_update (self.domain_id, null, null, conv, f_conv);
+                         if (f_conv and f_conv_init)
+                          BMK.WA.nntp_fill (self.domain_id);
+                      }
+                      self.vc_data_bind(e);
+      	    ]]>
+      	  </v:on-post>
+        </v:button>
+                <v:button action="simple" value="Clear" xhtml_onclick="javascript: return confirm (\'Do you want to reset settings to default?\');" xhtml_class="form-button">
+          <v:on-post>
+            <![CDATA[
+              delete from BMK.WA.SETTINGS where S_ACCOUNT_ID = self.account_id;
+                      BMK.WA.nntp_update (self.domain_id, null, null, 1, 0);
+
+                      self.settings := vector_concat (vector ('app', DB.DBA.WA_USER_APP_ENABLE (self.account_id)), BMK.WA.settings (self.domain_id));
+                      self.vc_data_bind(e);
+      	    ]]>
+      	  </v:on-post>
+        </v:button>
+      </div>
+            </vm:if>
+
+            <vm:if test="self.bSubAction = 'bookmarklet'">
+              <v:after-data-bind>
+                <![CDATA[
+                  self.s_url := sprintf('<a onClick="alert(''To drag the button to your toolbar, left click the link and while holding the mouse button down, drag it to the browser toolbar and release the button.''); return false;" href="javascript:location.href=''%sbookmarks.vspx?URL=''+location.href+''&amp;TITLE=''+document.title">Bookmark with BM</a>', BMK.WA.bookmarks_url(self.domain_id));
+                ]]>
+              </v:after-data-bind>
+              <table class="form-body" cellspacing="0">
+                <tr>
+                  <td>
+                     <br />
+                     You can bookmark URL from anywhere with the BM Bookmark button.
+                     <h3>Internet Explorer Users</h3>
+                     <ol>
+                       <li>To install the button, right click on this url <?vsp http(self.s_url); ?> and select the 'Add to Favorites' link. You may see a warning dialog -- click 'OK' to continue.</li>
+                       <li>To subscribe to the site you're currently viewing in your browser, just click the <b>Bookmark with BM</b> button from within your Favorites menu.</li>
+                     </ol>
+                     <h3>Firefox Users</h3>
+                     <ol>
+                       <li>To install the button on your browser, first make sure that the 'Bookmarks Toolbar' toolbar is visible in your browser. Click 'View'->'Toolbars' and verify that the 'Bookmarks Toolbar' item is checked.</li>
+                       <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmarks Toolbar' toolbar.</li>
+                       <li>A <b>Bookmark with BM</b> button should now appear in your 'Bookmarks Toolbar'.</li>
+                       <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Mozilla/Netscape Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Personal Toolbar' toolbar is visible in your browser. Click 'View'->'Show/Hide' and verify that the 'Personal Toolbar' item is checked.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Personal Toolbar' toolbar.</li>
+                      <li>A <b>Bookmark with BM</b> button should now appear in your 'Personal Toolbar'.</li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Safari Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Bookmark Bar' toolbar is visible in your browser. Click 'View'->'Menu' and verify that the 'Bookmark Bar' item is checked.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmark Bar' toolbar.</li>
+                      <li>A <b>Bookmark with BM</b> button should now appear in your 'Bookmark Bar'. </li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Chrome Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Bookmark Bar' toolbar is visible in your browser. Click the wrench icon in the upper right and then check 'Always show bookmarks bar'.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmark Bar' toolbar.</li>
+                      <li>A <b>Bookmark with BM</b> button should now appear in your 'Bookmark Bar'. </li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                  </td>
+                </tr>
+              </table>
+            </vm:if>
+
+            <vm:if test="self.bSubAction in ('publishBrowse', 'subscribeBrowse')">
+              <v:button value="--'New'" action="simple" xhtml_class="button">
+                <v:after-data-bind>
+                  <![CDATA[
+                    if (self.bSubAction = 'publishBrowse')
+                    {
+                      control.ufl_value := 'New Publication';
+                    }
+                    else if (self.bSubAction = 'subscribeBrowse')
+                    {
+                      control.ufl_value := 'New Subscription';
+                    }
+                  ]]>
+                </v:after-data-bind>
+                <v:on-post>
+                  <![CDATA[
+                    if (self.bSubAction = 'publishBrowse')
+                    {
+                      self.bSubAction := 'publishCreate';
+                    }
+                    else if (self.bSubAction = 'subscribeBrowse')
+                    {
+                      self.bSubAction := 'subscribeCreate';
+                    }
+                    self.vc_data_bind(e);
+                  ]]>
+                </v:on-post>
+              </v:button>
+              <v:button value="Delete" action="simple" xhtml_onclick="--'javascript: return confirmAction(\'Are you sure that you want to delete the selected item(s)?\', document.F1, \'cb_item\', \'No items were selected for deletion.\');'" xhtml_class="button">
+                <v:on-post>
+                  <![CDATA[
+                    declare N integer;
+
+                    for (N := 0; N < length(e.ve_params); N := N + 4)
+                      if (e.ve_params[N] = 'cb_item')
+                        delete from BMK.WA.EXCHANGE where EX_ID = cast (e.ve_params[N+1] as integer);
+
+                    self.vc_data_bind(e);
+                  ]]>
+                </v:on-post>
+              </v:button>
+              <v:data-source name="dsrc_exchanges" expression-type="sql" nrows="0" initial-offset="0">
+                <v:before-data-bind>
+                  <![CDATA[
+                    control.ds_sql := sprintf ('select * from BMK.WA.EXCHANGE where EX_DOMAIN_ID = %d and EX_TYPE = %d order by EX_NAME', self.domain_id, case when self.bSubAction = 'publishBrowse' then 0 else case when self.bSubAction = 'subscribeBrowse' then 1 else 2 end end);
+                  ]]>
+                </v:before-data-bind>
+              </v:data-source>
+
+              <v:data-set name="ds_exchanges" data-source="self.dsrc_exchanges" scrollable="1">
+                <v:template name="ds_exchanges_header" type="simple" name-to-remove="table" set-to-remove="bottom">
+                  <table id="preferences" class="ODS_grid">
+                    <thead>
+                      <tr>
+                        <th class="checkbox">
+                          <input type="checkbox" name="cb_all" value="Select All" onclick="selectAllCheckboxes(this, 'cb_item')" />
+                        </th>
+                        <th style="text-align: left;">Name</th>
+                        <th style="text-align: left;" width="5%" nowrap="nowrap">Executed On</th>
+                        <th style="text-align: left;" width="5%" nowrap="nowrap">Status</th>
+                        <th class="action">Action</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </v:template>
+                <v:template name="ds_exchanges_repeat" type="repeat">
+
+                  <v:template name="ds_exchanges_empty" type="if-not-exists" name-to-remove="table" set-to-remove="both">
+                    <table>
+                      <tr align="center">
+                        <td colspan="5">
+                          <?vsp
+                            if (self.bSubAction = 'publishBrowse')
+                            {
+                              http ('No publications');
+                            }
+                            else if (self.bSubAction = 'subscribeBrowse')
+                            {
+                              http ('No subscriptions');
+                            }
+                            else
+                            {
+                              http ('No SyncMLs');
+                            }
+                          ?>
+                        </td>
+                      </tr>
+                    </table>
+                  </v:template>
+
+                  <v:template name="ds_exchanges_browse" type="browse" name-to-remove="table" set-to-remove="both">
+                    <table>
+                      <tr>
+                        <td class="checkbox">
+                          <input type="checkbox" name="cb_item" value="<?V (control as vspx_row_template).te_column_value('EX_ID') ?>" onclick="selectCheck(this, 'cb_item')" />
+                        </td>
+                        <td nowrap="nowrap">
+                          <v:label value="--(control.vc_parent as vspx_row_template).te_column_value('EX_NAME')" />
+                        </td>
+                        <td nowrap="nowrap">
+                          <v:label value="--BMK.WA.dt_format ((control.vc_parent as vspx_row_template).te_column_value('EX_EXEC_TIME'), 'Y-M-D H:N')" />
+                        </td>
+                        <td nowrap="nowrap">
+                          <?vsp
+                            if ((control as vspx_row_template).te_column_value('EX_EXEC_LOG') is not null)
+                            {
+                              http (sprintf ('<a href="#" onclick="javascript: windowShow(\'message.vspx?msg=%U\', \'BM_message\');"><img src="/ods/images/icons/stop_16.png" border="0"/></a>', (control as vspx_row_template).te_column_value('EX_EXEC_LOG')));
+                            }
+                            else
+                            {
+                              http ('OK');
+                            }
+                          ?>
+                        </td>
+                        <td class="action">
+                          <v:button value="Edit" action="simple" xhtml_class="button">
+                            <v:on-post>
+                              <![CDATA[
+                                self.ve_id := (control.vc_parent as vspx_row_template).te_column_value('EX_ID');
+                                if (self.bSubAction = 'publishBrowse')
+                                {
+                                  self.bSubAction := 'publishUpdate';
+                                }
+                                else if (self.bSubAction = 'subscribeBrowse')
+                                {
+                                  self.bSubAction := 'subscribeUpdate';
+                                }
+                                self.vc_data_bind(e);
+                              ]]>
+                            </v:on-post>
+                          </v:button>
+                          <v:button value="Sync" action="simple" xhtml_class="button">
+                            <v:on-post>
+                              <![CDATA[
+                                declare exit handler for SQLSTATE '*'
+                                {
+                                  if (__SQL_STATE like 'AB%')
+                                  {
+                                    self.vc_error_message := BMK.WA.test_clear(__SQL_MESSAGE);
+                                    self.vc_is_valid := 0;
+                                    return;
+                                  }
+                                  resignal;
+                                };
+                                self.ve_id := (control.vc_parent as vspx_row_template).te_column_value('EX_ID');
+                                BMK.WA.exchange_exec (self.ve_id);
+
+                                self.vc_data_bind(e);
+                              ]]>
+                            </v:on-post>
+                          </v:button>
+                        </td>
+                      </tr>
+                    </table>
+                  </v:template>
+
+                </v:template>
+
+                <v:template type="simple" name-to-remove="table" set-to-remove="top">
+                  <table>
+                  </table>
+                </v:template>
+
+              </v:data-set>
+            </vm:if>
+
+            <v:template name="t20" type="simple" enabled="--case when self.bSubAction in ('publishCreate', 'publishUpdate', 'subscribeCreate', 'subscribeUpdate') then 1 else 0 end">
+              <v:before-data-bind>
+                <![CDATA[
+                  declare params any;
+                  params := self.vc_page.vc_event.ve_params;
+
+                  if (isnull (get_keyword ('exc_name', params)))
+                  {
+                    declare exit handler for not found goto _end2;
+
+                    if (self.bSubAction in  ('publishUpdate', 'subscribeUpdate'))
+                    {
+                      select EX_TYPE,
+                             EX_NAME,
+                             EX_UPDATE_TYPE,
+                             EX_UPDATE_PERIOD,
+                             EX_UPDATE_FREQ,
+                             deserialize (EX_OPTIONS)
+                        into self.ve_type,
+                             self.ve_name,
+                             self.ve_update_type,
+                             self.ve_update_period,
+                             self.ve_update_freq,
+                             self.ve_options
+                        from BMK.WA.EXCHANGE
+                       where EX_ID = self.ve_id;
+
+                       return;
+                    }
+                  _end2:;
+
+                    self.ve_type := case when (self.bSubAction = 'publishCreate') then 0 else case when (self.bSubAction = 'subscribeCreate') then 1 else 2 end end;
+                    self.ve_id := null;
+                    self.ve_name := '';
+                    self.ve_update_type := case when (self.bSubAction = 'publishCreate') then 1 else 2 end;
+                    self.ve_update_period := case when (self.bSubAction = 'publishCreate') then null else 'hourly' end;
+                    self.ve_update_freq := case when (self.bSubAction = 'publishCreate') then null else 1 end;
+                    self.ve_options := vector ();
+                  }
+                ]]>
+              </v:before-data-bind>
+              <div class="new-form-body">
+                <table cellspacing="0">
+                  <tr>
+                    <th width="30%">
+                      <v:label for="exc_name" value="Name" />
+                    </th>
+                    <td>
+                      <v:text name="exc_name" null-value="--''" value="--self.ve_name" xhtml_size="60" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th rowspan="<?V case when (self.bSubAction in ('publishCreate', 'publishUpdate')) then 3 else 2 end ?>" valign="top">
+                      Refresh type
+                    </th>
+                    <td nowrap="nowarap">
+                      <label>
+                        <v:radio-button name="exc_update_type_0" group-name="exc_update_type" value="0">
+                          <v:before-render>
+                            <![CDATA[
+                              control.ufl_selected := either (lte (self.ve_update_type, 0), 1, 0);
+                            ]]>
+                          </v:before-render>
+                        </v:radio-button>
+                        <b>manually</b>
+                      </label>
+                    </td>
+                  </tr>
+                  <vm:if test="self.bSubAction in ('publishCreate', 'publishUpdate')">
+                    <tr>
+                      <td nowrap="nowarap">
+                        <label>
+                          <v:radio-button name="exc_update_type_1" group-name="exc_update_type" value="1">
+                            <v:before-render>
+                              <![CDATA[
+                                control.ufl_selected := either (equ (self.ve_update_type, 1), 1, 0);
+                              ]]>
+                            </v:before-render>
+                          </v:radio-button>
+                          <b>after any entry is changed</b>
+                        </label>
+                      </td>
+                    </tr>
+                  </vm:if>
+                  <tr>
+                    <td nowrap="nowarap">
+                      <label>
+                        <v:radio-button name="exc_update_type_2" group-name="exc_update_type" value="2">
+                          <v:before-render>
+                            <![CDATA[
+                              control.ufl_selected := either (equ (self.ve_update_type, 2), 1, 0);
+                            ]]>
+                          </v:before-render>
+                        </v:radio-button>
+                        <b>every</b>
+                      </label>
+                      <v:text name="exc_update_freq" value="--self.ve_update_freq" xhtml_size="2" />
+                      <v:select-list name="exc_update_period">
+                        <v:item value="hourly" name="hour(s)" />
+                        <v:item value="daily" name="day(s)" />
+                        <v:before-data-bind>
+                          <![CDATA[
+                            control.ufl_value := self.ve_update_period;
+                          ]]>
+                        </v:before-data-bind>
+                      </v:select-list>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="new-section">
+                      <?V case when (self.bSubAction in ('publishCreate', 'publishUpdate')) then 'Destination' else  case when (self.bSubAction in ('subscribeCreate', 'subscribeUpdate')) then 'Source' else  'Exchange' end end ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th rowspan="3" valign="top">
+                      <?V case when (self.bSubAction in ('publishCreate', 'publishUpdate')) then 'Destination' else  'Source' end ?> type
+                    </th>
+                    <td nowrap="nowarap">
+                      <label>
+                        <v:radio-button name="exc_options_type_1" xhtml_id="exc_options_type_1" group-name="exc_options_type" value="1" xhtml_onchange="javascript: destinationChange(this, {show: [\'tr_exc_options_name\', \'exc_options_name_button\'], clear: [\'exc_options_name\']});">
+                          <v:before-render>
+                            <![CDATA[
+                              control.ufl_selected := either (lte (get_keyword ('type', coalesce (self.ve_options, vector ()), 1), 1), 1, 0);
+                            ]]>
+                          </v:before-render>
+                        </v:radio-button>
+                        <b>WebDAV Path</b>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td nowrap="nowarap">
+                      <label>
+                        <v:radio-button name="exc_options_type_2" xhtml_id="exc_options_type_2" group-name="exc_options_type" value="2" xhtml_onchange="javascript: destinationChange(this, {show: [\'tr_exc_options_name\'], hide: [\'exc_options_name_button\'], clear: [\'exc_options_name\']});">
+                          <v:before-render>
+                            <![CDATA[
+                              control.ufl_selected := either (equ (get_keyword ('type', coalesce (self.ve_options, vector ()), 1), 2), 1, 0);
+                            ]]>
+                          </v:before-render>
+                        </v:radio-button>
+                        <b>URL</b>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td nowrap="nowarap">
+                      <label>
+                        <v:radio-button name="exc_options_type_3" xhtml_id="exc_options_type_3" group-name="exc_options_type" value="3" xhtml_onchange="javascript: destinationChange(this, {hide: [\'tr_exc_options_name\'], clear: [\'exc_options_name\']});">
+                          <v:before-render>
+                            <![CDATA[
+                              control.ufl_selected := either (equ (get_keyword ('type', coalesce (self.ve_options, vector ()), 1), 3), 1, 0);
+                            ]]>
+                          </v:before-render>
+                        </v:radio-button>
+                        <b>Delicious</b>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr id="tr_exc_options_name">
+                    <th>
+                      <v:label for="sr_chars" value="WebDAV Path / URL" />
+                    </th>
+                    <td>
+                      <v:text name="exc_options_name" xhtml_id="exc_options_name" value="--get_keyword ('name', self.ve_options)" xhtml_size="60" />
+                      <input type="button" id="exc_options_name_button" value="Browse..." onclick="davBrowse ('exc_options_name');" />
+                          <![CDATA[
+                		    <script type="text/javascript">
+                          OAT.Loader.load(['dav'], function(){OAT.WebDav.init(davOptions);});
+                		    </script>
+                          ]]>
+                    </td>
+                  </tr>
+                  <script type="text/javascript">
+                    <![CDATA[
+                      var _elm = $('exc_options_type_'+<?V get_keyword ('type', self.ve_options, 1) ?>);
+                      if (_elm) {_elm.onchange();}
+                    ]]>
+                  </script>
+                  <tr>
+                    <th>
+                      User
+                    </th>
+                    <td>
+                      <v:text name="exc_options_user" value="--get_keyword ('user', self.ve_options)" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      Password
+                    </th>
+                    <td>
+                      <v:text name="exc_options_password" type="password" value="--get_keyword ('password', self.ve_options)" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="new-section">
+                      Options
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <v:label for="exc_folder_name" value="Folder"/>
+                    </th>
+                    <td>
+                      <v:text name="exc_folder_name" null-value="''" value="--get_keyword ('folderPath', self.ve_options)" fmt-function="BMK.WA.utf2wide" xhtml_class="textbox" xhtml_size="40%"/>
+                      <v:data-list name="exc_folder_id" sql="select 0 as F_ID, 'Select folder ...' as F_PATH2, '' as F_PATH from WS.WS.SYS_DAV_USER where U_NAME = 'dav' union all select F_ID, BMK.WA.folder_path2(F_PATH) as F_PATH2, F_PATH from BMK.WA.FOLDER where F_DOMAIN_ID = self.domain_id order by F_PATH" key-column="F_ID" value-column="F_PATH2" xhtml_class="select"/>
+                    </td>
+                  </tr>
+                  <vm:if test="self.bSubAction in ('publishCreate', 'publishUpdate')">
+                    <tr>
+                      <th>
+                        <v:label for="exc_tags_include" value="Include with tags (comma-separated)" />
+                      </th>
+                      <td>
+                        <v:text name="exc_tags_include" value="--get_keyword ('tagsInclude', self.ve_options)" xhtml_class="textbox" xhtml_size="60" />
+                        <input type="button" value="Clear" onclick="javascript: document.F1.elements['exc_tags_include'].value = ''" class="button" />
+                      </td>
+                    </tr>
+                    <?vsp self.myTags ('exc_tags_include'); ?>
+                    <tr>
+                      <th>
+                        <v:label for="exc_tags_exclude" value="Exclude with tags (comma-separated)" />
+                      </th>
+                      <td>
+                        <v:text name="exc_tags_exclude" value="--get_keyword ('tagsExclude', self.ve_options)" xhtml_class="textbox" xhtml_size="60" />
+                        <input type="button" value="Clear" onclick="javascript: document.F1.elements['exc_tags_exclude'].value = ''" class="button" />
+                      </td>
+                    </tr>
+                    <?vsp self.myTags ('exc_tags_exclude'); ?>
+                  </vm:if>
+                  <vm:if test="self.bSubAction in ('subscribeCreate', 'subscribeUpdate')">
+                    <tr>
+                      <th>
+                        <v:label for="exc_tags" value="Tags (comma-separated)"/>
+                      </th>
+                      <td>
+                        <v:text name="exc_tags" value="--get_keyword ('tags', self.ve_options)" xhtml_class="textbox" xhtml_size="60"/>
+                      </td>
+                    </tr>
+                    <?vsp self.MyTags ('exc_tags'); ?>
+                  </vm:if>
+                </table>
+              </div>
+              <div class="form-footer">
+                <v:button action="simple" value="--case when self.bSubAction in ('publishCreate', 'subscribeCreate', 'syncmlCreate') then 'Create' else 'Update' end" name="exc_save" xhtml_class="form-button">
+                  <v:on-post>
+                    <![CDATA[
+                      declare _type, _name, _nameTest, _user, _password, _tagsInclude, _tagsExclude, _tags, _folderPath any;
+                      declare tmp, params any;
+
+                      declare exit handler for SQLSTATE '*'
+                      {
+                        if (__SQL_STATE = 'TEST')
+                        {
+                          self.vc_error_message := BMK.WA.test_clear(__SQL_MESSAGE);
+                          self.vc_is_valid := 0;
+                          return;
+                        }
+                        resignal;
+                      };
+                      params := self.vc_page.vc_event.ve_params;
+
+                      self.ve_name := trim (self.exc_name.ufl_value);
+                      self.ve_update_freq := null;
+                      self.ve_update_period := null;
+                      if (self.exc_update_type_0.ufl_selected)
+                      {
+                        self.ve_update_type := 0;
+                      }
+                      else if (self.exc_update_type_1.ufl_selected)
+                      {
+                        self.ve_update_type := 1;
+                      }
+                      else if (self.exc_update_type_2.ufl_selected)
+                      {
+                        self.ve_update_type := 2;
+                        self.ve_update_freq := self.exc_update_freq.ufl_value;
+                        self.ve_update_period := self.exc_update_period.ufl_value;
+                      }
+                      _type := 0;
+                      if (self.exc_options_type_1.ufl_selected)
+                      {
+                        _type := 1;
+                      }
+                      else if (self.exc_options_type_2.ufl_selected)
+                      {
+                        _type := 2;
+                      }
+                      else if (self.exc_options_type_3.ufl_selected)
+                      {
+                        _type := 3;
+                      }
+                      _name := trim (self.exc_options_name.ufl_value);
+                      _user := trim (self.exc_options_user.ufl_value);
+                      _password := self.exc_options_password.ufl_value;
+                      _nameTest := ODS..dav_path_normalize(_name);
+                      if (_type = 1)
+                      {
+                        tmp := '1__';
+                        if ((self.ve_type = 0) or (self.ve_type = 2))
+                        {
+                          _nameTest := BMK.WA.dav_parent (_nameTest);
+                          tmp := '11_';
+                        }
+                        if (not BMK.WA.dav_check_authenticate (_nameTest, _user, _password, tmp))
+                        {
+                          signal ('TEST', 'The user has no rights for this folder.<>');
+                        }
+                      }
+
+                      _tagsInclude := null;
+                      _tagsExclude := null;
+                      _tags := null;
+                      _folderPath := null;
+
+                      if (self.bSubAction in ('publishCreate', 'publishUpdate'))
+                      {
+                        tmp := trim (self.exc_tags_include.ufl_value);
+                        BMK.WA.test (tmp, vector ('name', 'Include Tags', 'class', 'tags'));
+                        tmp := BMK.WA.tags2vector (tmp);
+                        tmp := BMK.WA.vector_unique (tmp);
+                        _tagsInclude := BMK.WA.vector2tags (tmp);
+
+                        tmp := trim (self.exc_tags_exclude.ufl_value);
+                        BMK.WA.test (tmp, vector ('name', 'Exclude Tags', 'class', 'tags'));
+                        tmp := BMK.WA.tags2vector (tmp);
+                        tmp := BMK.WA.vector_unique (tmp);
+                        _tagsExclude := BMK.WA.vector2tags (tmp);
+                      }
+
+                      if (self.bSubAction in ('subscribeCreate', 'subscribeUpdate'))
+                      {
+                        tmp := trim (self.exc_tags.ufl_value);
+                        BMK.WA.test (tmp, vector ('name', 'Tags', 'class', 'tags'));
+                        tmp := BMK.WA.tags2vector (tmp);
+                        tmp := BMK.WA.vector_unique (tmp);
+                        _tags := BMK.WA.vector2tags (tmp);
+                      }
+
+                      tmp := trim (self.exc_folder_name.ufl_value);
+                      if ((tmp <> '') and (not BMK.WA.folder_check_name (tmp, 1)))
+                      {
+                        signal ('TEST', 'Please, enter other folder name. This name contains bad characters.<>');
+                      }
+                      tmp := BMK.WA.folder_create (self.domain_id, tmp, self.exc_folder_id.ufl_value);
+                      _folderPath := BMK.WA.folder_path (tmp);
+
+                      self.ve_options := vector ('type', _type, 'name', _name, 'user', _user, 'password', _password, 'tagsInclude', _tagsInclude, 'tagsExclude', _tagsExclude, 'tags', _tags, 'folderPath', _folderPath);
+
+                      BMK.WA.test (self.ve_name, vector('name', 'Name', 'class', 'varchar', 'minLength', 1, 'maxLength', 255));
+                      if (self.ve_update_type = 2)
+                        BMK.WA.test (self.ve_update_freq, vector ('name', 'Frequency', 'class', 'integer', 'minValue', 1, 'maxValue', 30));
+                      if (_type <> 3)
+                        BMK.WA.test (_name, vector('name', 'Source Name/Path', 'class', 'varchar', 'minLength', 1, 'maxLength', 255));
+
+                      self.ve_update_freq := cast (self.ve_update_freq as integer);
+                      if (self.bSubAction in ('publishCreate', 'subscribeCreate', 'syncmlCreate'))
+                      {
+                        insert into BMK.WA.EXCHANGE (EX_DOMAIN_ID, EX_TYPE, EX_NAME, EX_UPDATE_TYPE, EX_UPDATE_PERIOD, EX_UPDATE_FREQ, EX_OPTIONS)
+                          values (self.domain_id, self.ve_type, self.ve_name, self.ve_update_type, self.ve_update_period, self.ve_update_freq, serialize (self.ve_options));
+                      }
+                      else
+                      {
+                        update BMK.WA.EXCHANGE
+                           set EX_NAME = self.ve_name,
+                               EX_UPDATE_TYPE = self.ve_update_type,
+                               EX_UPDATE_PERIOD = self.ve_update_period,
+                               EX_UPDATE_FREQ = self.ve_update_freq,
+                               EX_OPTIONS = serialize (self.ve_options)
+                         where EX_ID = self.ve_id;
+                      }
+
+                      self.bSubAction := case when (self.bSubAction in ('publishCreate', 'publishUpdate')) then 'publishBrowse' else case when (self.bSubAction in ('subscribeCreate', 'subscribeUpdate')) then 'subscribeBrowse' else 'syncmlBrowse' end end;
+                      self.vc_data_bind(e);
+                    ]]>
+                  </v:on-post>
+                </v:button>
+                <v:button action="simple" value="Cancel" name="exc_cancel" xhtml_class="form-button">
+                  <v:on-post>
+                    <![CDATA[
+                      self.bSubAction := case when (self.bSubAction in ('publishCreate', 'publishUpdate')) then 'publishBrowse' else case when (self.bSubAction in ('subscribeCreate', 'subscribeUpdate')) then 'subscribeBrowse' else 'syncmlBrowse' end end;
+                      self.vc_data_bind(e);
+                    ]]>
+                  </v:on-post>
+                </v:button>
+              </div>
+            </v:template>
+
+          </td>
+        </tr>
+      </table>
+    </vm:pagebody>
+  </vm:pagewrapper>
+</v:page>

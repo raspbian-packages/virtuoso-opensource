@@ -1,0 +1,92 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+  declare errorCount integer;
+  declare exit handler for SQLSTATE '40001'
+  {
+    rollback work;
+    if (errorCount > 5)
+      resignal;
+    errorCount := errorCount + 1;
+    goto _start;
+  };
+
+_start:
+  declare N, domain_id, account_id integer;
+  declare sid, realm, S varchar;
+  declare settings, requests, aSession any;
+
+  sid := get_keyword('sid', params);
+  realm := get_keyword('sid', params);
+
+  aSession := ENEWS.WA.session_restore (params);
+  domain_id := cast(get_keyword('domain_id', aSession, '0') as integer);
+  account_id := cast(get_keyword('user_id', aSession, '0') as integer);
+
+  S := http_request_get ('QUERY_STRING');
+  if (S <> '')
+    S := '?' || S;
+	http_rewrite ();
+	http_request_status ('HTTP/1.1 302 Found');
+  http_header (sprintf('Location: %s/%s%s\r\n', ENEWS.WA.domain_url (domain_id), 'news.vspx', S));
+	http_flush ();
+
+	commit work;
+
+  settings := ENEWS.WA.settings(domain_id, account_id);
+  if ((cast(get_keyword('updateFeeds', settings, '0') as varchar) = '1') or (cast(get_keyword('updateBlogs', settings, '0') as varchar) = '1'))
+  {
+    if (get_keyword('sid', settings, '') <> sid)
+    {
+      ENEWS.WA.set_keyword('sid', settings, sid);
+      insert replacing ENEWS.WA.SETTINGS(ES_DOMAIN_ID, ES_ACCOUNT_ID, ES_DATA) values(domain_id, account_id, serialize(settings));
+    	commit work;
+
+      if (cast(get_keyword('updateFeeds', settings, '0') as varchar) = '1')
+      {
+        ENEWS.WA.feeds_queue_add (domain_id);
+    	  commit work;
+    	}
+      if (cast(get_keyword('updateBlogs', settings, '0') as varchar) = '1')
+      {
+        ENEWS.WA.blogs_queue_add (domain_id);
+    	  commit work;
+    	}
+
+      N := 0;
+      requests := http_pending_req ();
+      foreach (any x in requests) do
+        if (x[1] like '%/news.vsp')
+          N := N + 1;
+
+      if (N > 1)
+        return;
+
+      if (cast(get_keyword('updateFeeds', settings, '0') as varchar) = '1')
+        ENEWS.WA.feeds_queue_agregator ();
+
+      if (cast(get_keyword('updateBlogs', settings, '0') as varchar) = '1')
+        ENEWS.WA.blogs_queue_agregator ();
+    }
+  }
+?>

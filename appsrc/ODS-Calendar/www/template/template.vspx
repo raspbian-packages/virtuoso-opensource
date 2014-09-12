@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:v="http://www.openlinksw.com/vspx/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://internetalchemy.org/2003/02/profile">
+    <base href="<?V CAL.WA.host_url () || http_path () ?>" /><![CDATA[<!--[if IE]></base><![endif]-->]]>
+    <?vsp
+      declare domainName varchar;
+
+      domainName := CAL.WA.domain_name (self.domain_id);
+      http (sprintf('<link rel="foaf" type="application/rdf+xml" title="FOAF" href="%s" />', CAL.WA.foaf_url (self.domain_id)));
+      if (CAL.WA.domain_is_public (self.domain_id))
+      {
+        http(sprintf('\n<link rel="meta" type="application/rdf+xml" title="SIOC" href="%s" />', CAL.WA.sioc_url (self.domain_id)));
+      http (sprintf ('\n    <link rel="search" type="application/opensearchdescription+xml" title="%s OpenSearch Description" href="%sexport.vspx?mode=opensearchdescription" />', domainName, CAL.WA.calendar_url (self.domain_id)));
+      }
+      http (sprintf('\n    <link rel="alternate" type="application/rss+xml" title="%V RSS" href="%s" />', domainName, CAL.WA.gems_url (self.domain_id)||'Calendar.rss'));
+      http (sprintf('\n    <link rel="alternate" type="application/atom+xml" title="%V Atom" href="%s" />', domainName, CAL.WA.gems_url (self.domain_id)||'Calendar.atom'));
+      http (sprintf('\n    <link rel="alternate" type="application/atomserv+xml" title="%V" href="%s/intro" />', domainName, CAL.WA.atom_lpath2 (self.domain_id)));
+      http (sprintf('\n    <link rel="alternate" type="text/calendar" title="%V" href="%s/gems/calendar.ics" />', domainName, CAL.WA.domain_sioc_url (self.domain_id)));
+      http (sprintf('\n    <link rel="alternate" type="text/icalendar" title="%V CalDAV" href="%s" />', domainName, CAL.WA.domain_calDav_url (self.domain_id)));
+      http (CAL.WA.geo_url (self.domain_id, self.account_id));
+
+      SIOC..rdf_links_header (self.rdf_iri);
+      SIOC..rdf_links_head (self.rdf_iri);
+    ?>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/ods/common.css" type="text/css" />
+    <link rel="stylesheet" href="/ods/typeahead.css" type="text/css" />
+    <meta name="dc.description" content="<?V CAL.WA.utf2wide (CAL.WA.domain_description (self.domain_id)) ?>" />
+    <meta name="dc.title" content="<?V CAL.WA.utf2wide (CAL.WA.domain_description (self.domain_id)) ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <![CDATA[
+      <script type="text/javascript" src="/ods/oat/loader.js"></script>
+      <script type="text/javascript">
+        OAT.Preferences.imagePath = '/ods/images/oat/';
+        OAT.Preferences.stylePath = '/ods/oat/styles/';
+        OAT.Preferences.showAjax = false;
+
+        // DAV
+        var davOptions = {
+          imagePath: OAT.Preferences.imagePath,
+          pathHome: '/home/',
+          path: '<?V CAL.WA.dav_logical_home (self.account_id) ?>',
+          user: '<?V CAL.WA.account_name (self.account_id) ?>',
+          connectionHeaders: {Authorization: '<?V CAL.WA.account_basicAuthorization (self.account_id) ?>'}
+        };
+        
+        var featureList=["ajax", "json", "anchor", "dialog", "color", "calendar"];
+        OAT.Loader.load(featureList);
+    </script>
+      <script type="text/javascript" src="/ods/tbl.js"></script>
+      <script type="text/javascript" src="/ods/typeahead.js"></script>
+      <script type="text/javascript" src="/ods/app.js"></script>
+      <script type="text/javascript" src="/ods/validate.js"></script>
+      <script type="text/javascript" src="js/calendar.js"></script>
+  	<script type="text/javascript">
+        // publics
+      	var deleteDialog;
+      	var deleteDialog2;
+        var aboutDialog;
+      	
+        function myInit() {
+          if (!OAT._loaded || !OAT.Dialog) {
+            setTimeout(myInit, 50);
+            return;
+          }
+          CAL.weekStartDay = '<?V self.cWeekStarts ?>';
+          CAL.dateFormat = '<?V self.cDateFormat ?>';
+
+          if (<?V cast (get_keyword ('app', self.settings, '0') as integer) ?> > 0)
+            generateAPP('app_area', {appActivation: "<?V case when cast (get_keyword ('app', self.settings, '1') as integer) = 2 then 'hover' else 'click' end ?>"});
+            
+          // dialogs
+          if ($('deleteDiv'))
+          {
+          	deleteDialog = new OAT.Dialog("Confirm delete", "deleteDiv", {width:400, resize:0, modal:1});
+            OAT.Dom.show('deleteDiv');
+          }
+          if ($('deleteDiv2'))
+          {
+          	deleteDialog2 = new OAT.Dialog("Confirm delete", "deleteDiv2", {width:400, resize:0, modal:1});
+            OAT.Dom.show('deleteDiv2');
+          }
+          	
+      		// init tabs
+          showTab('e', 4, 0);
+          showTab('t', 3, 0);
+          showTab('s', 4, 0);
+
+          // start reminder
+          if (<?V self.owner_id ?> == <?V self.account_id ?>)
+          {
+          setTimeout("checkReminder()", 5000)
+          if ($('reminderDiv'))
+          {
+          	reminderDialog = new OAT.Dialog("Reminder", "reminderDiv", {width:400, heigth:400, resize:0, buttons:0, modal:1});
+  	          reminderDialog.cancel = reminderDialog.hide;
+            OAT.Dom.show('reminderDiv');
+          }
+        }
+          setFooter();
+          window.onresize = function() {setFooter();}
+          OAT.MSG.send(OAT, 'PAGE_LOADED');
+        }
+        OAT.MSG.attach(OAT, 'PAGE_LOADED2', myInit);
+        window.onload = function(){OAT.MSG.send(OAT, 'PAGE_LOADED2');};
+  	</script>
+    ]]>
+    <title></title>
+  </head>
+  <body>
+    <v:page xmlns:v="http://www.openlinksw.com/vspx/">
+        <v:variable persist="0" name="domain_id" type="integer" default="-1" />
+        <v:variable persist="0" name="account_id" type="integer" default="-1" />
+        <v:variable persist="0" name="owner_id" type="integer" default="null" />
+      <v:variable persist="0" name="account_rights" type="varchar" default="''" />
+        <v:variable persist="0" name="settings" type="any" />
+      <v:variable persist="0" name="rdf_iri" type="varchar" default="null" />
+      <v:variable persist="0" name="cWeekStarts" type="varchar" default="'m'" />
+      <v:variable persist="0" name="cTimeZone" type="integer" default="0" />
+      <v:variable persist="0" name="cTimeFormat" type="varchar" default="'e'" />
+      <v:variable persist="0" name="cDateFormat" type="varchar" default="'dd.MM.yyyy'" />
+      <v:variable persist="0" name="cDaylight" type="integer" default="0" />
+      <v:on-init>
+        <![CDATA[
+          declare tmp any;
+
+          set ISOLATION = 'Committed';
+          set http_charset = 'utf-8';
+
+          -- Initialize variables
+          declare aSessInfo any;
+
+          aSessInfo := CAL.WA.session_restore (params);
+          self.domain_id := cast(get_keyword('domain_id', aSessInfo, '-1') as integer);
+          self.account_id := cast (get_keyword ('account_id', aSessInfo, '-1') as integer);
+          self.owner_id := CAL.WA.domain_owner_id (self.domain_id);
+          self.account_rights := get_keyword ('account_rights', aSessInfo);
+
+          self.settings := CAL.WA.settings (self.domain_id);
+          CAL.WA.settings_init (self.settings);
+          self.settings := CAL.WA.set_keyword ('app', self.settings, DB.DBA.WA_USER_APP_ENABLE (self.account_id));
+          tmp := CAL.WA.settings_usedTimeZone (self.domain_id, self.owner_id);
+          CAL.WA.set_keyword ('usedTimeZone', self.settings, tmp);
+
+          self.cWeekStarts := CAL.WA.settings_weekStarts (self.settings);
+          self.cTimeZone := CAL.WA.settings_timeZone (self.settings);
+          self.cTimeFormat := CAL.WA.settings_timeFormat (self.settings);
+          self.cDateFormat := CAL.WA.settings_dateFormat (self.settings);
+          self.cDaylight := CAL.WA.settings_daylight (self.settings);
+
+          self.vc_add_attribute ('xmlns:foaf', 'http://xmlns.com/foaf/0.1/');
+          self.vc_add_attribute ('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
+          self.vc_add_attribute ('xmlns:dct', 'http://purl.org/dc/terms/');
+          self.vc_add_attribute ('xmlns:rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+          self.vc_add_attribute ('xmlns:rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
+          self.vc_add_attribute ('xmlns:sioct', 'http://rdfs.org/sioc/types#');
+          self.vc_add_attribute ('xmlns:sioc', 'http://rdfs.org/sioc/ns#');
+        ]]>
+      </v:on-init>
+
+      <v:after-data-bind>
+        <![CDATA[
+          if (CAL.WA.frozen_check(self.domain_id))
+          {
+            declare freeze_page varchar;
+            freeze_page := CAL.WA.frozen_page(self.domain_id);
+            if (freeze_page is null or freeze_page = '' or freeze_page = 'default')
+            {
+              http_rewrite ();
+              http_request_status ('HTTP/1.1 404 Not found');
+              http (sprintf('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><HTML><head><TITLE>404 Not Found</TITLE></HEAD><body><H1>Not Found</H1>Resource %s not found.</BODY></HTML>', http_path (CAL.WA.page_name())));
+              http_flush();
+              return;
+            }
+            http_rewrite ();
+            http_request_status ('HTTP/1.1 302 Found');
+            http_header(sprintf('Location: %s\r\n\r\n', freeze_page));
+            http_flush();
+            return;
+          }
+        ]]>
+      </v:after-data-bind>
+
+      <v:placeholder />
+    </v:page>
+  </body>
+</html>

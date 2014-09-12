@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="error-page"
+        style="index.xsl"
+        fast-render="1"
+        xmlns:vm="http://www.openlinksw.com/vspx/ods/"
+        xmlns:v="http://www.openlinksw.com/vspx/"
+        doctype="-//W3C//DTD XHTML 1.0 Transitional//EN">
+  <vm:page>
+    <vm:header>
+      <vm:title>Unexpected Error</vm:title>
+    </vm:header>
+    <vm:pagewrapper>
+      <vm:variables>
+        <v:variable name="page_name" type="varchar" default="''" param-name="__PAGE" persist="0"/>
+        <v:variable name="code" type="varchar" default="''" param-name="__SQL_STATE" persist="temp"/>
+        <v:variable name="mesg" type="varchar" default="''" param-name="__SQL_MESSAGE" persist="0"/>
+      </vm:variables>
+      <vm:body>
+        <!--v:on-init>
+          <![CDATA[
+	    XXX: not here
+            if (self.code = '100')
+            {
+              http_request_status ('HTTP/1.1 302 Found');
+              http_header('Location: index.vspx\r\n');
+            }
+          ]]>
+        </v:on-init-->
+        <v:form name="drop_obj"
+                method="POST"
+                type="simple"
+                enabled="--case when length (self.code) > 0 then 1 else 0 end">
+          <div class="error_dialog">
+            <h1><img class="dialog_icon"
+                     src="images/icons/messagebox_warning.png"
+                     alt="warning icon"
+                     title="unexpected error"/>Unexpected Error</h1>
+            <div class="dialog_body">
+              <p>The action could not be performed because of an unexpected error.<br/>
+                 Please try again. The problem has been logged and the system
+                 administrators notified.</p>
+              <table class="error_tech_info">
+                <caption>Technical data</caption>
+                <tr><th>Page</th><td></td></tr>
+                <tr><th>SQL State</th><td><?V self.code ?></td></tr>
+		<tr><th>SQL Message</th><td><?V self.mesg ?></td></tr>
+              </table>
+            </div>
+	        <?vsp
+                declare msg any;
+		msg := regexp_match ('[^\r\n]*', self.mesg);
+                log_message (sprintf ('ODS [%s] %s', self.code, msg));
+		?>
+            <div class="dialog_buttons">
+              <v:button action="simple"
+                        name="cancel"
+                        value="Go back"
+                        xhtml_onclick="javascript:history.back();return false;"/>
+            </div>
+          </div>
+        </v:form>
+      </vm:body>
+    </vm:pagewrapper>
+  </vm:page>
+</v:page>

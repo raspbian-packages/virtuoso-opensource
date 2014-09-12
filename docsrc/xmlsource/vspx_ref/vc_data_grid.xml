@@ -1,0 +1,340 @@
+<refentry id="vc_data_grid">
+  <refmeta>
+  <refentrytitle>data-grid</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>data-grid</refname>
+  <refpurpose>Scrollable databound multi-row control.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_data_grid">
+    <funcprototype id="vc_proto_data_grid">
+      <funcdef>
+            &lt;<function>data-grid</function> <attribute>
+          <parameter>name</parameter> (required) </attribute>
+        <attribute>
+          <parameter>annotation</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>initial-enable</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>enabled</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>instantiate</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>control-udt</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>xsd-stub-xhtml</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>width</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>height</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>data</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>meta</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>nrows</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>sql</parameter> (required) </attribute>
+        <attribute>
+          <parameter>scrollable</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>cursor-type</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>edit</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcfile</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcline</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-log</parameter> (optional) </attribute>
+ /&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_data_grid">
+  <title>Description</title>
+  <para>
+<para>This is the generic multi-row database view control. It is used to show repeating data, as from tables
+or procedure views. Allows scrolling (paging) editing the data; adding a row or removal of existing rows.
+Usually this control generates a PL scrollable cursor of type as specified. The number of rows shown are
+configurable via nrows attribute. Note also that column children elements are optional; they can be omitted
+so then VSPX engine will compute them from specified SQL statement in &#39;sql&#39; attribute.</para>
+<para>Specific to this control is to have row-template and frame-template, these are to present repeating and non-repeating groups of children elements. The frame-template will usually
+have a &#39;rowset&#39; placeholder to designate the place where repeating group (row-template) will be instantiated. The control expects to find child controls with specific names. for scrolling buttons - [data-grid name]&#39;_prev&#39; and [data-grid name]&#39;_next&#39;; for editing buttons - [data-grid name]&#39;_edit&#39; and [data-grid name]&#39;_delete&#39;.</para>
+	</para>
+  </refsect1>
+  <refsect1 id="vc_attrs_data_grid">
+  <title>Attributes</title>
+  <formalpara>
+   <title>name = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>A page level unique name identifying a control.</para>
+  </formalpara>
+  <formalpara>
+    <title>annotation</title>
+    <para>A human readable comment.</para>
+  </formalpara>
+  <formalpara>
+   <title>initial-enable = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is initially visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>enabled = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>instantiate = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines whether a control instantiate its children. It is true by default. It could be data-bound to an SQL expression. Unlike most of calcucateable attributes, the value of this attribute for a control is calcluated before calling &#39;on-init&#39; event handler of the control; other values are calculated before calling &#39;before-data-bind&#39; event handler.</para>
+  </formalpara>
+  <formalpara>
+   <title>control-udt = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>At run time every control is represented as an instance of some user-defined type (UDT). VSPX compiles selects the UDT to use depending on name of the XML element that represents the control and maybe some of its attributes. In some specific cases the application developer may instruct VSPX compiler to use some other UDT, e.g. an application-specific UDT that is derived from the preset one. If specified, the value of &#39;control-udt&#39; attribute should be equal to the name of the desired target UDT.</para>
+  </formalpara>
+  <formalpara>
+    <title>xsd-stub-xhtml</title>
+    <para>This attribute is for internal use only. It has no effect if added to the source VSPX file.</para>
+  </formalpara>
+  <formalpara>
+    <title>width</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>height</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+   <title>data = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Expression which returns an array of rowset data, this is an alternative to specifying an SQL expression. The result then will be used to instantiate
+the repeating group. An example of such data is the result returned by &#39;exec&#39; function:</para>
+<programlisting>
+(
+  (&quot;ALFKI&quot; &quot;Alfreds Futterkiste&quot; &quot;030-0074321&quot; )
+  (&quot;ANATR&quot; &quot;Ana Trujillo Emparedados y helados&quot; &quot;(5) 555-4729&quot; )
+)
+</programlisting>
+</formalpara>
+  <formalpara>
+   <title>meta = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>This works with combination of data attribute, this expression must return an array of ro metadata. So when this is specified it needs to be an expression returning meta-data for columns. In practice this is the same as 1st element of metadata returned by &#39;exec()&#39; :</para>
+
+<programlisting>
+(
+  (&quot;CustomerID&quot; 182 0 5 0 1 1 &quot;Demo&quot; &quot;CustomerID&quot; &quot;demo&quot; &quot;Customers&quot; 0 )
+  (&quot;CompanyName&quot; 182 0 40 1 1 1 &quot;Demo&quot; &quot;CompanyName&quot; &quot;demo&quot; &quot;Customers&quot; 0 )
+  (&quot;Phone&quot; 182 0 24 1 1 1 &quot;Demo&quot; &quot;Phone&quot; &quot;demo&quot; &quot;Customers&quot; 0 )
+)
+</programlisting>
+
+<para>
+for details of metadata see &#39;exec()&#39; function description.</para>
+
+</formalpara>
+  <formalpara>
+   <title>nrows = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>The maximum number of replicas of the row template to be made for rows selected.
+This is like the rowset size for a scrollable cursor.</para>
+  </formalpara>
+  <formalpara>
+   <title>sql = <link linkend="vc_type_SqlCode">SqlCode</link>
+   </title>
+    <para>The select statement that gets the data.
+Parameters to the statement MUST be specified as SQL identifiers prefixed with a colon (named parameter).
+The values are given in the control&#39;s vspx:param children.  These specify the parameter name and a data bound expression for the value.
+</para>
+  </formalpara>
+  <formalpara>
+    <title>scrollable</title>
+    <para>The setting controls whether next and previous page buttons are presented.  This can be on even if the cursor is not scrollable as such.</para>
+  </formalpara>
+  <formalpara>
+    <title>cursor-type</title>
+   <table>
+      <title>Allowed values of the &#39;cursor-type&#39; attribute</title>
+    <tgroup cols="2">
+     <tbody>
+      <row>
+            <entry>static</entry>
+       <entry>
+              <para>A static cursor is used.</para>
+       </entry>
+      </row>
+      <row>
+            <entry>dynamic</entry>
+       <entry>
+              <para>A dynamic cursor is used.</para>
+       </entry>
+      </row>
+      <row>
+            <entry>keyset</entry>
+       <entry>
+              <para>A keyset cursor is used.</para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </formalpara>
+  <formalpara>
+   <title>edit = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Flags whether editing features are enabled on data grid control</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcfile</title>
+    <para>URI of the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcline</title>
+    <para>Line number in the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-log</title>
+    <para>This defines what sort of data are saved to the debugging log.
+</para>
+  </formalpara>
+  </refsect1>
+  <refsect1 id="vc_udt_data_grid">
+  <title>Declaration of type vspx_data_grid</title>
+  <para>
+ Scrollable, Multi-Row data grid Class
+</para>
+  <screen>
+create type vspx_data_grid under vspx_form
+as (
+    dg_nrows int default -1,    -- how many rows to show on single page
+    dg_scrollable int default 0,  -- scroll on form is enabled
+    dg_editable int default 1,          -- disable edit/add on whole grid
+    dg_row_meta any,      -- metadata
+    dg_row_data any,      -- the data for procedure binding
+    dg_current_row vspx_row_template,   -- current row template
+    dg_rowno_edit int default null, -- last edited row in result set, to re-display the edit box on error
+    dg_rows_fetched int default 0,  -- these are to keep state for scrolling
+    dg_prev_bookmark any default null,
+    dg_last_bookmark any default null
+   )  temporary self as ref
+  method vc_templates_clean () returns any,
+  constructor method vspx_data_grid (name varchar, parent vspx_control),
+  overriding method vc_set_view_state (e vspx_event) returns any,
+  overriding method vc_view_state (stream any, n int) returns any
+</screen>
+  </refsect1>
+  <refsect1 id="vc_ex_data_grid">
+  <title>Examples</title>
+   <example id="vc_ex_data_grid__0">
+    <title>
+  Editable multi-row data grid based on data-grid control
+</title>
+    <para>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!--
+ -  
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -  
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -  
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -  
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -  
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -  
+ -  
+
+
+This example will show a list of customers from the Northwind demo database.
+Allows editing, addtion and removal of existing records.
+
+</para>
+    <screen>
+&lt;v:page name=&quot;data_grid__0&quot; xmlns:v=&quot;http://www.openlinksw.com/vspx/&quot;&gt;
+&lt;html&gt;
+  &lt;body&gt;
+      &lt;v:data-grid name=&quot;dg&quot; nrows=&quot;5&quot; sql=&quot;select CustomerID, CompanyName, Phone from Demo.demo.Customers where CustomerId like :mask&quot; cursor-type=&quot;keyset&quot; edit=&quot;1&quot;&gt;
+        &lt;v:param name=&quot;mask&quot; value=&quot;&#39;%&#39;&quot;/&gt;
+        &lt;v:template name=&quot;t1&quot; type=&quot;frame&quot;&gt;
+          &lt;div&gt;
+            &lt;div&gt;
+              Action
+                &lt;v:label name=&quot;l1&quot; value=&quot;--(control.vc_parent as vspx_data_grid).dg_row_meta[0]&quot;/&gt;
+              &lt;v:label name=&quot;l2&quot; value=&quot;--(control.vc_parent as vspx_data_grid).dg_row_meta[1]&quot;/&gt;
+              &lt;v:label name=&quot;l3&quot; value=&quot;--(control.vc_parent as vspx_data_grid).dg_row_meta[2]&quot;/&gt;
+            &lt;/div&gt;
+            &lt;v:rowset/&gt;
+            &lt;v:form type=&quot;add&quot;/&gt;
+            &lt;div&gt;
+              &lt;v:button name=&quot;dg_prev&quot; action=&quot;simple&quot; value=&quot;&amp;lt;&amp;lt;&quot;/&gt;
+              &lt;v:button name=&quot;dg_next&quot; action=&quot;simple&quot; value=&quot;&amp;gt;&amp;gt;&quot;/&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/v:template&gt;
+        &lt;v:template name=&quot;t2&quot; type=&quot;row&quot;&gt;
+          &lt;div&gt;
+            &lt;v:button name=&quot;dg_edit&quot; action=&quot;simple&quot; value=&quot;Edit&quot;/&gt;
+            &lt;v:button name=&quot;dg_delete&quot; action=&quot;simple&quot; value=&quot;Delete&quot;&gt;
+              &lt;v:on-post&gt;
+              delete from Demo.demo.Customers where CustomerID = self.dg.dg_current_row.te_rowset[0];
+              self.dg.vc_data_bind (e);
+                &lt;/v:on-post&gt;
+            &lt;/v:button&gt;
+            &lt;v:label name=&quot;label1&quot; value=&quot;--(control.vc_parent as vspx_row_template).te_rowset[0]&quot;/&gt;
+            &lt;v:label name=&quot;label2&quot; value=&quot;--(control.vc_parent as vspx_row_template).te_rowset[1]&quot;/&gt;
+            &lt;v:label name=&quot;label3&quot; value=&quot;--(control.vc_parent as vspx_row_template).te_rowset[2]&quot;/&gt;
+          &lt;/div&gt;
+        &lt;/v:template&gt;
+        &lt;v:template name=&quot;t3&quot; type=&quot;if-not-exists&quot;&gt;
+          &lt;div&gt;No rows selected&lt;/div&gt;
+        &lt;/v:template&gt;
+        &lt;v:template name=&quot;t4&quot; type=&quot;edit&quot;&gt;
+          &lt;v:form name=&quot;u1&quot; type=&quot;update&quot; table=&quot;Demo.demo.Customers&quot; if-not-exists=&quot;insert&quot;&gt;
+            &lt;v:key column=&quot;CustomerID&quot; value=&quot;--self.dg.dg_current_row.te_rowset[0]&quot; default=&quot;null&quot;/&gt;
+            &lt;v:template type=&quot;if-exists&quot; name=&quot;t5&quot;&gt;
+              &lt;div&gt;
+                &lt;v:button name=&quot;b1&quot; action=&quot;submit&quot; value=&quot;Update&quot;/&gt;
+                &lt;input type=&quot;submit&quot; name=&quot;b2&quot; value=&quot;Cancel&quot;/&gt;
+                &lt;v:text name=&quot;c_id1&quot; column=&quot;CustomerID&quot;/&gt;
+                &lt;v:text name=&quot;c_name1&quot; column=&quot;CompanyName&quot;/&gt;
+                &lt;v:text name=&quot;c_phone1&quot; column=&quot;Phone&quot;/&gt;
+              &lt;/div&gt;
+            &lt;/v:template&gt;
+          &lt;/v:form&gt;
+        &lt;/v:template&gt;
+        &lt;v:template name=&quot;t6&quot; type=&quot;add&quot;&gt;
+          &lt;v:form type=&quot;update&quot; name=&quot;a1&quot; table=&quot;Demo.demo.Customers&quot; if-not-exists=&quot;insert&quot;&gt;
+            &lt;v:key column=&quot;CustomerID&quot; value=&quot;--&#39;&#39;&quot; default=&quot;null&quot;/&gt;
+            &lt;v:template name=&quot;t7&quot; type=&quot;if-exists&quot;&gt;
+              &lt;v:button name=&quot;b3&quot; action=&quot;submit&quot; value=&quot;Add&quot;/&gt;
+              &lt;v:text name=&quot;c_id2&quot; column=&quot;CustomerID&quot;/&gt;
+              &lt;v:text name=&quot;c_name2&quot; column=&quot;CompanyName&quot;/&gt;
+              &lt;v:text name=&quot;c_phone2&quot; column=&quot;Phone&quot;/&gt;
+            &lt;/v:template&gt;
+          &lt;/v:form&gt;
+        &lt;/v:template&gt;
+      &lt;/v:data-grid&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+&lt;/v:page&gt;
+</screen>
+   </example>
+  </refsect1>
+</refentry>

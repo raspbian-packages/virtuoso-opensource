@@ -1,0 +1,105 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+  set ISOLATION = 'Committed';
+  set http_charset = 'utf-8';
+
+  declare _domain_id, _user_id, _authorized integer;
+  declare _params, _gems, _user, _password, _role varchar;
+  declare _authorizeVector any;
+
+  _domain_id := CAL.WA.session_domain (params);
+  if (_domain_id > 0)
+  {
+      _authorized := CAL.WA.domain_is_public (_domain_id);
+      if (not _authorized)
+      {
+        _authorized := 1;
+      if (not ODS..ods_check_auth (_user, _domain_id, 'reader'))
+            _authorized := 0;
+      }
+      http_rewrite ();
+      if (not _authorized)
+      {
+        http_request_status ('HTTP/1.1 401 Unauthorized');
+  		  http_header ('WWW-Authenticate: Basic realm="wa"\r\n');
+     	  http('Unauthorized');
+    }
+    else
+    {
+      declare exit handler for sqlstate '*' { return;};
+
+      _gems := get_keyword('type', params);
+      if (_gems = 'calendar.ics')
+      {
+      http_request_status ('HTTP/1.1 200 OK');
+        http_header ('Content-Type: application/x-download\r\nContent-Disposition: inline; filename="calendar.ics"\r\n');
+      http (CAL.WA.export_vcal (_domain_id));
+      }
+      if (_gems in ('Calendar.rss', 'Calendar.atom', 'Calendar.rdf', 'Calendar.comment'))
+      {
+        declare _header, _links, _result, _path, _content, _type, _xslt any;
+
+        _user_id := CAL.WA.domain_owner_id (_domain_id);
+        _path := CAL.WA.dav_home (_user_id) || 'Gems/' || CAL.WA.domain_name (_domain_id) || '/' || _gems;
+
+        _result := string_output ();
+        DB.DBA.DAV_RES_CONTENT_INT (DB.DBA.DAV_SEARCH_ID (_path, 'R'), _content, _type, 0, 0);
+        _params := null;
+        if (get_keyword (':id', params, '') <> '')
+        {
+          _params := vector (':id', get_keyword (':id', params));
+        }
+        xml_template (xml_tree_doc (xml_tree (_content)), _params, _result);
+        _result := xml_tree_doc (xml_tree (string_output_string (_result)));
+        if (_gems in ('Calendar.atom', 'Calendar.rdf'))
+        {
+          if (_gems = 'Calendar.rdf')
+          {
+            _xslt := CAL.WA.xslt_full ('rss2rdf.xsl');
+          }
+          else
+          {
+            _xslt := CAL.WA.xslt_full ('rss2atom03.xsl');
+            if (CAL.WA.settings_atomVersion (CAL.WA.settings (_domain_id)) = '1.0')
+            {
+              _xslt := CAL.WA.xslt_full ('rss2atom.xsl');
+    }
+  }
+          _result := xslt (_xslt, _result);
+        }
+        _header := case when (_gems like '%atom%') then 'Content-Type: application/atom+xml\r\n' else 'Content-Type: text/xml\r\n' end;
+        if (_gems in ('Calendar.rss', 'Calendar.atom'))
+        {
+          _links := ODS..PSH_HEADER_LINKS (_domain_id);
+          if (length (_links))
+            _header := _header || sprintf ('Link: %s\r\n', _links);
+        }
+        http_request_status ('HTTP/1.1 200 OK');
+        http_header (_header);
+        http_value (_result);
+      }
+    }
+    http_flush ();
+  }
+?>

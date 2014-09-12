@@ -1,0 +1,538 @@
+<?xml version="1.0"?>
+<?vsp 
+--  
+--  $Id$
+--  
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--  
+--  Copyright (C) 1998-2012 OpenLink Software
+--  
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--  
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--  
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--  
+--  
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>Virtuoso SPARQL Query Demo</title>
+    <link rel="stylesheet" href="default.css" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="SyntaxHighlighter.css"></link>  
+    <script type="text/javascript">
+      var toolkitPath="toolkit"; 
+      var featureList=["tab","ajax","combolist","window","tree","grid","dav","xml"];
+    </script>
+    <script type="text/javascript" src="toolkit/loader.js"></script>
+    <script type="text/javascript" src="sparql_ajax.js"></script>
+    <script type="text/javascript">
+      var go_to = <?vsp if({?'goto'} = 'query_page') http('1'); else http('0');?>;
+    </script>
+    <script type="text/javascript" src="syntax/shCore.js"></script>
+    <script type="text/javascript" src="syntax/shBrushXml.js"></script>  
+    <script type="text/javascript" src="syntax/shBrushJScript.js"></script>  
+  </head>
+  <body>
+    <div id="page">
+      <div id="head"><img src="images/sparqlheader1.gif" alt="Virtuoso SPARQL Query Demo"/></div>
+    <div id="file_window_content"></div>
+      <div id="left"><div class="r"><div class="r"><div class="r">
+      <div id="nav_bar">
+        <ul class="home_proc_list">
+          <li id="tab_home">Home</li>
+          <li id="tab_query">Query Processor</li>
+        </ul>
+        <ul class="test_cases_list">
+<?vsp
+foreach (varchar grp in vector ('dawg', 'virt_ext')) do
+  {
+    declare dirmasks any;
+    declare top_title varchar;
+    if (grp = 'dawg')
+      {
+        dirmasks := vector ('%data-xml%', '%patched%');
+        top_title := 'DAWG Test Cases';
+      }
+    else if (grp = 'virt_ext')
+      {
+        dirmasks := vector ('%extensions%');
+        top_title := 'Language Extensions';
+      }
+    else signal ('SDEMO', 'Internal error in demo application: unknown value of grp');
+?>
+          <li id="tab_<?= grp ?>"><a href="#" id="tab_<?= grp ?>_toggle"><?= top_title ?></a>
+            <div id="<?= grp ?>_tree_container" style="display: none">
+              <ul class="tree" id="<?= grp ?>_tree">
+<?vsp
+          declare manifests any;
+          declare ctr integer;
+
+          manifests := "DB"."DBA".SPARQL_DAWG_MANIFEST_RDF_LIST();
+          manifests := subseq (manifests, 0, length (manifests) - 1);
+
+    for (ctr := 0; ctr < length (manifests) /* - 6 */; ctr := ctr + 1)
+          {
+        foreach (varchar dirmask in dirmasks) do
+          {
+            if (manifests[ctr] like dirmask)
+              goto check_status;
+          }
+        goto skip_failed_group;
+check_status:
+            declare m any;
+            m := "DB"."DBA".SPARQL_DAV_DATA_URI() || manifests[ctr];
+            m := subseq (m, 0, strrchr (m, '/'));
+            m := subseq (m, strrchr (m, '/')+1);
+            declare _tcases any;
+            _tcases := DB.DBA.SPARQL_EVAL_TO_ARRAY ('
+PREFIX tq: <http://www.w3.org/2001/sw/DataAccess/tests/test-query#>
+PREFIX tm: <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?name ?rquri
+WHERE {
+  ?bn tm:name ?name ;
+    tm:action
+      [ tq:query ?rquri ] .
+  optional {
+    ?bn tm:result ?etalonuri 
+    }
+  }', DB.DBA.SPARQL_DAV_DATA_URI () || manifests[ctr], 10000); -- SPARQL_EVAL_TO_ARRAY
+              foreach (any _tcase in _tcases) do
+              {
+            if (exists (select top 1 1 
+                          from DB.DBA.SPARQL_DAWG_STATUS 
+                          where TEST_URI = _tcase[1] and 
+                                (TEST_STATUS = 'PASSED' or TEST_STATUS = 'PASSED/may-vary')))
+                  goto there_is_passed_test;
+              }
+            goto skip_failed_group;
+there_is_passed_test:
+        http(sprintf('\n                <li class="lvl1"><a href="#">%s</a>',m));
+?>
+	            <ul class="lvl2">
+<?vsp
+            foreach (any _tcase in _tcases) do
+		        {
+              declare _name, _descr, _rquri, _origin varchar;
+              _name := _tcase[0]; _descr := _tcase[0]; _rquri := _tcase[1];
+            if (not exists (select top 1 1 
+                              from DB.DBA.SPARQL_DAWG_STATUS 
+                              where TEST_URI = _rquri and 
+                                    (TEST_STATUS = 'PASSED' or TEST_STATUS = 'PASSED/may-vary')))
+                goto skip_failed_test;
+              _origin := 'W3C DAWG';
+		          _descr := cast (_descr as varchar);
+		          _descr := replace (_descr, '\n', ' ');
+		          _descr := replace (_descr, '\t', ' ');
+		          _descr := replace (_descr, '    ', ' ');
+		          _descr := replace (_descr, '  ', ' ');
+?>
+                      <li class="lvl2">
+                        <!--<div style="padding-left:34px;">-->
+                          <a href="#" onclick="load_dawg('<?V manifests[ctr] ?>','<?vsp http_url(_name); ?>','<?V grp ?>')">
+<?vsp 
+  http(replace (_descr,'-','&shy;-<wbr></wbr>')); 
+?>    
+                          </a>
+                        <!--</div>-->
+                      </li> <!-- lvl2 -->
+<?vsp
+skip_failed_test: ;
+		        }
+?>
+                    </ul> <!-- lvl2 -->
+<?vsp
+            http('</li> <!-- lvl1 -->');
+skip_failed_group: ;
+          }
+?>
+              </ul> <!-- dawg_tree -->
+            </div> <!-- dawg_tree_container -->
+          </li> <!-- dawq_sq -->
+<?vsp
+  }
+?>
+          <li id="tab_sq"><a href="#" id="tab_sq_toggle">Other Sample Queries</a>
+            <div id="samples_tree_container" style="display: none">
+              <ul class="tree" id="samples_tree">
+<?vsp
+          for (SELECT DISTINCT SQ_GROUP AS _SQ_GROUP FROM RQ.RQ.SAMPLE_QUERIES)do
+          {
+?>
+                  <li class="lvl1"><a href="#"><?V _SQ_GROUP ?></a>
+	            <ul class="lvl2">
+<?vsp
+	          for (SELECT SQ_NAME AS _SQ_NAME FROM RQ.RQ.SAMPLE_QUERIES WHERE SQ_GROUP = _SQ_GROUP ORDER BY SQ_ORDER)do
+	          {
+?>
+                      <li class="lvl2">
+                        <!--<div style="padding-left:34px;">-->
+                          <a href="#" onclick="load_sq('<?V _SQ_GROUP ?>','<?vsp http_url(_SQ_NAME); ?>')">
+<?vsp 
+      http(replace(_SQ_NAME,'-','-<wbr></wbr>')); 
+?>
+                          </a>
+                        <!--</div>-->
+                      </li> <!-- lvl2 -->
+<?vsp
+		        }
+?>
+                    </ul> <!-- lvl2 -->
+                  </li> <!-- lvl1 -->
+<?vsp
+          }
+?>
+              </ul> <!-- samples-tree -->
+            </div> <!-- samples_tree_container -->
+          </li> <!-- tab_sq -->
+        </ul> <!-- test_cases_list -->
+        <ul class="imports_list">
+          <li id="tab_import_data">Import RDF Data</li>
+          <li id="tab_view_imports"><a href="#" onclick="open_dav()">View Imported Data</a></li>
+        </ul> <!-- imports_list -->
+        <ul class="docs_list">
+           <li><a href="http://docs.openlinksw.com/virtuoso/rdfandsparql.html">Query Service Documentation</a></li>
+           <li><a href="http://docs.openlinksw.com/virtuoso">Virtuoso Documentation</a></li>
+
+<li id="tab_tutorial"><a href="#" id="tab_tutorial_toggle">Virtuoso SPARQL Tutorials</a>
+            <div id="tutorial_tree_container" style="display: none">
+              <ul class="tree" id="tutorial_tree">
+
+                  <li class="lvl1"><a href="#">Presentations</a>
+	            <ul class="lvl2">
+
+               <li class="lvl2"><a href="http://virtuoso.openlinksw.com/presentations/SPARQL_Tutorials/SPARQL_Tutorials_Part_1/SPARQL_Tutorials_Part_1.html">Virtuoso SPARQL Tutorial 1</a></li>
+               <li class="lvl2"><a href="http://virtuoso.openlinksw.com/presentations/SPARQL_Tutorials/SPARQL_Tutorials_Part_2/SPARQL_Tutorials_Part_2.html">Virtuoso SPARQL Tutorial 2</a></li>
+               <li class="lvl2"><a href="http://virtuoso.openlinksw.com/presentations/SPARQL_Tutorials/SPARQL_Tutorials_Part_3/SPARQL_Tutorials_Part_3.html">Virtuoso SPARQL Tutorial 3</a></li>
+               <li class="lvl2"><a href="http://virtuoso.openlinksw.com/presentations/SPARQL_Tutorials/SPARQL_Tutorials_Part_4/SPARQL_Tutorials_Part_4.html">Virtuoso SPARQL Tutorial 4</a></li>
+
+                    </ul>
+                  </li>
+
+              </ul>
+            </div>
+          </li>
+
+           <li><a href="http://virtuoso.openlinksw.com/wiki/main/">Virtuoso Wiki</a></li>
+           <li><a href="http://virtuoso.openlinksw.com/blog/">Virtuoso Blog</a></li>
+        </ul> <!-- docs_list -->
+      </div> <!-- nav_bar -->
+      </div></div></div></div> <!-- left -->
+      <div id="right">
+        <div id="r_hack"><div class="r"><div class="r"><div class="r">
+          <div id="main_col"></div> <!-- this is where the main_col_pages appear. It's magick (tm)! -->
+          <div class="main_col_page" id="page_home">
+        <h2>OpenLink Virtuoso's SPARQL Implementation Demo</h2>
+            <h3>What is SPARQL?</h3>
+        <p>SPARQL is the W3C's query-language for RDF Data Management Systems (aka Triple Stores).</p>
+        <p>SPARQL is system-independent, fitting in alongside SQL for relational databases and 
+        XQuery for XML data. The development and evolution of this standard is 
+              overseen by the <a href="http://www.w3.org/2001/sw/DataAccess/">RDF Data Access Working Group</a>
+              (DAWG) within W3C. Although The language is still in development, 
+              basic functionality is fully documented and publicly available.</p>
+        <h3> What is this demo about?</h3>
+            <p>It is a live demonstration of Virtuoso&#39;s implementation of 
+              <a href="http://www.w3.org/TR/rdf-dawg-uc/">DAWG&#39;s SPARQL test-suite</A>; 
+              a collection of SPARQL query language 
+        use-cases that enable interactive and simplified testing 
+              of a Triple Store&#39;s implementation.</p>
+        
+            <p>In this demo the RDF documents are stored within the Virtuoso server&#39;s 
+              database and are accessed via its 
+              <a href="http://asg.web.cmu.edu/rfc/rfc2518.html" target="_blank">WebDAV</a> 
+              repository, making all the test-suite graphs URL accessible.</p>
+        
+            <h3> What else is there?</h3>
+            <p>This demo can be also used as reach AJAX interface for Virtuoso SPARQL endpoint
+               <a target="_new" href="/sparql">/sparql</a>. The endpoint supports and 
+               SOAP requests, you can use the WSDL definition - 
+               <a target="_new" href="/sparql/services.wsdl">/sparql/services.wsdl</a> for details.
+               For more information refer to <a href="http://docs.openlinksw.com/virtuoso">Virtuoso Documentation</a>,
+               <a href="http://docs.openlinksw.com/virtuoso/rdfandsparql.html">Query Service Documentation</a>, 
+               <a href="http://virtuoso.openlinksw.com/wiki/main/">Virtuoso Wiki</a> or 
+               <a href="http://virtuoso.openlinksw.com/blog/">Virtuoso Blog</a>
+            </p>
+
+          
+        <h3>Limitations and differences in the demo</h3>
+            <p>Virtuoso&#39;s SPARQL compiler is still a work-in-progress (beta quality). 
+        Therefore, expect a degree of flux in this demo as the compiler evolves (rapidly).</p>
+        
+        <h3>Is there any technical support for this demo?</h3>
+        <p>Unlike other products of OpenLink Software, this demo 
+        is not supported by our 24x7 help service. Feel free to 
+        contact the authors of this demo directly: 
+              <a href="mailto:sparql@openlinksw.com">sparql@openlinksw.com</a>.</p>
+        <p>All feedback is appreciated, since our goal is to 
+        demonstrate the workability of SPARQL to the degree possible via this demo.</p>
+      </div><!-- page_home -->
+          <div class="main_col_page" id="page_dawg" style="display:none;">
+            <a target="_blank" href="http://www.w3.org/2001/sw/DataAccess/tests/" class="w3cdawglink">W3C DAWG Testcases site</a>
+            <h2>W3C DAWG Test Cases</h2>
+        <div id="dawg_content">
+              <p>The folder tree on the side bar contains 
+              <a href="http://www.w3.org/2001/sw/DataAccess/tests/">DAWG test cases</a> 
+                in functional groupings as presented by the <a href="http://www.w3c.org/">W3C</a>. 
+                Selecting an individual test in the tree lets you view its query text and associated data and
+             load it in the query processor interface for editing and execution.</p>
+        </div><!-- dawg_content -->
+      </div><!-- page_dawg -->
+          <div class="main_col_page" id="page_virt_ext" style="display:none;">
+            <!--<a target="_blank" href="http://www.w3.org/2001/sw/DataAccess/tests/" class="w3cdawglink">W3C DAWG Testcases site</a> -->
+            <h2>Virtuoso-Specific SPARQL Language Extensions</h2>
+            <div id="virt_ext_content">
+              <p>The folder tree on the side bar contains sample queries that
+                demonstrate non-standard features of the
+                <a target="_blank" href="http://docs.openlinksw.com/virtuoso/rdfandsparql.html">SPARQL compiler of OpenLink Virtuoso</a>.
+                Selecting an individual test in the tree lets you view its query text and associated data and
+                load it in the query processor interface for editing and execution.</p>
+            </div><!-- virt_ext_content -->
+          </div><!-- page_virt_ext -->
+      <div id="page_sq" style="display:none;">
+        <h2>Other Sample Queries</h2>
+        <div id="sq_content">
+              <p>The folder tree on the side bar contains other sample queries that can help you test 
+                the service or create your own queries. Selecting an individual
+             test in the tree lets you view its query text and associated data and
+             load it in the query processor interface for editing and execution.</p>
+        </div><!-- sq_content -->
+          </div><!-- page_tutorial -->
+          <div id="page_tutorial" style="display:none;">
+            <h2>Virtuoso SPARQL Tutorials</h2>
+            <div id="tutorial_content">
+              <p>The folder tree on the side bar contains a tutorials collection that covers:</p>
+              <ul>
+                <li>Using SIOC to Model the Linked Data Web</li>
+                <li>SPARQL Extensions in the Virtuoso Universal Server</li>
+                <li>SPARQL and Analytics</li>
+                <li>Exploring FOAF, Atom OWL, Annotea and SKOS based Data Spaces on the Linked Data Web</li>
+              </ul>
+            </div>
+          </div>
+          <div class="main_col_page" id="page_import_data" style="display:none;">
+        <iframe id="import_data_frame" name="import_data_frame" src="data_upload.vsp"></iframe>
+      </div><!-- page_import_data -->
+          <div class="main_col_page" id="page_query" style="display:none;">
+        <h2>Query Processor</h2>
+        <form>
+          <label for="default-graph-uri">Query Processor:</label>
+          <select id="remote" name="remote" onchange="switch_panels()">
+            <option value="">Local</option>
+            <option value="y">Remote</option>
+          </select>
+          <br/>
+          <br/>
+          <div id="local_panel">
+<?vsp
+              if (gt (sys_stat ('st_dbms_ver'), '04.50.2918')) 
+              {
+                declare can_sponge integer;
+                can_sponge := coalesce ((select top 1 1
+                             from DB.DBA.SYS_USERS as sup
+                             join DB.DBA.SYS_ROLE_GRANTS as g on (sup.U_ID = g.GI_SUPER)
+                             join DB.DBA.SYS_USERS as sub on (g.GI_SUB = sub.U_ID)
+                            where sup.U_NAME = 'SPARQL' and sub.U_NAME = 'SPARQL_UPDATE' ), 0);
+?>
+                <div>
+                  <input type="checkbox" value="soft" name="should-sponge" id="should-sponge" checked="checked"<?V either(can_sponge,'',' disabled="disabled"') ?>/>
+                  <label for="should-sponge" class="should-sponge">Retrieve remote RDF data for all missing source graphs</label>
+                  <br/>
+<?vsp
+              if (not(can_sponge))
+              {
+?>
+                  <i>Security restrictions of this server does not allow you to retrieve remote RDF data.
+                  DBA may wish to grant "SPARQL_UPDATE" privilege to "SPARQL" account to remove the restriction.</i>
+                  <br/>
+<?vsp
+              }
+?>
+                </div>
+
+<?vsp
+              } else {
+?>
+                <label for="load">RDF Data Set Processing Options:</label>
+                <div>
+                  <input type="radio" value="ifnodata" name="load" id="load" checked="checked"/>
+                  <label for="load" class="load">Load Data</label>
+              <br/>
+              <input type="radio" value="always" name="load" id="load_always"/>
+                  <label for="load_always" class="load">Replace &amp; Load</label>
+              <br/>
+              <input type="radio" value="never" name="load" id="load_never"/>
+                  <label for="load_never" class="load">Never Load</label>
+            </div>
+            <br/>
+<?vsp
+              }
+?>
+                <br/>
+          </div>
+          <div id="remote_panel">
+            <label for="service">Query Service Endpoint</label>
+            <br/>
+            <div id="sr_cl_div"></div>
+            <br/>
+          </div>
+              <div id="view_data_file" style="display:none;">
+            <a href="#" onclick="view_file()">view data file</a>
+          </div>
+              <ul id="tabgrph">
+                <li id="tabgrph_default" class="tab tab_selected">
+          <label for="default-graph-uri">Graph</label>
+                </li>
+                <li id="tabgrph_named" class="tab">
+                  <label for="named-graphs">Named Graphs (<span id="named_graphs_cnt">0</span>)</label>
+                </li>
+              </ul>
+<?vsp
+
+            declare default_dgu varchar;
+            default_dgu := cfg_item_value (virtuoso_ini_path(), 'URIQA', 'DefaultHost');
+            if (default_dgu is not null)
+              default_dgu := 'http://' || default_dgu || '/sys';
+?>
+              <div id="tabgrph_content"></div>
+              <div id="tabgrph_default_content">
+          <input id="default-graph-uri" name="default-graph-uri" value="<?V default_dgu ?>" onchange="OAT.Dom.hide($('view_data_file'));"/>
+              </div>
+              <div id="tabgrph_named_content">
+                <div id="graphs_grid_div">
+                  <table class="grid" id="named_graph_list">
+                    <thead>
+                      <tr>
+                        <td><div style="width: 20px;" class="header_value"/></td>
+                        <td style="text-align: center;">
+                           <div style="overflow: hidden; width: 440px;" class="header_value">Named Graph</div>
+                        </td>
+                        <td><div style="overflow: hidden; width: 100px;" class="header_value"/></td>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr class="even">
+                        <td></td>
+                        <td><input style="width: 440px;" type="input" id="named_graph_add" name="named_graph_add"/></td>
+                        <td style="text-align: center;">
+                          <button onclick="add_named_graph();return false;"><img alt="add" title="add" src="images/edit_add.png"/> add</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+              <br/>
+              <div id="topbox_ctl" class="ctl_right">
+                <select name="prefix" id="prefix" onchange="prefix_insert()">
+    			        <option value="">-- Prefixes --</option>
+    			        <option value="PREFIX cc: &lt;http://web.resource.org/cc/&gt;">CC</option>
+    			        <option value="PREFIX dataview: &lt;http://www.w3.org/2003/g/data-view#&gt;">DATAVIEW</option>
+    			        <option value="PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;">DC</option>
+    			        <option value="PREFIX dcterms: &lt;http://purl.org/dc/terms/&gt;">DCTERMS</option>
+    			        <option value="PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;">FOAF</option>
+    			        <option value="PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;">OWL</option>
+    			        <option value="PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;">RDF</option>
+    			        <option value="PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;">RDFS</option>
+    			        <option value="PREFIX rss: &lt;http://purl.org/rss/1.0/&gt;">RSS</option>
+    			        <option value="PREFIX sioc: &lt;http://rdfs.org/sioc/ns#&gt;">SIOC</option>
+    			        <option value="PREFIX sioct: &lt;http://rdfs.org/sioc/types#&gt;">SIOCT</option>
+    			        <option value="PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;">SKOS</option>
+    			        <option value="PREFIX vs: &lt;http://www.w3.org/2003/06/sw-vocab-status/ns#&gt;">VS</option>
+    			        <option value="PREFIX wot: &lt;http://xmlns.com/wot/0.1/&gt;">WOT</option>
+    			        <option value="PREFIX xhtml: &lt;http://www.w3.org/1999/xhtml&gt;">XHTML</option>
+    			        <option value="PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;">XSD</option>
+    			      </select>
+    	          <select name="template" id="template" onchange="template_insert()">
+				          <option value="">-- Template --</option>
+				          <option value="SELECT DISTINCT ?s ?p ?o
+WHERE
+{
+   ?s ?p ?o .
+}">Select</option>
+
+		              <option value="CONSTRUCT
+{
+   ?s ?p ?o .
+}
+WHERE
+{
+   ?s ?p ?o .
+}">Construct</option>
+		              <option value="ASK
+WHERE
+{
+   ?s ?p ?o .
+}">Ask</option>
+				        </select>
+    	          <select name="tool" id="tool" onchange="tool_invoke()">
+				          <option value="">-- Statement Help --</option>
+				          <option value="tool_put_line_start('#')">Comment Selection</option>
+				          <option value="tool_rem_line_start('#')">Uncomment Selection</option>
+				          <option value="tool_put_line_start('    ')">Indent Selection</option>
+				          <option value="tool_rem_line_start('    ')">Remove Indent Selection</option>
+				          <option value="tool_put_around('OPTIONAL\n{\n','\n}\n')">Make Optional </option>
+				          <option value="tool_put('BASE <http://example.org/base>')">put BASE</option>
+				          <option value="tool_put('FROM <http://example.org/from>')">put FROM</option>
+				          <option value="tool_put('FROM NAMED <http://example.org/named>')">put FROM NAMED</option>
+				          <option value="tool_put('UNION\n')">put UNION</option>
+				          <option value="tool_put('GRAPH')">put GRAPH</option>
+				          <option value="tool_put('ORDER BY')">put ORDER BY</option>
+				          <option value="tool_put('ORDER BY ASC(?x)')">put ORDER BY ASC()</option>
+				          <option value="tool_put('ORDER BY DESC(?x)')">put ORDER BY DESC()</option>
+				          <option value="tool_put('LIMIT 10')">put LIMIT</option>
+				          <option value="tool_put('OFFSET 10')">put OFFSET</option>
+				          <option value="tool_put('FILTER ( ?x < 3 ) .')">put Simple Filter</option>
+				          <option value="tool_put('FILTER regex( str(?name), &quot;Jane&quot;, &quot;i&quot; ) .')">put Regexp Filter</option>
+				          <option value="tool_put('FILTER ( bound(?x) ) .')">put Bound Filter</option>
+				          <option value="tool_put('FILTER ( ?date > &quot;2005-01-01T00:00:00Z&quot;^^xsd:dateTime ) .')">put Date Filter</option>
+				        </select>
+				        <a href="#" onclick="tools_popup()"><img src="images/cr16-action-window_new.png" alt="Statement Help" title="Statement Help" border="0"/></a>
+				      </div>
+          <label for="query">SPARQL Query</label><br/>
+              <textarea id="query" name="query" onchange="format_select(this)" onkeyup="format_select(this)" wrap="off">SELECT * WHERE {?s ?p ?o}</textarea>
+          <br/>
+              <input type="button" id="explain" name="explain" value="Execution plan" onclick="QueryExec('c')">
+          <label for="format">Output format</label>
+          <select id="format" onchange="format_change()">
+                <option value="auto">Auto</option>
+                <option value="application/isparql+table" selected="selected">Table</option>
+            <option value="application/sparql-results+xml">XML</option>
+            <option value="application/sparql-results+json">JSON</option>
+            <option value="application/javascript">Javascript</option>
+            <option value="text/html">HTML</option>
+          </select>
+          <label for="maxrows">Max Rows</label>
+          <select id="maxrows">
+            <option value="10">10</option>
+            <option value="20">20</option>
+                <option value="50" selected="selected">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+              <br/>
+              <div style="height:1px;"></div> <!-- IE hack -->
+              <input type="button" value="Store" onclick="store_click()" class="ctl_right">
+              <input type="button" value="Load" onclick="load_click()" class="ctl_right">
+              <input type="button" value="Run Query" onclick="QueryExec()">
+              <input type="reset" value="Reset" onclick="reset_click()">
+          <br/><br/>
+        </form>
+        <div id="res_area"></div>
+        <div id="etalon"></div>
+          </div> <!-- page_query -->
+        </div></div></div></div> <!-- r_hack -->
+    <div id="foot">Copyright &copy; <?V year(now()) ?> OpenLink Software, Inc</div>
+      </div> <!-- #right -->
+    </div><!-- #page -->
+  </body>
+</html>

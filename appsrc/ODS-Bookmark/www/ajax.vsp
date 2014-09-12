@@ -1,0 +1,465 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+  declare N, M, _domain_id, _account_id integer;
+  declare sid, realm, action, subAction, node, nodePath varchar;
+  declare nodes, parts, sessionData, returnData any;
+
+  sid := get_keyword ('sid', params, '');
+  realm := get_keyword ('realm', params, '');
+
+  action := get_keyword ('a', params, '');
+  subAction := get_keyword ('sa', params, '');
+
+  sessionData := BMK.WA.session_restore (params);
+  _domain_id  := cast (get_keyword ('domain_id', sessionData, '0') as integer);
+  _account_id := BMK.WA.domain_owner_id (_domain_id);
+
+  if (action = 'visited')
+  {
+    declare id integer;
+
+    id := cast (get_keyword ('id', params, '0') as integer);
+    BMK.WA.bookmark_visited_set (_domain_id, id, now ());
+  }
+  else if (action = 'load')
+  {
+    declare progressID, progressIndex any;
+
+    progressID := cast (get_keyword ('id', params, msec_time()) as varchar);
+    progressIndex := registry_get ('bookmark_index_' || progressID);
+	  if (subAction = 'stop')
+	  {
+	    registry_set ('bookmark_action_' || progressID, 'stop');
+	  }
+	  else if (subAction = 'state')
+	  {
+      if (not (isinteger(progressIndex) and (progressIndex = 0)))
+	  {
+	    http_rewrite ();
+	    http_header ('Content-Type: text/xml\r\n');
+	    http('<root>');
+        http(sprintf('<index>%s</index>', cast (progressIndex as varchar)));
+	    http('</root>');
+	  }
+	  }
+	  else if (subAction = 'init')
+	  {
+	    registry_set ('bookmark_index_' || progressID, '0');
+
+      http_rewrite ();
+      http_header ('Content-Type: text/xml\r\n');
+      http('<root>');
+	    http (sprintf ('<id>%s</id>', cast (progressID as varchar)));
+      http('</root>');
+	    http_flush ();
+
+      declare folder_id, folder_name, tags, R, S, T any;
+
+      R := DAV_RES_CONTENT_INT (DAV_SEARCH_ID ('/DAV/VAD/Bookmarks/Import/' || sid, 'R'), S, T, 0, 0);
+      S := blob_to_string (S);
+      DB.DBA.DAV_DELETE_INT ('/DAV/VAD/Bookmarks/Import/' || sid, 1, null, null, 0);
+
+      -- check / create folder
+      folder_id := cast (get_keyword ('folder_id', params, '0') as integer);
+      folder_name := trim (get_keyword ('folder_name', params, ''));
+      folder_id := BMK.WA.folder_create (_domain_id, folder_name, folder_id);
+      tags := trim (get_keyword ('tags', params, ''));
+
+      -- import
+      {
+        declare exit handler for sqlstate '*'
+        {
+        	goto _end;
+        };
+        BMK.WA.bookmark_import (S, _domain_id, folder_id, tags, progressID);
+      }
+	  _end:;
+
+	    registry_remove ('bookmark_index_'  || progressID);
+	    registry_remove ('bookmark_action_' || progressID);
+	  }
+  }
+  else if (action = 'tree')
+  {
+    nodePath := trim (get_keyword ('np', params, ''), '/');
+    if (subAction = 'load')
+    {
+      declare nodeID, nodeType any;
+      declare itemID, itemType, itemLabel, itemPath, itemImage, itemSelected, itemDraggable any;
+
+      vectorbld_init (returnData);
+      if ((nodePath = '') and (_domain_id < 0))
+      {
+        node := 'r#0';
+      }
+      else if ((nodePath = '') and (_domain_id > 0))
+      {
+        node := 'r#1';
+      }
+      else
+      {
+        parts := split_and_decode (nodePath, 0, '\0\0/');
+        node := case when length (parts) then parts[length (parts)-1] else '' end;
+      }
+      _account_id := cast (get_keyword ('account_id', sessionData, '-1') as integer);
+      nodes := BMK.WA.bmk_tree (_domain_id, _account_id, node, nodePath);
+      for (N := 0; N < length (nodes); N := N + 3)
+      {
+        nodeID := BMK.WA.node_id (nodes [N+1]);
+        nodeType := lcase (BMK.WA.node_type (nodes [N+1]));
+        itemID := nodes [N+1];
+        itemType := 1;
+        if (
+            ((nodeType = 's') and (nodeID <> -1)) or
+            (nodeType = 'b')
+           )
+        {
+          itemType := 0;
+        }
+        itemLabel := nodes [N];
+        itemPath := replace ('/' || nodes [N+2], '//', '/');
+        itemImage := '';
+        if ((nodeType = 's') and (nodeID <> -1))
+        {
+          itemImage := '/subscriptions/image/sfolder_16.jpg';
+        }
+        itemSelected := 1;
+        itemDraggable := 0;
+        vectorbld_acc (returnData, vector (itemID, itemType, itemLabel, itemPath, itemImage, itemSelected, itemDraggable));
+      }
+      vectorbld_final (returnData);
+    }
+    http_rewrite ();
+    http_header ('Content-Type: text/plain\r\n');
+    http (ODS..obj2json (returnData, 5));
+  }
+  else if (action = 'tags')
+  {
+    declare tagsMin, tagsMax integer;
+    declare tag, tagStyle varchar;
+
+    nodePath := trim (get_keyword ('np', params, ''), '/');
+    tag := BMK.WA.node_suffix (nodePath);
+
+    http_rewrite ();
+    http_header ('Content-Type: text/html\r\n');
+
+    select max(T_COUNT), min(T_COUNT) into tagsMax, tagsMin from BMK.WA.TAGS where T_DOMAIN_ID = _domain_id and T_COUNT > 0;
+
+    for (select T_TAG, T_COUNT from BMK.WA.TAGS where T_DOMAIN_ID = _domain_id and T_COUNT > 0 order by T_TAG) do
+    {
+      tagStyle := ODS.WA.tag_style (T_COUNT, tagsMin, tagsMax) || 'padding-left: 3px;';
+      http (sprintf ('<a id="t_tag_%s" href="%s" onclick="javascript: BMK.selectTag(\'%s\'); return false;" style="%s">%s</a> ', BMK.WA.tag_id (T_TAG), SIOC..tag_iri (BMK.WA.forum_iri (_domain_id), T_TAG), T_TAG, tagStyle, T_TAG));
+    }
+  }
+  else if (action = 'form')
+  {
+    declare exit handler for SQLSTATE '*'
+    {
+      if (__SQL_STATE = 'TEST')
+      {
+        returnData := BMK.WA.test_clear(__SQL_MESSAGE);
+      } else {
+        returnData := __SQL_STATE || ': Unexpected error!';
+      }
+      goto _formExit;
+    };
+
+    returnData := '';
+    if (subAction in ('Bookmark/Create', 'Bookmark/Edit'))
+	  {
+	    declare tmp, id, name, uri, description, folder_id, folder_name, tags, grants, acl, suffix any;
+
+      id := cast (get_keyword ('b_id', params, '-1') as integer);
+      name := trim (get_keyword ('b_name', params, ''));
+      description := trim (get_keyword ('b_description', params, ''));
+      uri := trim (get_keyword ('b_uri', params, ''));
+      folder_id := cast (get_keyword ('b_folder_id', params) as integer);
+      folder_name := trim (get_keyword ('b_folder_name', params, ''));
+      tags := trim (get_keyword ('b_tags', params, ''));
+      grants := '';
+      for (N := 0; N < length (params); N := N + 2)
+      {
+        if ((params [N] like 'f_fld_1_%') and (trim (params [N+1]) <> ''))
+        {
+          tmp := split_and_decode (trim (params[N+1]), 0, '\0\0,');
+          for (M := 0; M < length (tmp); M := M + 1)
+          {
+            if (not isnull (BMK.WA.account_id (trim (tmp[M]))))
+              grants := grants || ',' || tmp[M];
+          }
+        }
+      }
+      grants := trim (grants, ',');
+      BMK.WA.test (name, vector ('name', 'Bookmark Name', 'class', 'varchar', 'type', 'varchar', 'minLength', 1, 'maxLength', 255));
+      BMK.WA.test (uri, vector('name', 'Bookmark Link', 'class', 'uri', 'type', 'varchar', 'minLength', 1, 'maxLength', 255));
+      if ((folder_name <> '') and (not BMK.WA.folder_check_name (folder_name, 1)))
+      {
+        returnData := 'Please, enter other folder name. This name contains bad characters.';
+	      goto _formExit;
+      }
+      BMK.WA.test (tags, vector('name', 'Tags', 'class', 'tags'));
+      tmp := BMK.WA.tags2vector (tags);
+      tmp := BMK.WA.vector_unique (tmp);
+      tags := BMK.WA.vector2tags (tmp);
+      acl := serialize (DB.DBA.wa_aci_params (params));
+      folder_id := BMK.WA.folder_create (_domain_id, folder_name, folder_id);
+      id := BMK.WA.bookmark_update (id, _domain_id, uri, name, description, tags, folder_id, null, acl);
+      BMK.WA.shareNode (_account_id, BMK.WA.make_node ('b', id), grants, 1);
+	  }
+	  else if (subAction in ('Folder/Create', 'Folder/Edit'))
+	  {
+	    declare tmp, id, name, parent_id, grants any;
+
+      id := cast (get_keyword ('f_id', params, -1) as integer);
+      parent_id := cast (get_keyword ('f_parent_id', params, 0) as integer);
+      name := trim (get_keyword ('f_name', params, ''));
+      grants := trim (get_keyword ('f_grants', params, ''));
+      if (parent_id = 0)
+        parent_id := null;
+
+      BMK.WA.test (name, vector ('name', 'Folder name', 'class', 'folder', 'type', 'varchar', 'minLength', 1, 'maxLength', 255));
+      if (BMK.WA.folder_check_unique (_domain_id, parent_id, name, id))
+      {
+        signal('TEST', 'Folder name already exists. Please, enter new name!<>');
+      }
+      if ((subAction <> 'Folder/Create') and BMK.WA.folder_check_parent(_domain_id, id, parent_id))
+      {
+        signal('TEST', 'Please, enter other parent folder. This folder is superior of the selected parent folder!<>');
+      }
+      if (subAction = 'Folder/Create')
+      {
+        id := BMK.WA.folder_create2(_domain_id, parent_id, name);
+      } else {
+        update BMK.WA.FOLDER
+           set F_PARENT_ID = parent_id,
+               F_NAME = name
+         where F_ID = id;
+      }
+      BMK.WA.shareNode (_account_id, BMK.WA.make_node ('f', id), grants, 1);
+	  }
+	  else if (subAction in ('Smart Folder/Create', 'Smart Folder/Edit'))
+	  {
+	    declare tmp, id, name, keywords, expression, tags, own, folder_id, shared, grants any;
+
+      id := cast (get_keyword ('s_id', params, '-1') as integer);
+      name := trim (get_keyword ('s_name', params, ''));
+      keywords := trim (get_keyword ('s_keywords', params, ''));
+      expression := trim (get_keyword ('s_expression', params, ''));
+      tags := trim (get_keyword ('s_tags', params, ''));
+      own := cast (get_keyword ('s_own', params, '0') as integer);
+      folder_id := cast (get_keyword ('s_folder', params, '0') as integer);;
+      shared := cast (get_keyword ('s_shared', params, '0') as integer);
+      grants := trim (get_keyword ('s_grants', params, ''));
+
+      BMK.WA.test(name, vector('name', 'Smart folder name', 'class', 'folder', 'type', 'varchar', 'minLength', 1, 'maxLength', 255));
+      tmp := coalesce((select SF_ID from BMK.WA.SFOLDER where SF_DOMAIN_ID = _domain_id and SF_NAME = name), -1);
+      if (((subAction = 'Smart Folder/Create') and (tmp <> -1)) or ((subAction = 'Smart Folder/Update') and (tmp <> id) and (tmp <> -1)))
+        signal('TEST', 'Smart folder name already exists. Please, enter new ''Smart folder name''!<>');
+      BMK.WA.test (keywords, vector('name', 'Keywords', 'class', 'free-text'));
+      BMK.WA.test (expression, vector('name', 'Expression', 'class', 'free-text-expression'));
+      BMK.WA.test (tags, vector('name', ' Tags', 'class', 'tags'));
+
+      tmp := BMK.WA.ft2vector (keywords);
+      tmp := BMK.WA.vector_unique (tmp, 2);
+      keywords := BMK.WA.vector2str (tmp);
+
+      tmp := BMK.WA.tags2vector (tags);
+      tmp := BMK.WA.vector_unique (tmp, 2);
+      tags := BMK.WA.vector2tags (tmp);
+
+      declare data varchar;
+
+      BMK.WA.xml_set ('keywords', data, keywords);
+      BMK.WA.xml_set ('expression', data, expression);
+      BMK.WA.xml_set ('tags', data, tags);
+      if (own = 1)
+      {
+        BMK.WA.xml_set('myBookmarks', data, 1);
+        if (folder_id > 0)
+          BMK.WA.xml_set('folder', data, folder_id);
+      }
+      if (shared = 1)
+      {
+        BMK.WA.xml_set('mySharedBookmarks', data, 1);
+        if (grants <> '')
+          BMK.WA.xml_set('grants', data, grants);
+      }
+      data := BMK.WA.xml2string (data);
+
+      if (subAction = 'Smart Folder/Create')
+      {
+        BMK.WA.sfolder_create (_domain_id, name, data);
+      } else {
+        BMK.WA.sfolder_update (_domain_id, id, name, data);
+      }
+	  }
+	  else if (subAction = 'tags')
+	  {
+      declare node_id, node_type any;
+	    declare tags, oTags, nTags any;
+
+      tags := get_keyword ('t_tag', params, '');
+      if (not BMK.WA.validate_tags (tags))
+      {
+        returnData := 'The expression contans not valid tag(s).';
+	      goto _formExit;
+      }
+      for (N := 0; N < length (params); N := N + 2)
+      {
+        if (params[N] = 'cb_item')
+        {
+          node_id := BMK.WA.node_id (params[N+1]);
+          node_type := BMK.WA.node_type (params[N+1]);
+          if (node_type = 'b')
+          {
+            oTags := BMK.WA.tags_select (_domain_id, node_id);
+            nTags := BMK.WA.tags_join (oTags, tags);
+            BMK.WA.bookmark_tags (_domain_id, node_id, nTags);
+          }
+        }
+      }
+	  }
+	  else if (subAction = 'move')
+	  {
+      declare node_id, node_type any;
+      declare mFolderID, mFolderName any;
+
+      mFolderID := get_keyword ('m_folder_id', params, '');
+      mFolderName := trim (get_keyword ('m_folder_name', params, ''));
+      if ((mFolderName <> '') and (not BMK.WA.folder_check_name (mFolderName, 1)))
+      {
+        returnData := 'Please, enter other folder name. This name contains bad characters.';
+	      goto _formExit;
+      }
+
+      mFolderID := BMK.WA.folder_create (_domain_id, mFolderName, mFolderID);
+      for (N := 0; N < length (params); N := N + 2)
+      {
+        if (params[N] = 'cb_item')
+        {
+          node_id := BMK.WA.node_id (params[N+1]);
+          node_type := BMK.WA.node_type (params[N+1]);
+          if (node_type = 'f')
+          {
+            BMK.WA.folder_parent (node_id, mFolderID);
+          }
+          else if (node_type = 'b')
+          {
+            BMK.WA.bookmark_parent (node_id, mFolderID);
+          }
+        }
+      }
+	  }
+	  else if (subAction = 'share')
+	  {
+	    declare sShare, sOverride any;
+
+      sShare := trim (get_keyword ('s_share', params, ''));
+      sOverride := get_keyword ('s_override', params, '');
+
+      for (N := 0; N < length (params); N := N + 2)
+      {
+        if (params[N] = 'cb_item')
+        {
+          BMK.WA.shareNode (_account_id, params[N+1], sShare, sOverride);
+        }
+      }
+	  }
+	  else if (subAction = 'delete')
+	  {
+      declare node_id, node_type any;
+
+      for (N := 0; N < length (params); N := N + 2)
+      {
+        if (params[N] = 'cb_item')
+        {
+          node_id := BMK.WA.node_id (params[N+1]);
+          node_type := BMK.WA.node_type (params[N+1]);
+          if (node_type = 'f')
+          {
+            BMK.WA.folder_delete (_domain_id, node_id);
+          }
+          else if (node_type = 'b')
+          {
+            BMK.WA.bookmark_delete (_domain_id, node_id);
+          }
+          else if (node_type = 's')
+          {
+            BMK.WA.sfolder_delete (_domain_id, node_id);
+          }
+        }
+      }
+	  }
+	_formExit:;
+    http_rewrite ();
+    http_header ('Content-Type: text/plain\r\n');
+    http (ODS..obj2json(returnData, 5));
+  }
+  else if (action = 'about')
+  {
+    http (         '<div style="padding: 1em;">');
+    http (         '<table style="width: 100%;">');
+    http (         '  <tr>');
+    http (         '    <td align="right" width="50%">');
+    http (         '      <b>Server Version:</b>');
+    http (         '    </td>');
+    http (         '    <td>');
+    http (sprintf ('      %s', sys_stat('st_dbms_ver')));
+    http (         '    </td>');
+    http (         '  </tr>');
+    http (         '  <tr>');
+    http (         '    <td align="right">');
+    http (         '      <b>Server Build Date:</b>');
+    http (         '    </td>');
+    http (         '    <td>');
+    http (sprintf ('      %s', sys_stat('st_build_date')));
+    http (         '  </tr>');
+    http (         '  <tr><td align="center" colspan="2"><hr /><td></tr>');
+    http (         '  <tr>');
+    http (         '    <td align="right">');
+    http (         '      <b>ODS Bookmarks Version:</b>');
+    http (         '    </td>');
+    http (         '    <td>');
+    http (sprintf ('      %s', registry_get('_bookmark_version_')));
+    http (         '    </td>');
+    http (         '  </tr>');
+    http (         '  <tr>');
+    http (         '    <td align="right">');
+    http (         '     <b>ODS Bookmarks Build Date:</b>');
+    http (         '    </td>');
+    http (         '    <td>');
+    http (sprintf ('     %s', registry_get('_bookmark_build_')));
+    http (         '    </td>');
+    http (         '  </tr>');
+    http (         '  <tr><td align="center" colspan="2"><hr /><td></tr>');
+    http (         '  <tr>');
+    http (         '    <td align="center" colspan="2">');
+    http (         '      <input type="button" value="OK" onclick="javascript: aboutDialog.hide(); return false;" />');
+    http (         '    <td>');
+    http (         '  </tr>');
+    http (         '</table>');
+    http (         '</div>');
+  }
+?>

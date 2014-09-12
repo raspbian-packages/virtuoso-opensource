@@ -1,0 +1,351 @@
+<refentry id="vc_form">
+  <refmeta>
+  <refentrytitle>form</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>form</refname>
+  <refpurpose>Generic scriptable container for elements that may accept user&#39;s input.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_form">
+    <funcprototype id="vc_proto_form">
+      <funcdef>
+            &lt;<function>form</function> <attribute>
+          <parameter>name</parameter> (required) </attribute>
+        <attribute>
+          <parameter>annotation</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>initial-enable</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>enabled</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>instantiate</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>control-udt</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>xsd-stub-xhtml</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>width</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>height</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>type</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>action</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>method</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>table</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>if-not-exists</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>concurrency</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>triggers</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>data-source</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcfile</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcline</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-log</parameter> (optional) </attribute>
+ /&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_form">
+  <title>Description</title>
+  <para>
+    This is a grouping element for controls that handle post data and validation of user&#39;s input. In case of type &#39;update&#39;, this is a single row update control for a database table.
+This retrieves the data from the row identified by the keys and shows the data in the column bound fields enclosed.  If responding to a post for a submit inside this form, the form updates/inserts the data and shows the resulting state at the render pass.
+</para>
+  </refsect1>
+  <refsect1 id="vc_attrs_form">
+  <title>Attributes</title>
+  <formalpara>
+   <title>name = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>A page level unique name identifying a control.</para>
+  </formalpara>
+  <formalpara>
+    <title>annotation</title>
+    <para>A human readable comment.</para>
+  </formalpara>
+  <formalpara>
+   <title>initial-enable = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is initially visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>enabled = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines  whether  a control is visible. True by default. Could be data-bound to an SQL expression.</para>
+  </formalpara>
+  <formalpara>
+   <title>instantiate = <link linkend="vc_type_CalculateableValue">CalculateableValue</link>
+   </title>
+    <para>Determines whether a control instantiate its children. It is true by default. It could be data-bound to an SQL expression. Unlike most of calcucateable attributes, the value of this attribute for a control is calcluated before calling &#39;on-init&#39; event handler of the control; other values are calculated before calling &#39;before-data-bind&#39; event handler.</para>
+  </formalpara>
+  <formalpara>
+   <title>control-udt = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>At run time every control is represented as an instance of some user-defined type (UDT). VSPX compiles selects the UDT to use depending on name of the XML element that represents the control and maybe some of its attributes. In some specific cases the application developer may instruct VSPX compiler to use some other UDT, e.g. an application-specific UDT that is derived from the preset one. If specified, the value of &#39;control-udt&#39; attribute should be equal to the name of the desired target UDT.</para>
+  </formalpara>
+  <formalpara>
+    <title>xsd-stub-xhtml</title>
+    <para>This attribute is for internal use only. It has no effect if added to the source VSPX file.</para>
+  </formalpara>
+  <formalpara>
+    <title>width</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>height</title>
+    <para>Visible width of the control when it is displayed in WYSIWYG tools when the source VSPX text is edited.
+The value of this attribute will not be used when the resulting HTML is rendered.</para>
+  </formalpara>
+  <formalpara>
+    <title>type</title>
+    <para>Type of form, can be &#39;simple&#39; or &#39;update&#39;. When this is &#39;simple&#39; the vspx_form class will be instantiated, otherwise in case of &#39;update&#39; vspx_update_form subclass will be used.</para>
+   <table>
+      <title>Allowed values of the &#39;type&#39; attribute</title>
+    <tgroup cols="2">
+     <tbody>
+      <row>
+            <entry>simple</entry>
+       <entry>
+              <para>
+Form with no special data binding.
+</para>
+       </entry>
+      </row>
+      <row>
+            <entry>update</entry>
+       <entry>
+              <para>
+Form that may be used in templates of type &#39;update&#39; or &#39;add&#39;.
+</para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </formalpara>
+  <formalpara>
+    <title>action</title>
+    <para>
+      A URL for processing. The data filled-in the form will be submitted to the &#39;action&#39; page.
+      Therefore this is a page where the content of that form will be processed.
+      If it is empty, the target is a current page.
+				 </para>
+  </formalpara>
+  <formalpara>
+    <title>method</title>
+    <para>A method  of transferring the form data, can be POST or GET. The same as &#39;method&#39; of HTML forms.</para>
+    <para>The use of &#39;GET&#39; is not recommended because the length of the URI may easily exceed internal limits of the browser or an intermediate proxy server.</para>
+  </formalpara>
+  <formalpara>
+    <title>table</title>
+    <para>If the value of &#39;type&#39; attribute is &#39;update&#39;, the form acts as a single row update control for a database table; and the value of &#39;table&#39; attribute specifies the name of that table.
+It retrieves the data from the row identified by the keys and shows the data in the column bound fields enclosed.  If responding to a post for a submit inside this form, the form updates/inserts the data and shows the resulting state at the render pass.
+This attribute is required if &#39;type&#39; is &#39;update&#39; and prohibited otherwise.</para>
+  </formalpara>
+  <formalpara>
+    <title>if-not-exists</title>
+    <para>If the keys do not select any row, and the value of this attribute is &#39;insert&#39;, the update form will be filled in with defaults filled in and will do an insert into the table when the form is submitted.
+In this case of course the keys will have to be defaulted after the post or will have to be supplied in the post as fields.
+Any defaulting should take place in the v:on-post handler which is before the insert or update in the event of the post.
+</para>
+  </formalpara>
+  <formalpara>
+    <title>concurrency</title>
+    <para>If true and a previous value was shown in the form before the post being processed, this causes the system to check whether any of the data has been updated between getting it and the post at hand.
+This is a sort of optimistic concurrency control at the row level.  If an update is detected, the updated_meanwhile message is set as the error message of the form and no update is made.  The render pass may choose to process this message as it will, the default is to show it as any other error message for form level validation failure.
+</para>
+  </formalpara>
+  <formalpara>
+    <title>triggers</title>
+    <para>This is applicable for update form only, when this is OFF no PL triggers
+	will be fired when inserting or updating.</para>
+  </formalpara>
+  <formalpara>
+   <title>data-source = <link linkend="vc_type_SqlName">SqlName</link>
+   </title>
+    <para>This is applicable to the update form and is
+	An alternative of &#39;table&#39;. When is specified the value is suppsed to be
+	valid reference to existing data-source control. Further the given data-source
+	will be used to bind/update the data.
+      </para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcfile</title>
+    <para>URI of the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcline</title>
+    <para>Line number in the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-log</title>
+    <para>This defines what sort of data are saved to the debugging log.
+</para>
+  </formalpara>
+  </refsect1>
+  <refsect1 id="vc_udt_form">
+  <title>Declaration of type vspx_form</title>
+  <para>
+</para>
+  <screen>
+create type vspx_form under vspx_control
+   as
+     (
+       uf_action varchar default &#39;&#39;,
+       uf_method varchar default &#39;post&#39;,
+       --uf_inside_form int default 0,
+       uf_validators any,
+       uf_xmodel any default null,
+       uf_xsubmit any default null,
+       uf_xschema any default null
+     )  temporary self as ref
+   constructor method vspx_form (name varchar, parent vspx_control),
+   method prologue_render (sid varchar, realm varchar, nonce varchar) returns any,
+   method epilogue_render () returns any,
+   overriding method vc_set_model () returns any
+</screen>
+  </refsect1>
+  <refsect1 id="vc_ex_form">
+  <title>Examples</title>
+   <example id="vc_ex_form__0">
+    <title>
+  Simple entry form
+</title>
+    <para>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!--
+ -  
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -  
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -  
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -  
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -  
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -  
+ -  
+
+
+The OK button of the form submits data from the form back to the same page.
+
+</para>
+    <screen>
+&lt;v:page name=&quot;form__0&quot; xmlns:v=&quot;http://www.openlinksw.com/vspx/&quot;&gt;
+  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;VSPX samples | v:form&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;v:form name=&quot;form1&quot; type=&quot;simple&quot; action=&quot;&quot; method=&quot;POST&quot;&gt;
+        &lt;v:label name=&quot;label1&quot; value=&quot;--&#39;Simple form&#39;&quot;/&gt;
+        &lt;v:text name=&quot;txt1&quot; default=&quot;&quot;/&gt;
+        &lt;v:text name=&quot;txt2&quot; default=&quot;&quot;/&gt;
+        &lt;v:button name=&quot;submit1&quot; action=&quot;simple&quot; value=&quot;OK&quot;/&gt;
+      &lt;/v:form&gt;
+    &lt;/body&gt;
+  &lt;/html&gt;
+&lt;/v:page&gt;
+</screen>
+   </example>
+   <example id="vc_ex_form__1">
+    <title>
+  Simple entry form containing various controls
+</title>
+    <para>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!--
+ -  
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -  
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -  
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -  
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -  
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -  
+ -  
+
+
+The OK button of the form submits data from the form back to the same page.
+the check-box is validated against ragio group
+
+</para>
+    <screen>
+&lt;v:page name=&quot;form__1&quot; xmlns:v=&quot;http://www.openlinksw.com/vspx/&quot;&gt;
+  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;VSPX samples | v:form | v:validator&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;v:form name=&quot;f1&quot; type=&quot;simple&quot; method=&quot;POST&quot;&gt;
+	&lt;v:error-summary/&gt;&lt;br/&gt;
+        &lt;v:label name=&quot;l1&quot; value=&quot;--&#39;Simple form&#39;&quot;/&gt;&lt;br/&gt;
+        &lt;v:url name=&quot;u1&quot; value=&quot;--&#39;This page&#39;&quot; url=&quot;--self.f1.uf_action&quot; /&gt;&lt;br/&gt;
+        &lt;v:text name=&quot;t1&quot; value=&quot;--self.rb1.ufl_value&quot;/&gt;&lt;br/&gt;
+        &lt;v:text name=&quot;t2&quot; value=&quot;--&#39;my&#39;||&#39;password&#39;&quot; type=&quot;password&quot;/&gt;&lt;br/&gt;
+        &lt;v:text name=&quot;t3&quot; value=&quot;--&#39;something&#39;||&#39;hidden&#39;&quot; type=&quot;hidden&quot;/&gt;
+	&lt;v:textarea name=&quot;ta1&quot; value=&quot;--&#39;some text&#39;&quot; /&gt;&lt;br/&gt;
+        &lt;v:check-box name=&quot;cb1&quot; value=&quot;check-box&quot; /&gt;&lt;br/&gt;
+	&lt;v:radio-group name=&quot;rg1&quot;&gt;
+	 &lt;v:radio-button name=&quot;rb1&quot; value=&quot;one&quot; /&gt;
+	 &lt;v:radio-button name=&quot;rb2&quot; value=&quot;two&quot; /&gt;
+        &lt;/v:radio-group&gt;&lt;br/&gt;
+        &lt;v:button name=&quot;b1&quot; action=&quot;simple&quot; value=&quot;--&#39;OK&#39;&quot;/&gt;&lt;br/&gt;
+ 	&lt;v:validator test=&quot;sql&quot; message=&quot;only when radio is on position one check-box could be checked&quot;&gt;
+	if (self.rb2.ufl_selected and self.cb1.ufl_selected)
+	  {
+	    return 1;
+	  }
+	&lt;/v:validator&gt;
+      &lt;/v:form&gt;
+    &lt;/body&gt;
+  &lt;/html&gt;
+&lt;/v:page&gt;
+</screen>
+   </example>
+  </refsect1>
+  <tip>
+  <title>See Also: Reference Material in the Tutorial:</title>
+   <para>
+    <ulink url="/tutorial/web/vx_s_2/form.vspx">VX-S-2</ulink>
+   </para>
+   <para>
+    <ulink url="/tutorial/web/vx_s_3/update_form.vspx">VX-S-3</ulink>
+   </para>
+  </tip>
+</refentry>

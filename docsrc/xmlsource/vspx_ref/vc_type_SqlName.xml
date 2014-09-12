@@ -1,0 +1,24 @@
+<refentry id="vc_type_SqlName">
+  <refmeta>
+  <refentrytitle>SqlName</refentrytitle>
+  <refmiscinfo>vspx_simple_type</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>SqlName</refname>
+  <refpurpose>The type of attribute that contains a name of the Virtuoso/PL UDT instance that should be created for the control.</refpurpose>
+  </refnamediv>
+  <refsect1 id="vc_desc_SqlName">
+  <title>Description</title>
+  <para>
+The type for a Virtuoso/PL name that should be used during code generation.
+KNOWN BUG: If double quotes are used in the value of this type then
+the generated code may be incorrect.
+This is why this schema restrictes the syntax of values of such type.
+</para>
+  <para>
+The type identifier &#39;SqlName&#39; is introduced only for diagnostic purposes, you will never use it in VSPX code.
+When Virtuoso server tries to compile an invalid VSPX page, you might see a diagnostic messages like &#39;the value of attribute X of a control Y does not match pattern ... for type SqlName&#39;.
+If you see this then you should check the syntax of the value of the specified attribute.
+</para>
+  </refsect1>
+ </refentry>

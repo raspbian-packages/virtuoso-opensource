@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+  -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:v="http://www.openlinksw.com/vspx/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://internetalchemy.org/2003/02/profile">
+    <base href="<?V AB.WA.host_url () || http_path () ?>" /><![CDATA[<!--[if IE]></base><![endif]-->]]>
+    <?vsp
+      SIOC..rdf_links_header (self.rdf_iri);
+      SIOC..rdf_links_head (self.rdf_iri);
+    ?>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/ods/common.css" type="text/css" />
+    <link rel="stylesheet" href="/ods/typeahead.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <![CDATA[
+      <script type="text/javascript" src="/ods/oat/loader.js"></script>
+      <script type="text/javascript">
+        OAT.Preferences.imagePath = '/ods/images/oat/';
+        OAT.Preferences.showAjax = false;
+
+        var featureList=["json", "dialog", "combolist", "quickedit"];
+        OAT.Loader.load(featureList);
+      </script>
+      <script type="text/javascript" src="/ods/tbl.js"></script>
+      <script type="text/javascript" src="/ods/typeahead.js"></script>
+      <script type="text/javascript" src="js/ab.js"></script>
+      <script type="text/javascript">
+        function myInit()
+        {
+          // init tabs
+          showTab('a', 2, 0);
+        }
+        OAT.MSG.attach(OAT, 'PAGE_LOADED', myInit);
+        window.onload = function(){OAT.MSG.send(OAT, 'PAGE_LOADED');};
+      	window.onkeyup = function (event) {
+      		if (event.keyCode == 27) {
+      			window.close ();
+      		}
+      	}
+      </script>
+    ]]>
+    <title></title>
+  </head>
+  <body>
+    <v:page xmlns:v="http://www.openlinksw.com/vspx/">
+        <v:variable persist="0" name="domain_id" type="integer" default="-1"/>
+        <v:variable persist="0" name="account_id" type="integer" default="-1"/>
+        <v:variable persist="0" name="account_rights" type="varchar" default="''"/>
+      <v:variable persist="0" name="person_rights" type="varchar" default="''" />
+        <v:variable persist="0" name="settings" type="any" />
+      <v:variable persist="0" name="rdf_iri" type="varchar" default="null" />
+      <v:on-init>
+        <![CDATA[
+          set ISOLATION = 'Committed';
+          set http_charset = 'utf-8';
+
+          -- Initialize variables
+          declare aSessInfo any;
+
+          aSessInfo := AB.WA.session_restore (params);
+          self.domain_id := cast(get_keyword('domain_id', aSessInfo, '-1') as integer);
+          self.account_id := cast (get_keyword ('account_id', aSessInfo, '-1') as integer);
+          self.account_rights := get_keyword ('account_rights', aSessInfo, '');
+          self.person_rights := get_keyword ('person_rights', aSessInfo);
+          self.settings := AB.WA.settings (self.domain_id);
+        ]]>
+      </v:on-init>
+
+      <v:placeholder />
+    </v:page>
+  </body>
+</html>

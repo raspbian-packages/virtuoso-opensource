@@ -1,0 +1,196 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+  set ISOLATION = 'Committed';
+  set http_charset = 'utf-8';
+
+  declare host_port, base_path varchar;
+
+  host_port := WA_GET_HOST ();
+  if (isstring (host_port) and strchr (host_port , ':') is null)
+  {
+    host_port := host_port || ':80';
+    if (http_request_header (lines, 'User-Agent') like '%Safari%')
+    {
+      declare _url_params varchar;
+      _url_params := PHOTO.WA.url_params (get_keyword ('sid', params), get_keyword ('realm', params));
+      if (isstring(_url_params) and _url_params <> '')
+        _url_params := '?' || _url_params;
+      PHOTO.WA.redirect (sprintf ('%s%s%s', PHOTO.WA.host_url (), http_path (), _url_params));
+    }
+  }
+  base_path := PHOTO.WA.host_url () || http_path ();
+
+  declare auth_uid,_mime_type varchar;
+  declare current_user photo_user;
+  declare _sid,home_url varchar;
+  declare user_gallery,_home_path,_xsl,my_file varchar;
+  declare _owner_id integer;
+  declare current_instance photo_instance;
+  declare geo_data any;
+  declare wa_home_title,wa_home_link varchar;
+  declare _header, _links, _xml,_xsl_path any;
+
+  user_gallery := '';
+	wa_home_title := case when registry_get ('wa_home_title') = 0 then 'OPS Home' else registry_get ('wa_home_title') end;
+	wa_home_link := case when registry_get ('wa_home_link') = 0 then '/wa/' else registry_get ('wa_home_link') end;
+
+  auth_uid := PHOTO.WA._session_user(params,current_user);
+
+  if (auth_uid <> '')
+  {
+    _sid := current_user.sid;
+  }else{
+    _sid := '';
+  }
+
+  current_instance := new photo_instance();
+  if (isnull(current_instance.home_path))
+  {
+    PHOTO.WA.http_404();
+    return;
+  }
+
+  path := PHOTO.WA.utl_parse_url(http_path());
+
+  if (PHOTO.WA.frozen_check(current_instance,current_user))
+  {
+    declare freeze_page varchar;
+
+    freeze_page := PHOTO.WA.frozen_page(current_instance.name);
+    if (freeze_page is null or freeze_page = '' or freeze_page = 'default')
+    {
+      http_rewrite ();
+      http_request_status ('HTTP/1.1 404 Not found');
+      http (sprintf('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><HTML><head><TITLE>404 Not Found</TITLE></HEAD><body><H1>Not Found</H1>Resource %s not found.</BODY></HTML>', http_path (path[0])));
+      http_flush();
+      return;
+    }
+    http_rewrite ();
+    http_request_status ('HTTP/1.1 302 Found');
+    http_header(sprintf('Location: %s\r\n\r\n', freeze_page));
+    http_flush();
+    return;
+  }
+
+  if (length(path) > 0)
+  {
+    my_file := path[length(path)-1];
+    if (my_file in ('rss.xml', 'atom.xml', 'index.rdf', 'xbel.xml', 'mrss.xml'))
+    {
+      _xsl := '';
+      if (my_file = 'atom.xml')
+      {
+        _xsl := 'rss2atom.xsl';
+      }
+      else if (my_file = 'index.rdf')
+      {
+        _xsl := 'rss2rdf.xsl';
+      }
+      else if (my_file = 'xbel.xml')
+      {
+        _xsl := 'rss2xbel.xsl';
+      }
+      else if (my_file = 'mrss.xml')
+      {
+        _xsl := 'rss2mrss.xsl';
+      }
+
+      _header := case when (my_file like '%atom%') then 'Content-Type: application/atom+xml\r\n' else 'Content-Type: text/xml\r\n' end;
+      _links := ODS..PSH_HEADER_LINKS (current_instance.gallery_id);
+      if (length (_links))
+        _header := _header || sprintf ('Link: %s\r\n', _links);
+
+      http_rewrite();
+      http_header (_header);
+      http(PHOTO.WA.rss_output(current_instance,params));
+      if (_xsl <> '')
+      {
+        _xsl_path := sprintf('%sxslt/%s', PHOTO.WA.base_path(), _xsl);
+        http_xslt (_xsl_path);
+      }
+      return;
+    }
+  }
+
+  user_gallery := sprintf('<gallery><![CDATA[%s]]></gallery>',current_instance.home_path);
+  geo_data := PHOTO.WA.get_geo_info(current_user.user_id);
+  _xsl_path := sprintf('%sxslt/index.xsl',PHOTO.WA.base_path());
+  _xml := string_output();
+
+  declare isOwner integer;
+  isOwner:=0;
+  if(current_instance.owner_id=current_user.user_id)
+     isOwner:=1;
+  
+  declare owner_fullname varchar;
+  if(isOwner)
+  {
+    owner_fullname:=coalesce(current_user.full_name,current_user.first_name||' '||current_user.last_name,current_user.auth_uid);
+  } else {
+    owner_fullname := PHOTO.WA.user_fullName (current_instance.owner_id);
+  }
+  
+  declare host_port, base_path varchar;
+  host_port := WA_GET_HOST ();
+  if (isstring (host_port) and strchr (host_port , ':') is null)
+  {
+    host_port := host_port || ':80';
+  }
+  base_path := PHOTO.WA.host_url () || http_path ();
+
+  http(sprintf('<root sid="%s" realm="%s">',_sid,either(current_user.realm,'')),_xml);
+
+  http(sprintf('<user lat="%.06f" lng="%.06f" owner="%d">',coalesce(geo_data[0],0),coalesce(geo_data[1],0),isOwner),_xml);
+  http(sprintf('<full_name>%s</full_name>',current_user.full_name),_xml);
+  http(sprintf('<first_name>%s</first_name>',current_user.first_name),_xml);
+  http(sprintf('<last_name>%s</last_name>',current_user.last_name),_xml);
+  http(sprintf('<user_name>%s</user_name>',coalesce(current_user.auth_uid,'')),_xml);
+  http (sprintf ('<user_role>%s</user_role>', PHOTO.WA._session_role (current_instance.gallery_id, current_user.user_id)), _xml);
+  http('</user>', _xml);
+
+  http(sprintf('<host>%s</host>',host_port),_xml);
+  http(sprintf('<base>%s</base>',base_path),_xml);
+  http(sprintf('<app_type>photos</app_type>'),_xml);
+  http(sprintf('<aplus>%d</aplus>',DB.DBA.WA_USER_APP_ENABLE (current_instance.owner_id)),_xml);
+  http(sprintf('<instance>%U</instance>', current_instance.name),_xml);
+  http(sprintf('<home_url>%s</home_url>',current_instance.home_url),_xml);
+  http (sprintf ('<wa_home_title>%V</wa_home_title>', wa_home_title), _xml);
+  http(sprintf('<wa_home_link>%s</wa_home_link>',wa_home_link),_xml);
+  http(sprintf('<gallery_id>%d</gallery_id>',current_instance.gallery_id),_xml);
+  http(sprintf('<instance_owner>%s</instance_owner>',current_instance.owner_name),_xml);
+  http(sprintf('<instance_owner_fullname>%s</instance_owner_fullname>',owner_fullname),_xml);
+  http(sprintf('<instance_name>%s</instance_name>', current_instance.name), _xml);
+  http(sprintf('<instance_description>%s</instance_description>', current_instance.description), _xml);
+  http(sprintf('<dc_instance_name>%V</dc_instance_name>', PHOTO.WA.xml2string (current_instance.name)), _xml);
+  http(sprintf('<dc_instance_description>%V</dc_instance_description>', PHOTO.WA.xml2string (current_instance.description)), _xml);
+  http(sprintf('<map>%d</map>',PHOTO.WA.gallery_show_map (current_instance.gallery_id)),_xml);
+  http(sprintf('<is_discussion>%d</is_discussion>', PHOTO.WA.discussion_check ()),_xml);
+    http(sprintf('<bar><![CDATA[%s]]></bar>',ODS.BAR._EXEC('oGallery', params, lines)),_xml);
+  http(user_gallery,_xml);
+  http(PHOTO.WA.get_lastest_users(current_user),_xml);
+  http('</root>',_xml);
+
+  _xml := string_output_string(_xml);
+  PHOTO.WA.myhttp(_xml,_xsl_path,get_keyword('vv',params,''));
+
+?>

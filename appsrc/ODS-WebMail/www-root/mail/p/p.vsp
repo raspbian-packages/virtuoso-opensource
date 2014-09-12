@@ -1,0 +1,45 @@
+<?vsp
+--
+--  $Id$
+--
+--  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+--  project.
+--
+--  Copyright (C) 1998-2012 OpenLink Software
+--
+--  This project is free software; you can redistribute it and/or modify it
+--  under the terms of the GNU General Public License as published by the
+--  Free Software Foundation; only version 2 of the License, dated June 1991.
+--
+--  This program is distributed in the hope that it will be useful, but
+--  WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License along
+--  with this program; if not, write to the Free Software Foundation, Inc.,
+--  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+--
+
+    declare _source,x varchar;
+    declare _xst,_xml,str, r varchar;
+    _source := 'niama';
+
+    _xst := get_keyword('s', params,concat(http_root(),'/www-root/mail/p/tags.xsl'));
+    _xml := get_keyword('x', params,concat(http_root(),'/www-root/mail/p/tags.xml'));
+
+
+
+    xslt_sheet (_xst, xml_tree_doc (xml_tree (file_to_string(_xst))));
+    r := xslt (_xst, xml_tree_doc (xml_tree (file_to_string(_xml))));
+
+
+    declare str any;
+    str := string_output ();
+    http_value (r, 0, str);
+
+    string_to_file (concat(http_root(),'/xslt/mail/html_parse2.xsl'),str,-2);
+
+    http('OK');
+
+ ?>

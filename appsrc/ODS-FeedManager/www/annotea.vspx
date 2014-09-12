@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="annotea" decor="template/popup.vspx" style="template/template.xsl" fast-render="1" xmlns:v="http://www.openlinksw.com/vspx/" xmlns:vm="http://www.openlinksw.com/vspx/macro" doctype="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+  <v:method name="showTDValue" arglist="in id integer, in value any">
+    <![CDATA[
+      if (self.v_mode = 'show') {
+        http (value);
+      } else if (self.v_mode = 'create') {
+        http (value);
+      } else if (id <> self.v_id) {
+        http (value);
+      } else {
+        http ('<b>' || value || '</b>');
+      }
+    ]]>
+  </v:method>
+
+  <vm:pagetitle>Annotation page</vm:pagetitle>
+  <vm:popup_pagewrapper>
+    <vm:variables>
+      <v:variable persist="0" name="v_sid" param-name="sid" type="varchar" />
+      <v:variable persist="0" name="v_realm" param-name="realm" type="varchar" />
+      <v:variable persist="0" name="v_mode" param-name="mode" type="varchar" default="'show'"/>
+      <v:variable persist="0" name="v_oid" param-name="oid" type="integer" />
+      <v:variable persist="0" name="v_id" param-name="id" type="integer" />
+      <v:variable persist="0" name="v_author" type="varchar" default="''" />
+      <v:variable persist="0" name="v_body" type="varchar" default="''" />
+      <v:variable persist="0" name="v_claims" type="any" default="null" />
+
+      <v:variable name="v_tabNo" param-name="tabNo" type="varchar" default="0" />
+    </vm:variables>
+    <vm:pagebody>
+      <input type="hidden" name="sid"   id="sid"   value="<?V self.v_sid ?>" />
+      <input type="hidden" name="realm" id="realm" value="<?V self.v_realm ?>" />
+      <div class="form-header">
+        Free Text Annotation: '<?V ENEWS.WA.utf2wide ((select coalesce(EFI_TITLE, '~ no title ~') from ENEWS.WA.FEED_ITEM where EFI_ID = self.v_oid)) ?>'
+      </div>
+
+      <div class="new-form-body">
+        <v:data-set name="ds" sql="select * from ENEWS.WA.ANNOTATIONS where A_OBJECT_ID = :p0 and A_DOMAIN_ID = :p1 order by A_ID desc" nrows="0" scrollable="1">
+          <v:param name="p0" value="--self.v_oid" />
+          <v:param name="p1" value="--self.domain_id" />
+
+          <v:template name="ds_header" type="simple" name-to-remove="table" set-to-remove="bottom">
+            <div style="padding-bottom: 5px;">
+              <v:button action="simple" value="Annotate" xhtml_title="Annotate" xhtml_class="button">
+                <v:on-post>
+                  <![CDATA[
+                    self.v_id := null;
+                    self.v_mode := 'create';
+                    self.vc_data_bind(e);
+                  ]]>
+                </v:on-post>
+              </v:button>
+            </div>
+            <table class="ODS_grid ANN_grid">
+            </table>
+          </v:template>
+
+          <v:template name="ds_repeat" type="repeat" name-to-remove="" set-to-remove="">
+
+            <v:template name="ds_empty" type="if-not-exists" name-to-remove="table" set-to-remove="both">
+              <table>
+                <tr>
+                  <td>
+                    No annotations
+                  </td>
+                </tr>
+              </table>
+            </v:template>
+
+            <v:template name="ds_browse" type="browse" name-to-remove="table" set-to-remove="both">
+              <?vsp
+                 declare row vspx_row_template;
+                 row := control;
+              ?>
+              <table>
+                <tr>
+                  <td width="1%" nowrap="nowrap">
+                    <?vsp self.showTDValue (row.te_column_value('A_ID'), ENEWS.WA.dt_value (row.te_column_value('A_CREATED'))); ?>
+                  </td>
+                  <td>
+                    <?vsp
+                      declare id, iri any;
+
+                      id := row.te_column_value('A_ID');
+                      iri := ENEWS.WA.url_fix (SIOC..feed_annotation_iri (self.domain_id, self.v_oid, id), self.v_sid, self.v_realm);
+                      http (sprintf ('<a href="%V">', iri));
+                      self.showTDValue (id, row.te_column_value('A_AUTHOR'));
+                      http ('</a>');
+                    ?>
+                  </td>
+                  <td width="1%" nowrap="nowrap">
+                    <v:button action="simple" value="edit" xhtml_title="Edit" xhtml_class="button">
+                      <v:on-post>
+                        <![CDATA[
+                          self.v_id := (control.vc_parent as vspx_row_template).te_column_value('A_ID');
+                          self.v_mode := 'edit';
+                          self.vc_data_bind(e);
+                        ]]>
+                      </v:on-post>
+                    </v:button>
+                    <v:button action="simple" value="Delete" xhtml_title="Delete" xhtml_onclick="return confirmAction(\'Are you sure that you want to delete this annotation?\');" xhtml_class="button">
+                      <v:on-post>
+                        <![CDATA[
+                          declare id integer;
+
+                          id := (control.vc_parent as vspx_row_template).te_column_value('A_ID');
+                          delete from ENEWS.WA.ANNOTATIONS where A_ID = id;
+
+                          self.v_mode := 'show';
+                          self.vc_data_bind(e);
+                        ]]>
+                      </v:on-post>
+                    </v:button>
+                  </td>
+                </tr>
+                <tr>
+                  <td />
+                  <td colspan="2">
+                    <i><?vsp self.showTDValue (row.te_column_value('A_ID'), row.te_column_value('A_BODY')); ?></i>
+                  </td>
+                </tr>
+              </table>
+            </v:template>
+
+          </v:template>
+
+          <v:template type="simple" name-to-remove="table" set-to-remove="top">
+            <table>
+            </table>
+          </v:template>
+
+        </v:data-set>
+        <vm:if test="self.v_mode <> 'show'">
+          <hr />
+          <v:before-data-bind>
+            <![CDATA[
+              self.v_author := ENEWS.WA.account_fullName (self.account_id);
+              self.v_body := '';
+              self.v_claims := vector ();
+              if (self.v_mode = 'edit')
+              {
+                select A_AUTHOR,
+                       A_BODY,
+                       deserialize (A_CLAIMS)
+                  into self.v_author,
+                       self.v_body,
+                       self.v_claims
+                  from ENEWS.WA.ANNOTATIONS
+                 where A_ID = self.v_id;
+
+                self.rdf_iri := SIOC..feed_annotation_iri (self.domain_id, self.v_oid, self.v_id);
+              }
+            ]]>
+          </v:before-data-bind>
+          <v:text name="tabNo" xhtml_id="tabNo" type="hidden" value="--self.v_tabNo" />
+          <div id="a" class="c1">
+            <div class="tabs">
+              &nbsp;<vm:tabCaption tab="a" tabsCount="2" tabNo="0" caption="Notes" />
+              &nbsp;<vm:tabCaption tab="a" tabsCount="2" tabNo="1" caption="Structured Statements (Triples)" />
+            </div>
+            <div class="contents">
+              <div id="a_content_0" class="tabContent" style="display: none;">
+          <table width="90%" cellspacing="0">
+            <tr>
+              <th>
+                <v:label for="f_author" value="Author" />
+              </th>
+              <td>
+                      <v:text name="f_author" xhtml_id="f_author" value="--self.v_author" fmt-function="ENEWS.WA.utf2wide" xhtml_class="textbox" xhtml_size="50">
+                  <v:before-data-bind>
+                    <![CDATA[
+                      if (self.v_mode = 'edit')
+                        control.tf_style :=3;
+                    ]]>
+                  </v:before-data-bind>
+                </v:text>
+              </td>
+            </tr>
+            <tr>
+                    <th valign="top">
+                Annotation
+              </th>
+              <td>
+			                <textarea id="f_body" name="f_body" style="width: 400; height: 170"><?vsp http (self.v_body); ?></textarea>
+                      <![CDATA[
+                        <script type="text/javascript" src="/ods/ckeditor/ckeditor.js"></script>
+                        <script type="text/javascript">
+                          var oEditor = CKEDITOR.replace('f_body');
+                        </script>
+                      ]]>
+              </td>
+            </tr>
+                </table>
+              </div>
+              <div id="a_content_1" class="tabContent" style="display: none;">
+                <div style="margin-bottom: 5px;">
+                  <b>Subject URI</b>: <a href="<?V SIOC..feed_item_iri2 (self.v_oid) ?>"><i><?V ENEWS.WA.utf2wide ((select coalesce(EFI_TITLE, '~ no title ~') from ENEWS.WA.FEED_ITEM where EFI_ID = self.v_oid)) ?></i></a>
+                </div>
+                <table>
+                  <tr>
+                    <td width="800px">
+                      <table id="c_tbl" class="ODS_grid">
+                        <thead>
+            <tr>
+                            <th width="50%">Relation</th>
+                            <th width="50%">Value</th>
+                            <th class="action">Action</th>
+                    </tr>
+                  </thead>
+                  		  <![CDATA[
+                  		    <script type="text/javascript">
+                  <?vsp
+                    declare N integer;
+
+                    for (N := 0; N < length (self.v_claims); N := N + 1)
+                    {
+                              http (sprintf ('OAT.MSG.attach(OAT, "PAGE_LOADED", function(){TBL.createRow("c", null, {fld_1: {mode: 2, value: "%s"}, fld_2: {mode: 0, value: "%s"}, btn_1: {mode: 2}});});', self.v_claims[N][1], self.v_claims[N][2]));
+                    }
+                  ?>
+                		    </script>
+                		  ]]>
+                        <tr id="c_tr_no"><td colspan="2"><b>No Triplets</b></td></tr>
+                      </table>
+		                </td>
+                    <td valign="top" nowrap="nowrap">
+                      <img class="pointer" src="image/add_16.png" border="0" alt="Add Security" title="Add Tripple" onclick="javascript: TBL.createRow('c', null, {fld_1: {mode: 2}, fld_2: {mode: 0}, btn_1: {mode: 2}});" />
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="form-footer">
+            <v:button action="simple" value="Post" xhtml_title="Post" xhtml_class="button">
+                    <v:on-post>
+                      <![CDATA[
+                  declare N, M integer;
+                  declare params, xt any;
+
+                  params := self.vc_page.vc_event.ve_params;
+
+                  self.v_body := trim (get_keyword ('f_body', params, ''));
+                  xt := xml_tree_doc (xml_tree (self.v_body, 2, '', 'UTF-8'));
+                  if (xpath_eval ('//no-auto-href', xt, 1) is null)
+                    self.v_body := DB.DBA.wa_content_annotate (self.account_id, self.v_body);
+
+                  self.v_claims := vector ();
+                  for (N := 0; N < length (params); N := N + 2)
+                  {
+                    if ((params[N] like 'c_fld_1_%') and (trim (params[N+1]) <> ''))
+                    {
+                      M := replace (params[N], 'c_fld_1_', '');
+                      if (trim (get_keyword ('c_fld_2_'||M, params)) <> '')
+                        self.v_claims := vector_concat (self.v_claims, vector (vector (null, trim (params[N+1]), trim (get_keyword ('c_fld_2_'||M, params)))));
+                    }
+                  }
+
+                  if (self.v_mode = 'create')
+                  {
+                          self.v_author := trim (self.f_author.ufl_value);
+                    insert into ENEWS.WA.ANNOTATIONS (A_DOMAIN_ID, A_OBJECT_ID, A_BODY, A_AUTHOR, A_CLAIMS, A_CREATED, A_UPDATED)
+                      values (self.domain_id, self.v_oid, self.v_body, self.v_author, serialize (self.v_claims), now (), now ());
+                        } else {
+                          update ENEWS.WA.ANNOTATIONS
+                             set A_BODY = self.v_body,
+                           A_CLAIMS = serialize (self.v_claims),
+                                 A_UPDATED = now ()
+                           where A_ID = self.v_id;
+                        }
+
+                        self.v_mode := 'show';
+                        self.vc_data_bind(e);
+                      ]]>
+                    </v:on-post>
+                  </v:button>
+                  <v:button action="simple" value="Cancel" xhtml_title="Cancel" xhtml_class="button">
+                    <v:on-post>
+                      <![CDATA[
+                        self.v_mode := 'show';
+                        self.vc_data_bind(e);
+                      ]]>
+                    </v:on-post>
+                  </v:button>
+                </div>
+        </vm:if>
+      </div>
+      <script>
+        <![CDATA[
+          coloriseTable('annotations');
+        ]]>
+      </script>
+    </vm:pagebody>
+  </vm:popup_pagewrapper>
+</v:page>

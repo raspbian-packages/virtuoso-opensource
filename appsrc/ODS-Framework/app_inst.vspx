@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="ods-app-instances-page"
+        xmlns:vm="http://www.openlinksw.com/vspx/ods/"
+        xmlns:v="http://www.openlinksw.com/vspx/"
+        style="index.xsl"
+        doctype="-//W3C//DTD XHTML 1.0 Transitional//EN"
+        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<vm:page>
+  <vm:header>
+    <vm:title>Applications</vm:title>
+    <vm:disco-sioc-app-link />
+  </vm:header>
+  <vm:pagewrapper>
+    <v:variable name="ufid" type="integer" default="-1"/>
+    <vm:rawheader caption="<?V wa_utf8_to_wide (coalesce (self.f_full_name, self.u_full_name)) ?><?V case when length (self.fname) or length (self.sid) then '\'s' else '' end ?> <?V WA_GET_APP_NAME (self.app_type) ?>"/>
+    <vm:body>
+      <v:local-variable name="lvsn">
+      <v:before-data-bind>
+  <![CDATA[
+
+    if ( not length(self.sid)
+         and (self.app_type='oMail')
+       )
+    {
+      signal ('22023', sprintf ('You are not allowed to view personal information when not signed in.', self.fname));
+    };
+
+
+	 if (length (self.fname))
+	   {
+      declare exit handler for not found
+	    {
+	     signal ('22023', sprintf ('User "%s" does not exist.', self.fname));
+	    };
+
+	    select U_ID into self.ufid from SYS_USERS where U_NAME = self.fname;
+	   }
+
+
+   if (not length (self.fname) and length (self.sid))
+     self.fname := self.u_name;
+
+   if (length (self.fname))
+     {
+       select U_ID into self.ufid from SYS_USERS where U_NAME = self.fname;
+     }
+  ]]>
+      </v:before-data-bind>
+      </v:local-variable>
+      <vm:login redirect="app_inst.vspx"/>
+      <table border="0" class="app_inst_page">
+      <tr>
+   <?vsp
+
+
+   declare firstcolumn_wide integer;
+   firstcolumn_wide:=5;
+
+   if ( ( length (self.sid) and self.u_name <> self.fname )
+         or
+        (length (self.sid) = 0)
+      )
+   {
+     firstcolumn_wide:=25;
+   }
+
+
+   ?>
+   <td width="<?Vcast(firstcolumn_wide as varchar)||'%'?>" valign="top">
+      <table border="0" width="100%" height="100%" class="settings">
+      <?vsp
+      if(self.app_type<>'nntpf' and self.app_type<>'discussion')
+       {
+
+        declare i int;
+        declare q_str, rc, dta, h any;
+
+        if(length(self.fname)>0 and self.fname<>coalesce(self.u_name,''))
+        {
+        q_str:=sprintf('select distinct top 11  WAM_INST as INST_NAME,WAM_HOME_PAGE as INST_URL'||
+                       ' from WA_MEMBER, WA_INSTANCE, SYS_USERS '||
+                       ' where WA_MEMBER.WAM_INST=WA_INSTANCE.WAI_NAME and WA_MEMBER.WAM_USER=SYS_USERS.U_ID and U_NAME=''%s'' and WAI_IS_PUBLIC=1 and WAM_APP_TYPE = ''%s'' ',self.fname,self.app_type);
+        }else
+        {
+        q_str:=sprintf('select distinct top 11  WAM_INST as INST_NAME,WAM_HOME_PAGE as INST_URL'||
+                       ' from WA_MEMBER, WA_INSTANCE '||
+                       ' where WA_MEMBER.WAM_INST=WA_INSTANCE.WAI_NAME and WAI_IS_PUBLIC=1 and WAM_APP_TYPE = ''%s'' ',self.app_type);
+        }
+
+
+        declare INST_URL,INST_NAME,INST_OWNER varchar;
+
+        rc := exec (q_str, null, null, vector (), 0, null, null, h);
+        while (0 = exec_next (h, null, null, dta))
+        {
+          exec_result (dta);
+
+          INST_URL:=coalesce(dta[1],'javascript:void(0)');
+
+          INST_NAME:=coalesce(dta[0],'');
+
+          INST_OWNER:=WA_APP_GET_OWNER(dta[0]);
+
+          declare dataspace_url varchar;
+
+          dataspace_url:=sprintf('/dataspace/%U/%s/%s',INST_OWNER,wa_get_app_dataspace(self.app_type),INST_NAME);
+
+      ?>
+      <tr class="<?V case when mod(i,2) then 'listing_row_odd' else 'listing_row_even' end ?>">
+        <td nowrap="nowrap">
+          <a href="<?vsp http(wa_expand_url (dataspace_url, self.login_pars)); ?>"><img src="images/icons/go_16.png" border="0"/> <?V wa_utf8_to_wide (INST_NAME) ?></a>
+
+        </td>
+      </tr>
+      <?vsp
+          i := i + 1;
+          if(i>=10)
+          {
+           declare more_link varchar;
+           if(self.odsbar_loginparams is not null and length(self.odsbar_loginparams)>0)
+               more_link:=wa_expand_url (self.odsbar_ods_gpath || 'search.vspx?apps=apps&q=' || WA_GET_APP_NAME(self.app_type), self.odsbar_loginparams);
+           else
+               more_link:= self.odsbar_ods_gpath || 'search.vspx?apps=apps&q=' || WA_GET_APP_NAME(self.app_type);
+
+           more_link:=wa_expand_url (self.odsbar_ods_gpath || 'search.vspx?apps=apps&q=' || WA_GET_APP_NAME(self.app_type), self.odsbar_loginparams);
+?>
+      <tr class="<?V case when mod(i,2) then 'listing_row_odd' else 'listing_row_even' end ?>">
+        <td nowrap="nowrap">
+     <a  href="<?vsp http(more_link);?>">more...</a>
+        </td>
+      </tr>
+
+<?vsp
+            goto end_for;
+	         }
+
+
+          }
+
+end_for:
+          exec_close (h);
+
+          if (i = 0 and length (self.fname))
+          {
+      ?>
+       <tr>
+         <td>
+          No Instances
+        </td>
+       </tr>
+      <?vsp
+          }
+        }
+      ?>
+      <?vsp
+      if(self.app_type='nntpf' or self.app_type='discussion')
+       {
+      ?>
+       <tr>
+         <td nowrap="nowrap">
+          <a href="<?Vrtrim(self.odsbar_ods_gpath,'/ods/')||wa_expand_url ('/dataspace/discussion', self.login_pars)?>"><img src="images/icons/go_16.png" border="0"/> Discussions</a>
+        </td>
+       </tr>
+
+      <?vsp
+          }
+      ?>
+
+     </table>
+    </td>
+    <td width="<?Vcast((100-firstcolumn_wide) as varchar)||'%'?>">
+            <?vsp
+            if (self.app_type = 'WEBLOG2')
+              {
+            ?>
+            <vm:dash-blog-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'eNews2')
+              {
+            ?>
+            <vm:dash-enews-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'oMail')
+              {
+            ?>
+            <vm:dash-omail-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'oWiki')
+              {
+            ?>
+            <vm:dash-wiki-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'Bookmark')
+              {
+            ?>
+            <vm:dash-bookmark-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'oDrive')
+              {
+            ?>
+            <vm:dash-odrive-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'oGallery')
+              {
+            ?>
+            <vm:dash-ogallery-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'Polls')
+              {
+            ?>
+            <vm:dash-polls-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'AddressBook')
+              {
+            ?>
+            <vm:dash-addressbook-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'Calendar')
+              {
+            ?>
+            <vm:dash-calendar-summary/>
+            <?vsp
+              }
+            else if (self.app_type = 'IM')
+              {
+            ?>
+            <vm:dash-im-summary/>
+            <?vsp
+              }
+            else if ((self.app_type = 'nntpf' or self.app_type = 'discussion') and self.sid)
+              {
+            ?>
+            <vm:dash-discussions-summary/>
+            <?vsp
+              }
+            ?>
+        </td>
+      </tr>
+    </table>
+    </vm:body>
+  </vm:pagewrapper>
+</vm:page>
+</v:page>

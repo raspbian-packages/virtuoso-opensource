@@ -1,0 +1,769 @@
+<?xml version="1.0" ?> <!-- -*- tab-width: 4 -*- -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--
+
+  $Id$
+
+  This file is part of the OpenLink Ajax Toolkit (OAT) project
+
+  Copyright (C) 2009-2012 OpenLink Software
+
+  This project is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; only version 2 of the License, dated June 1991
+
+  This project is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<head>
+
+  <title>OpenLink iSPARQL</title>
+
+  <meta name="viewport" content="width=device-width"/>
+
+  <link rel="apple-touch-icon" href="/isparql/images/mob_home_icon.png"/>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-status-bar-style" content="black-translucent" />
+
+  <link type="text/css" rel="stylesheet" href="/isparql/styles/style.css"/>
+  <link type="text/css" rel="stylesheet" href="/isparql/styles/execute.css"/>
+  <link media="only screen and (max-device-width: 480px)" 
+        type="text/css" 
+	rel="stylesheet" 
+	href="/isparql/styles/mobile.css"/>
+
+  <script type="text/javascript">
+
+window.YMAPPID = 'yahoo-id';
+var featureList = ["keyboard","dimmer","tab","ajax","combolist","win","tree","grid","anchor","dav","xml",
+                   "svgsparql","toolbar","dialog","sparql","graphsvg","menu","layers","rdfstore",
+		   "rdfmini","map","json"];
+  </script>
+  <script type="text/javascript" src="/isparql/toolkit/loader.js"></script>
+  <script type="text/javascript" src="defaults.js"></script>
+  <script type="text/javascript" src="statusui.js"></script>
+  <script type="text/javascript" src="error.js"></script>
+  <script type="text/javascript" src="location.js"></script>
+  <script type="text/javascript" src="io.js"></script>
+  <script type="text/javascript" src="execute.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="qbe.js"></script>
+  <script type="text/javascript" src="ubiq.js"></script>
+
+  <script type="text/javascript">
+
+// XXX should be done in defaults.js
+
+function myInit() {
+  OAT.Preferences.imagePath = '/isparql/toolkit/images/';
+  OAT.Preferences.stylePath = '/isparql/toolkit/styles/';
+
+  /* load stylesheets */
+  OAT.Style.include("grid.css");
+  OAT.Style.include("webdav.css");
+
+  // <a>++
+  OAT.Anchor.imagePath = OAT.Preferences.imagePath;
+  OAT.Anchor.zIndex = 1001;
+  gen_isparql_bookmarklet();
+  gen_sparql_bookmarklet();
+}
+
+OAT.MSG.attach(OAT, 'OAT_LOAD', myInit);
+  </script>
+</head>
+<body>
+  <div id="page">
+    <div id="splash">
+      <div id="splash_inner">
+        <div id="splash_hd">
+          <img src="images/openlinklogo_wstrap_2008_no_motto.png" alt="OpenLink Software"/>
+	</div>
+        <div class="msg" id="statMsgMain">iSPARQL Initialization</div>
+        <div class="msg" id="statMsgElem">Loading</div>
+	
+        <img src="/isparql/toolkit/images/throbber.gif" id="splashThrobber" style="display:none"/>
+
+        <noscript>
+          <img src="/isparql/images/stop_32.png" alt="error"/>
+          <div class="error statMsgError">
+            iSPARQL is a JavaScript application.<br/>
+	    It turns out that JavaScript is not available. This may mean that you are running on a browser that has no JavaScript support, 
+            or JavaScript is disabled.<br/>
+            To use iSPARQL, please switch to a browser that has JavaScript, or enable JavaScript for this page, if it's been disabled.
+	  </div>
+        </noscript>
+
+        <img src="/isparql/images/stop_32.png" alt="error" id="splashErrorImg" style="display: none"/>
+
+        <div class="error" id="statMsgErr"></div>
+	<div id="splash_ver"></div>
+        <div id="splash_copyr">Copyright &copy; 2006-2012 OpenLink Software</div>
+
+        <div id="splash_foot" class="opl_motto">Making Technology Work For You &trade;</div>
+      </div> <!-- #splash_inner -->
+    </div> <!-- #splash -->
+
+    <div id="locAcquireUI" style="display:none;position:absolute"> <!-- location acquire UI template. -->
+      <div id="locAcquireUI_inner">
+        <div id="locAcquireMsg">
+          <div id="locAcquireTitleC">
+		    <h3 id="locAcquireTitleT">Locating</h3>
+            <img id="locAcquireThrobber" alt="throbber" src="/isparql/toolkit/images/throbber_small.gif"/>
+          </div>
+          <table id="locAcquireCurrent">
+            <tr>
+              <td><label for="locAcquireManualLatInput">Latitude</label></td>
+              <td id="locAcquireLatCtr">
+	            <input type="text" 
+                       class="locAcquireForm" 
+                       id="locAcquireManualLatInput" />
+              </td>
+            </tr>
+            <tr>
+	          <td><label for="locAcquireManualLonInput">Longitude</label></td>
+	          <td id="locAcquireLonCtr">
+	            <input type="text" 
+                       class="locAcquireForm" 
+                       id="locAcquireManualLonInput" />
+              </td>
+            </tr>
+            <tr>
+              <td>Accuracy</td>
+              <td id="locAcquireAccCtr">N/A</td>
+            </tr>
+          </table>
+        </div> <!-- #locAcquireMsg -->
+        <div id="locAcquireGeocodeForm" style="display:none">
+          <label for="locAcquireAddrInput">Address:</label>
+          <input type="text" class="locAcquireForm" id="locAcquireAddrInput"/>
+        </div>
+        <div id="locAcquireErrMsg"></div>
+        <div id="locAcquireBtnCtr">
+          <button id="locAcquireUseBtn">Use</button>
+	      <button id="locAcquireGeocodeBtn">Enter Address</button>
+	      <button id="locAcquireManualBtn">Manual</button>
+          <button id="locAcquireRefreshBtn">Refresh</button>
+          <button id="locAcquireCancelBtn">Cancel</button>
+        </div>
+      </div> <!-- #locAcquireUI_inner -->
+    </div> <!-- #locAcquireUI -->
+
+    <div id="page_content" style="display:none;">
+      <ul id="menu">
+        <li>iSPARQL
+          <ul id="menu_isparql_down" class="menu_isparql" style="display:none">
+            <li id="menu_b_prefs">Preferences&#8230;</li>
+	    	<li class="noclose"><hr/></li>
+	    	<li id="menu_b_about">About iSPARQL&#8230;</li>
+          </ul>
+        </li>
+        <li>File
+          <ul id="menu_file_down" class="menu_file" style="display:none;">
+	    <li id="menu_b_reset">Reset</li>
+	    <li id="menu_b_load" class="disabled">Open</li>
+	    <li id="menu_b_save" class="disabled">Save</li>
+	    <li id="menu_b_saveas" class="disabled">Save As...</li>
+	    <!--li class="menu_spacer"><hr/></li-->
+	    <!--li id="menu_b_prefs">Preferences...</li-->
+	  </ul>
+        </li>
+        <li>Help
+	  <ul class="menu_help" style="display:none;">
+	        <li id="menu_b_help">iSPARQL Help&#8230;</li>
+	  </ul>
+        </li>
+        <li id="login_b">Login</li>
+      </ul> <!-- menu -->
+      <img id="throbber" style="display:none; cursor:pointer;" />
+      <ul id="tabs">
+        <li id="tab_qbe" title="SPARQL Query By Example">QBE</li>
+        <li id="tab_query" title="SPARQL Query By Typing">Advanced</li>
+        <li id="tab_results" title="Results">Results</li>
+      </ul>
+      <div id="content">
+        <div id="main_col"></div> <!-- this is the container for main_col_pages appear. -->
+        <div class="main_col_page" id="page_qbe" style="display:none;">
+          <div id="qbe_toolbar"></div>
+	  <div id="qbe_query_div">
+	    <div id="qbe_canvas">
+	      <div id="qbe_parent"></div>
+	    </div>
+            <div id="qbe_bottom"> <!-- bottom orders options etc -->
+	      <div id="qbe_orders">
+	        <div id="qbe_orderby_grid"></div>
+	      </div>
+	      <br style="clear:both;"/>
+	      <div id="qbe_resizer_area" style=""></div> <!-- #qbe_resizer_area -->
+            </div> <!-- #qbe_bottom -->
+          </div> <!-- #qbe_query_div -->
+          <div id="qbe_props">
+            <div id="qbe_props_help">
+              <p>Please select a node or edge to view its properties.</p>
+            </div>
+	    <div id="qbe_props_node" style="display:none;">
+	      <label for="qbe_node_type">Type:</label>
+	      <select id="qbe_node_type">
+		<option value="0" selected="selected">URI</option>
+		<option value="1">Literal</option>
+	      </select><br/>
+              <label for="qbe_node_id">Variable:</label>
+	      <input type="text" id="qbe_node_id"/><br/>
+	      <label for="qbe_node_res_type">Datatype: </label>
+	      <input type="text" id="qbe_node_res_type" />
+	    </div> <!-- #qbe_props_node -->
+	    <div id="qbe_props_edge" style="display:none;">
+	      <input type="checkbox" id="qbe_edge_type" /><label class="ckb" for="qbe_edge_type">Optional</label><br/>
+	          <label for="qbe_edge_value">Name: </label><input type="text" id="qbe_edge_value" />
+	    </div>
+            <div id="qbe_props_group" style="display:none;">
+              <label for="qbe_group_type">Group Type: </label>
+              <select id="qbe_group_type">
+                <option value="0">Graph</option>
+                <option value="1">Optional</option>
+                <option value="2">Union</option>
+	        <option value="3">Construct</option>
+              </select><br/>
+              <label for="qbe_group_id">ID: </label>
+              <input type="text" id="qbe_group_id" />
+            </div> <!-- #qbe_props_group -->
+	    <div id="qbe_props_common" style="display:none;">
+              <input type="checkbox" id="qbe_orderby" />
+	      <label for="qbe_orderby" class="ckb">Order By</label><br/>
+	      <input type="checkbox" id="qbe_visible" />
+	      <label for="qbe_visible" class="ckb">Visible</label>
+            </div> <!-- #qbe_props_common -->
+          </div> <!-- #qbe_props -->
+          <div id="schemas"> <!#-- schemas (sub)window -->
+	    <div id="schemas_tree_container">
+	      <ul id="schemas_tree"></ul>
+	    </div>
+	    <div id="schema_div"></div>
+	    <button id="schema_import">Import</button>
+	    <button id="schema_remove">Remove</button>
+          </div> <!-- #schemas -->
+        </div> <!-- #page_qbe -->
+        <div class="main_col_page" id="page_query" style="display:none;">
+          <div id="toolbar"></div><br/>
+          <div id="query_div">
+	    <form id="query_form">
+	      <ul id="tabgrph">
+	        <li id="tabgrph_default" class="tab tab_selected">
+                  <label for="default-graph-uri">Graph</label>
+                </li>
+                <li id="tabgrph_named" class="tab">
+                  <label for="named-graphs">Named Graphs (<span id="named_graphs_cnt">0</span>)</label>
+                </li>
+              </ul> <!-- #tabgrph -->
+              <div id="tabgrph_content"></div>
+              <div id="tabgrph_default_content">
+                <input id="default-graph-uri" name="default-graph-uri" value=""/>
+		<button type="button" id="default-graph-uri-clear">Clear</button>
+              </div>
+              <div id="tabgrph_named_content">
+                <div id="graphs_grid_div">
+	          <table class="grid" id="named_graph_list">
+		    <thead>
+		      <tr>
+                        <td><div style="width: 20px;" class="header_value"></div></td>
+                        <td style="text-align: center;">
+                          <div style="overflow: hidden; width: 440px;" class="header_value">Named Graph</div>
+                        </td>
+                        <td><div style="overflow: hidden; width: 100px;" class="header_value"></div></td>
+                      </tr>
+                    </thead>
+                    <tfoot>
+		      <tr class="even">
+		        <td></td>
+                        <td><input style="width: 440px;" type="input" id="named_graph_add" name="named_graph_add"/></td>
+		        <td style="text-align: center;">
+		                  <button onclick="add_named_graph();return false;">Add</button>
+                        </td>
+                      </tr> <!-- .even -->
+                    </tfoot>
+	              </table> <!-- named_graph_list -->
+                </div> <!-- #graphs_grid_div -->
+	      </div> <!-- #tabgrph_named_content --> <br/>
+              <div id="topbox_ctl" class="ctl_right">
+	        <select name="recent_queries" id="recent_queries">
+		  <option value="">-- Recent Queries --</option>
+		  <option value="***CLEAR***"></option>
+		</select>
+                <select name="prefix" id="prefix" onchange="prefix_insert()">
+                  <option value="">-- Prefixes --</option>
+                  <!--option value="PREFIX cc: &lt;http://web.resource.org/cc/&gt;">CC</option>
+                  <option value="PREFIX dataview: &lt;http://www.w3.org/2003/g/data-view#&gt;">DATAVIEW</option>
+                  <option value="PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;">DC</option>
+                  <option value="PREFIX dcterms: &lt;http://purl.org/dc/terms/&gt;">DCTERMS</option>
+                  <option value="PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;">FOAF</option>
+                  <option value="PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;">OWL</option>
+		  <option value="PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;">RDF</option>
+		  <option value="PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;">RDFS</option>
+		  <option value="PREFIX rss: &lt;http://purl.org/rss/1.0/&gt;">RSS</option>
+		  <option value="PREFIX sioc: &lt;http://rdfs.org/sioc/ns#&gt;">SIOC</option>
+		  <option value="PREFIX sioct: &lt;http://rdfs.org/sioc/types#&gt;">SIOCT</option>
+		  <option value="PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;">SKOS</option>
+		  <option value="PREFIX vs: &lt;http://www.w3.org/2003/06/sw-vocab-status/ns#&gt;">VS</option>
+		  <option value="PREFIX wot: &lt;http://xmlns.com/wot/0.1/&gt;">WOT</option>
+		  <option value="PREFIX xhtml: &lt;http://www.w3.org/1999/xhtml&gt;">XHTML</option>
+		          <option value="PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;">XSD</option-->
+		</select>
+		<select name="template" id="template" onchange="template_insert()">
+		  <option value="">-- Template --</option>
+		          <option value="
+SELECT DISTINCT ?s ?p ?o
+			WHERE
+			{
+			?s ?p ?o .
+			}">Select</option>
+
+		          <option value="
+CONSTRUCT
+			{
+			?s ?p ?o .
+			}
+			WHERE
+			{
+			?s ?p ?o .
+			}">Construct</option>
+                  <option value="
+ASK WHERE
+			{
+			?s ?p ?o .
+			}">Ask</option>
+                  <option value="CONSTRUCT { ?thing rdfs:type ?type;
+              foaf:name ?name;
+              geo:geometry ?geo .}
+WHERE     {	?thing a ?type;
+              foaf:name ?name; 
+              geo:geometry ?geo .
+			  FILTER (bif:st_intersects (?geo, bif:st_point (__P_LAT__,__P_LON__), 200))
+          } 
+">Proximity query</option>
+		</select>
+		<select name="tool" id="tool" onchange="tool_invoke()">
+		  <option value="">-- Statement Help --</option>
+		  <option value="tool_put_line_start('#')">Comment Selection</option>
+		  <option value="tool_rem_line_start('#')">Uncomment Selection</option>
+		  <option value="tool_put_line_start('    ')">Indent Selection</option>
+		  <option value="tool_rem_line_start('    ')">Remove Indent Selection</option>
+		  <option value="tool_put_around('OPTIONAL\n{\n','\n}\n')">Make Optional </option>
+		  <option value="tool_put('BASE <http://example.org/base>')">put BASE</option>
+		  <option value="tool_put('FROM <http://example.org/from>')">put FROM</option>
+		  <option value="tool_put('FROM NAMED <http://example.org/named>')">put FROM NAMED</option>
+		  <option value="tool_put('UNION\n')">put UNION</option>
+		  <option value="tool_put('GRAPH')">put GRAPH</option>
+		  <option value="tool_put('ORDER BY')">put ORDER BY</option>
+		  <option value="tool_put('ORDER BY ASC(?x)')">put ORDER BY ASC()</option>
+		  <option value="tool_put('ORDER BY DESC(?x)')">put ORDER BY DESC()</option>
+		  <option value="tool_put('LIMIT 10')">put LIMIT</option>
+		  <option value="tool_put('OFFSET 10')">put OFFSET</option>
+		  <option value="tool_put('FILTER ( ?x < 3 ) .')">put Simple Filter</option>
+		  <option value="tool_put('FILTER regex( str(?name), &quot;Jane&quot;, &quot;i&quot; ) .')">put Regexp Filter</option>
+		  <option value="tool_put('FILTER ( bound(?x) ) .')">put Bound Filter</option>
+		  <option value="tool_put('FILTER ( ?date > &quot;2005-01-01T00:00:00Z&quot;^^xsd:dateTime ) .')">put Date Filter</option>
+		          <option value="tool_put('FILTER ( bif:st_intersects (?geo, bif:st_point(__P_LAT__, __P_LON__),200)) .')">put Proximity Filter</option>
+		          <option value="tool_put('__P_LAT__')">insert Latitude Macro</option>
+		          <option value="tool_put('__P_LON__')">insert Longitude Macro</option>
+		</select>
+
+		        <a href="#" onclick="tools_popup()">
+                  <img src="images/cr16-action-window_new.png" alt="Statement Help" title="Statement Help" border="0"/>
+                </a>
+	      </div> <!-- #topbox_ctl -->
+	      <label for="query">SPARQL Query</label><br/>
+	      <div style="clear:both;">
+	        <textarea id="query" name="query" wrap="off"></textarea>
+	      </div><br/>
+	      <!--div>
+	        <input type="button" value="Use Query & Close" id="return_btn" style="display:none">
+	      </div-->
+	    </form>
+	    <div id="query_resizer_area"></div>
+	  </div> <!-- #query_div -->
+        <div id="res_area"></div> <!-- #res_area -->
+      </div> <!-- page_query -->
+      <div id="queryopts_outer">
+        <div id="queryopts_ctr">
+      <fieldset class="queryopts" id="queryopts">
+	  	<legend>Query options</legend>
+	  	<div id="qry_type_ctls">
+	  	  <input type="checkbox" value="on" id="qbe_distinct"/>
+      	  <label for="qbe_distinct">Distinct</label>
+            &nbsp;|&nbsp;
+	  	  <label for="qbe_query_type">Type:</label>
+	  	  <select id="qbe_query_type">
+	    	<option value="SELECT" selected="selected">SELECT</option>
+	    	<option value="CONSTRUCT">CONSTRUCT</option>
+	    	<option value="DESCRIBE">DESCRIBE</option>
+	    	<option value="INSERT">INSERT</option>
+	    	<option value="DELETE">DELETE</option>
+	  	  </select>
+        &nbsp;|&nbsp;
+	  	</div> <!-- qry_type_ctls -->
+	    <div class="fm_rw">
+	  	<label for="maxrows">Result size limit: </label>
+        <input type="text" id="maxrows" size="4"/> rows
+              <span class="expln">Leave empty for server maximum setting.</span>
+            </div>
+            <div class="fm_rw" id="qry_tout_ctls">
+              <label for="timeout">Query timeout: </label>
+	      <input type="text" id="timeout" size="4" />
+              <span class="expln" id="tout_expln">msec - leave blank for server default, or when not querying a Virtuoso endpoint.</span>
+	    </div>
+      </fieldset>
+        <div class="controls" id="controls">
+        <h3 id="endpoint_opts_toggler" class="ctl_tgl">
+          <span class="tgl_indicator" id="endpointoptstogglerarrow">&#9656;</span>Sponger <span id="epvirtuosoindicator" style="display: none">(Virtuoso)</span>
+          </h3>
+	    <div id="endpoint_opts" class="ctl_ctr" style="display:none">
+	      <fieldset class="deref_opts" id="derefOpts">
+              <table>
+                <tr>
+	          <td class="cachingOpts" style="padding-right: 8px;">
+		    <label for="cachingSchemesCtl" title="(re)set get:soft pragma value">Caching Scheme:</label><!-- XXX -->
+		    <select id="cachingSchemesCtl">
+                      <option value="none">Don't Sponge</option>
+		      <option value="replacing">None (replacing)</option>
+		      <option value="soft">Automatic (soft)</option>
+		    </select><br/>
+		    <label for="nodesRetrievedCtl" title="(re)set input:grab-limit pragma value">Limit Sponging To:</label>
+		    <select id="nodesRetrievedCtl"> <!-- XXX should be text input -->
+		      <option value="">Default</option>
+		      <option value="100">100</option>
+		      <option value="200">200</option>
+		      <option value="300">300</option>
+		      <option value="400">400</option>
+		      <option value="500">500</option>
+		    </select><label class="unit">nodes</label><br/>
+		    <label for="nodesCrawledCtl" title="(re)set input:grab-depth pragma value">Sponge No Deeper Than:</label>
+                    <select id="nodesCrawledCtl">
+		      <option value="">Default</option>
+		      <option value="1">1</option>
+		      <option value="2">2</option>
+		      <option value="3">3</option>
+		      <option value="4">4</option>
+		      <option value="5">5</option>
+		      <option value="6">6</option>
+		      <option value="7">7</option>
+		      <option value="8">8</option>
+		      <option value="9">9</option>
+		      <option value="10">10</option>
+		    </select><label class="unit">levels</label>
+		  </td>
+                  <td style="border-left: 2px outset #ddd;padding-left: 10px;vertical-align:top;">
+		    <h4 class="title">Path Traversal Schemes</h4>
+		    <input type="radio"
+		           name="pathTraversalSchemes"
+			   value=""
+			   id="pathTravSchemesDefault"
+			   checked="checked"/>
+		    <label for="pathTravSchemesDefault"
+		           id="pathTravSchemesDefaultLabel"
+			   class="ckb">Server Default:</label><br/> <!-- XXX should have list to show -->
+
+		    <input type="radio"
+		           name="pathTraversalSchemes"
+			   value="grab-all"
+			   id="pathTravSchemesGraball"/>
+		    <label for="pathTravSchemesGraball"
+		           id="pathTravSchemesGraballLabel"
+			   title="set input:grab-all"
+			   class="ckb">Follow All Properties</label><br/>
+
+		    <input type="radio"
+  		           name="pathTraversalSchemes"
+			   value="grab-seealso"
+			   id="pathTravSchemesSeealso"/>
+		    <label for="pathTravSchemesSeealso"
+		           title="set input:grab-seealso"
+		           id="pathTravSchemesSeealsoLabel"
+			   class="ckb">Custom List&#8230;</label><br/>
+
+		  </td>
+		  <td>
+                    <div id="pathTravSchemesPredSelCtr">
+                      <label for="pathTravSchemesPreds" title="Set input:grab-seealso">Follow These Properties:</label><br/>
+		      <select id="pathTravSchemesPreds"
+		              multiple="multiple"
+			      style="height: 100px;">
+		            <option value="http://xmlns.com/foaf/0.1/knows" selected="selected">foaf:knows</option>
+		            <option value="http://rdfs.org/sioc/ns#links_to" selected="selected">sioc:links_to</option>
+		            <option value="http://www.w3.org/2000/01/rdf-schema#isDefinedBy" selected="selected">rdfs:isDefinedBy</option>
+		            <option value="http://www.w3.org/2000/01/rdf-schema#seeAlso" selected="selected">rdfs:seeAlso</option>
+		            <option value="http://www.w3.org/2002/07/owl#sameAs" selected="selected">owl:sameAs</option>
+		      </select><br/>
+		      <input type="button" id="spongerPredsAdd" value="Add" style="margin-top:10px;"/>
+		      <input type="button" id="spongerPredsDel" style="margin-top:10px;" value="Remove"/>
+		      <input type="button" id="spongerPredsDefault" value="Revert to Defaults"/>
+                    </div> <!-- #pathTravSchemePredSelCtr -->
+		  </td>
+                  <td style="border-left: 2px outset #ddd;padding-left: 10px;vertical-align:top;width: 160px;">
+		    <h4 class="title">Variable Bindings<h4>
+		    <select id="spongerVars" multiple="multiple" style="height: 100px;width: 150px;margin-right: 10px;display:none;"></select>
+                    <input type="button" id="spongerVarsAdd" value="Add" style="margin-top:10px;"/>
+		    <input type="button" id="spongerVarsDel" style="margin-top:10px;" value="Remove"/><br/>
+                  </td>
+	        </tr>
+              </table>
+            </fieldset>
+	    <br style="clear:both;"/>
+          </div> <!-- endpoint_options -->
+	</div> <!-- #controls -->
+      <div class="controls" id="queryMetaData">
+        <h3 id="mdtoggler" class="ctl_tgl"><span class="tgl_indicator" id="mdoptstogglerarrow">&#9656;</span>Query Metadata</h3>
+        <div id="mdopts_ctr" class="ctl_ctr" style="display: none">
+          <fieldset class="md_opts" id="mdopts">
+            <label for="mdtitle">Title:</label><input type="text" id="mdtitle"/><br/>
+	        <label for="mddescription">Description:</label><input type="text" id="mddescription"/><br/>
+	        <label for="mdcreator">Creator:</label><input type="text" id="mdcreator"/><br/>
+	        <!--div class="expln">This metadata will be saved together with the query in a .rq file.</div-->
+          </fieldset>
+        </div> <!-- #mdopts_ctr -->
+      </div> <!-- #queryMetaData -->
+        <br style="clear:both;" />
+        </div> <!-- queryopts_ctr -->
+      </div> <!-- #queryopts_outer -->
+	<div class="main_col_page" id="page_results"></div>
+        <div id="foot">
+	      <div id="data_links" style="display:none">Raw Linked Data formats: 
+            <span id="cxml_raw_lnk_c" style="display:none"><a id="cxml_raw_lnk">CXML</a> | </span><a id="csv_raw_lnk">CSV</a> |
+		    RDF (<a id="nt_raw_lnk">N-Triples</a> <a id="n3_raw_lnk">N3/Turtle</a> <a id="json_raw_lnk">JSON</a> <a id="rdfxml_raw_lnk">XML</a>) |
+            ODATA (<a id="odata_atom_lnk">Atom</a> | <a id="odata_json_lnk">JSON</a>)
+          </div>
+          <div class="foot_l" id="foot_l">
+          <div class="ubiq_gem" style="display: none">
+              <a onclick="javascript:gen_ubiq_meta()">
+                <img src="images/ubiq_icon_16.png" alt="Ubiquity icon"/><span class="text">Ubiquity</span>
+              </a>
+            </div>
+            &nbsp;Bookmarklet - drag this link to your browser's bookmark bar: <a id="isparql_bookmarklet_a" href="javascript:(function(){location='http://www.openlinksw.com/';})();">iSPARQL</a> <a id="sparql_bookmarklet_a" href="" style="display:none">SPARQL</a>
+        </div> <!-- #foot_l -->
+          <div class="foot_r" id="foot_r">
+            iSPARQL Copyright &copy; 2006-2012 OpenLink Software<br/><span id="ft_loc"></span><br/>
+        </div>
+	<div id="stats"></div> <!-- stats -->
+      </div> <!-- #foot -->
+      </div> <!-- #content -->
+    </div><!-- #page_content -->
+  </div><!-- #page -->
+  <div id="pragmaAddProp" style="display:none;">
+    <h2>Add Predicate</h2>
+    <table style="width: 80%;">
+      <tr>
+	<td>Prefix</td>
+	<td><input type="text" id="pragmaAddPropPrefix"/></td>
+      </tr>
+      <tr>
+	<td><label for="pragmaAddPropUri">URI:</td>
+	<td><input type="text" id="pragmaAddPropUri"/></td>
+      </tr>
+      <tr>
+	<td></td>
+	<td style="text-align:center;">
+          <input type="button" value="Add" id="pragmaAddPropAdd" />
+	  <input type="button" value="Cancel" id="pragmaAddPropCancel" />
+	</td>
+      </tr>
+    </table>
+  </div> <!-- #pragmaAddProp -->
+  <div id="windows" style="display:none;">
+    <div id="auth_dlg">
+      <label for="auth_dlg_user">Username:</label>
+      <input type="text" id="auth_dlg_user" value="demo" /><br/>
+      <label for="auth_dlg_pass" class="align">Password:</label>
+      <input type="password" id="auth_dlg_pass" value="demo" /><br/>
+      <!--input type="checkbox" id="auth_dlg_save"><label class="ckb">Save in browser</label-->
+      <div id="auth_dlg_error"></div>
+      <div id="auth_buttons"><button id="auth_login_b">Login</button><button id="auth_cancel_b">Cancel</button></div>
+    </div>
+    <div id="goptions">
+      <div id="prefs_auth">
+        <label for="username" class="align">Username:</label>
+
+        <label for="login_put_type" class="align">Web Server Type:</label>
+        <select id="login_put_type">
+          <option value="http">HTTP - Basic</option>
+          <option value="dav" selected="selected">HTTP - WebDAV</option>
+        </select>
+      </div> <!-- prefs_auth -->
+      <div id="prefs_ep">
+        <div id="virtuoso_options" style="display:none" label="Virtuoso-specific">
+          <input id="should-sponge-none" type="radio" value="" name="should-sponge"/>
+          <label for="should-sponge-none">Use only local data (including data retrieved before),<br/> but do not retrieve more</label><br/>
+          <input id="should-sponge-soft" type="radio" value="soft" name="should-sponge"/>
+          <label for="should-sponge-soft" class="ckb">Retrieve remote RDF data for all missing source graphs</label><br/>
+
+          <input id="should-sponge-grab-all" type="radio" value="grab-all" name="should-sponge"/>
+          <label for="should-sponge-grab-all">Retrieve all missing remote RDF data that might be useful</label><br/>
+
+          <input id="should-sponge-grab-seealso" type="radio" value="grab-seealso" name="should-sponge"/>
+          <label for="should-sponge-grab-seealso" class="ckb">Retrieve all missing remote RDF data that might be useful, including seeAlso references</label>
+          <br/>
+          <input id="should-sponge-grab-everything" type="radio" value="grab-everything" name="should-sponge"/>
+          <label for="should-sponge-grab-everything" class="ckb">Try to download all referenced resources (this may be very slow and inefficient)</label><br/><br/>
+          <input type="checkbox" value="1" name="proxy" id="proxy" checked="checked"/>
+          <label for="proxy">Proxy the request via Virtuoso, if it is a remote endpoint.</label>
+          <br/> <!-- This break is important, because of positioning problems ... don't remove it. -->
+        </div>
+      </div> <!-- #prefs_ep -->
+    </div> <!-- goptions -->
+
+    <div id="help_dlg">
+      <h2>iSPARQL Help</h2>
+      <p>OpenLink iSPARQL is a utility for building and executing SPARQL queries. It may be used on any standard SPARQL
+         endpoint but can utilize the full power of Virtuoso Sponger when connected to a Virtuoso endpoint.</p>
+      <p>The queries, together with various parameters may be saved in a WebDAV-capable file server.</p>
+      <h3>Additional Resources</h3>
+      <p>These links open in a new browser window:</p>
+      <ul>
+        <li>
+          <a target="_blank"
+             href="http://docs.openlinksw.com/virtuoso/rdfandsparql.html">
+            SPARQL Protocol Documentation
+          </a>
+        </li>
+	<li>
+          <a target="_blank"
+             href="http://wikis.openlinksw.com/dataspace/owiki/wiki/OATWikiWeb/InteractiveSparqlQueryBuilder">
+            iSPARQL Documentation</a>
+        </li>
+	<li>
+          <a target="_blank"
+             href="http://wikis.openlinksw.com/dataspace/owiki/wiki/OATWikiWeb/InteractiveSparqlQueryBuilderTutorials">
+             iSPARQL Tutorials</a>
+        </li>
+	<li>
+          <a target="_blank"
+             href="http://docs.openlinksw.com/virtuoso">Virtuoso Documentation
+          </a>
+        </li>
+	<li>
+          <a target="_blank"
+             href="http://virtuoso.openlinksw.com/wiki/main/">Virtuoso Wiki
+          </a>
+        </li>
+	<li>
+          <a target="_blank"
+             href="http://virtuoso.openlinksw.com/blog/">Virtuoso Blog
+          </a>
+        </li>
+      </ul>
+      <div class="btn_row"><button id="help_dlg_b_ok">OK</button></div>
+    </div> <!-- #help_dlg -->
+
+    <div id="about_dlg">
+      <h1>OpenLink iSPARQL</h1>
+      <pre>
+      Version: <span id="about_version">N/A</span>
+<!--      Build Date:   <span id="about_date">N/A</span> -->
+      Built using <a target="_blank" href="http://sourceforge.net/projects/oat">OpenLink Ajax Toolkit (OAT)</a>
+      OAT version: <span id="about_oat_version">N/A</span>
+      OAT build: <span id="about_oat_build">N/A</span>
+      IRI DB count: <span id="iridb_stats">N/A</span> IRI IDs
+<!--      STORE:        <span style="display:none" id="store_count">N/A</span> graphs
+                    <span id="triple_count">N/A</span> triples
+                    <span style="display:none" id="item_count">N/A</span> items
+                    <span id="label_count">N/A</span> labels chosen
+                      <span id="label_proc_count">N/A</span> labels processed -->
+      Last known Loc: <span id="about_loc">Unknown</span>
+
+      </pre>
+      <div class="btn_row"><button id="about_dlg_b_ok">OK</button></div>
+    </div> <!-- #about_dlg -->
+
+	<div id="prefs_dlg">
+	  <!-- ul id="prefs_tabrow">
+        <li id="ptab_services">Services</li>
+        <li id="ptab_deref">Data Dereferencing</li>
+      </ul-->
+	  <!--div id="prefs_tabdeck"> </div--> <!-- Browser DOM bug alert: do not make into a self-terminating tag -->
+      <div id="prefs_tab_services_ct" class="prefs_tab_ctr">
+        <h2>Services</h2>
+		<div id="endpoint"><label for="service">SPARQL Endpoint:</label></div> <!-- endpoint combo box container -->
+	<!--div id="episvirtctr">
+	  <input type="checkbox" id="episvirt" checked="true" />
+	  <label class="ckb" for="episvirt">Use Virtuoso-specific options</label>
+        </div-->
+        <div id="shortener">
+		  <input type="checkbox" id="shortener_ep_ckb">
+		  <label for="shortener_ep_ckb" class="ckb">Shorten URIs using:<br/><span class="expln">Virtuoso curi endpoint</span></label><input id="shortener_ep"></div>
+      </div> <!-- #prefs_tab_services -->
+      <!-- div id="prefs_tab_deref_ct">
+        <h2>Dereferencing options</h2>
+      </div--> <!-- #prefs_tab_deref_ct -->
+    </div> <!-- #prefs_dlg -->
+
+    <div id="qbe_unsupported_div">
+      iSPARQL's Query By Example builder requires SVG support.<br/>
+      Please try one of the following:<br/>
+      <a target="_blank" href="http://www.firefox.com/"
+         title="Get Firefox"><img class="logo" src="images/firefox-logo.png" alt="Get Firefox"/></a> 
+      <a target="_blank" href="http://www.apple.com/safari/"
+         title="Get Safari"><img class="logo" src="images/safari-logo.png" alt="Get Safari"/></a> 
+      <a target="_blank" href="http://www.opera.com/browser"
+         title="Get Opera"><img class="logo" src="images/opera-logo.png" alt="Get Opera"/></a>
+      <a target="_blank" href="http://google.com/chrome"
+         title="Get Google Chrome"><img class="logo" src="images/chrome-logo.png" alt="Get Google Chrome"/></a>
+    </div> <!-- #qbe_unsupported_div -->
+
+    <div id="qbe_dataset_div">
+      <table class="grid" id="qbe_dataset_list">
+        <thead>
+          <tr>
+            <td><div style="width: 20px;" class="header_value"></div></td>
+            <td>
+               <div style="overflow: hidden; width: 50px;" class="header_value">Type</div>
+            </td>
+            <td style="text-align: center;">
+               <div style="overflow: hidden; width: 440px;" class="header_value">URI</div>
+            </td>
+            <td><div style="overflow: hidden; width: 100px;" class="header_value"></div></td>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr class="even">
+            <td></td>
+            <td>
+              <select id="qbe_dataset_type_add">
+                <option value="F">From</option>
+                <option value="N">Named</option>
+              </select>
+            </td>
+            <td><input style="width: 440px;" type="input" id="qbe_dataset_add" name="qbe_dataset_add"/></td>
+            <td style="text-align: center;">
+              <button id="qbe_dataset_add_btn">Add</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div> <!-- #qbe_dataset_div -->
+  </div> <!-- #windows -->
+  <div id="map_popup_templates" style="display:none">
+    <div class="map_popup_tpl" id="tpl_person">
+      <div class="map_popup_inner">
+	<div class="top">
+	  <div class="tpl_left">
+	    <div class="pic">foaf:depiction</div>
+	    <div class="name">foaf:name</div>
+	  </div>
+	  <div class="tpl_right">
+	    <ul>
+	      <li><span class="title">foaf:title</span></li>
+	      <li><span class="address">foaf:address</span></li>
+	    </ul>
+	  </div>
+	<div rdf_prop="foaf:name"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

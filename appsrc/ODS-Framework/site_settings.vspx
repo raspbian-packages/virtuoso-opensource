@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="blog-home-page"
+  xmlns:vm="http://www.openlinksw.com/vspx/ods/"
+  xmlns:v="http://www.openlinksw.com/vspx/"
+  style="index.xsl"
+  doctype="-//W3C//DTD XHTML 1.0 Transitional//EN"
+  doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<vm:page>
+  <vm:header>
+    <vm:title>Site Settings</vm:title>
+  </vm:header>
+  <v:on-init>
+    if(wa_user_is_dba (connection_get('vspx_user'),null)=0)
+       signal('22024', 'You have no DBA privileges!');
+  </v:on-init>
+  <vm:pagewrapper>
+    <vm:rawheader caption="Site Settings"/>
+    <vm:navigation-new on="site_settings"/>
+    <vm:body>
+      <vm:login redirect="index.vspx"/>
+      <table border="0" width="100%" height="100%" class="settings">
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl1" value="Web Application Configuration" url="web_header.vspx" render-only="1" />
+	    <div>
+	      Change the site logo, copyright, welcome etc. messages.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl2" value="Mail" url="mail.vspx" render-only="1" />
+	    <div>
+	      Edit site mail settings.
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl3" value="Member Registration" url="member.vspx" render-only="1" />
+	    <div>
+	      Change the member registration settings.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl4" value="Server Settings" url="server.vspx" render-only="1" />
+	    <div>
+	      Error display settings, or act as an user.
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl5" value="Application Agreements" url="app.vspx" render-only="1" />
+	    <div>
+	      Upload the application agreements.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl6" value="Admin Tools" url="/conductor/" render-only="1" />
+	    <div>
+	      Manage the server instance via OpenLink Virtuoso Conductor.
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+              <v:url name="appl7" value="Login Authentication Keys" url="login_keys.vspx" render-only="1" />
+	    <div>
+                Login authentication keys.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl8" value="Application menu" url="app_menu_settings.vspx" render-only="1" />
+	    <div>
+	      Application menu settings
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+              <v:url name="appl7" value="Mapping Services" url="map_svc.vspx" render-only="1" />
+	    <div>
+                Mapping services providers.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl10" value="Application instances" url="app_instance_limits.vspx" render-only="1" />
+	    <div>
+	      Application instances limitations.
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+              <v:url name="appl9" value="Users Administration" url="accounts.vspx" render-only="1" />
+	    <div>
+                Enable or disable user accounts.
+	    </div>
+	  </td>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+	    <v:url name="appl12" value="Notification Services" url="ping_svc.vspx" render-only="1" />
+	    <div>
+	      Notification services providers.
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <img src="images/icons/go_16.png" border="0" alt="" />
+              <v:url name="appl11" value="RDF Data" url="rdf_storage.vspx" render-only="1" />
+	    <div>
+                RDF Data Administration
+	    </div>
+	  </td>
+	  <td>
+              <img src="images/icons/go_16.png" border="0" alt="" />
+              <v:url name="appl11" value="Semantic Pingback Log" url="semping_log.vspx" render-only="1" />
+              <div>
+                Semantic Pingback
+              </div>
+	  </td>
+	</tr>
+      </table>
+    </vm:body>
+  </vm:pagewrapper>
+</vm:page>
+</v:page>

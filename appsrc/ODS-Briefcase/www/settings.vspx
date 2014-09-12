@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ -
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="settings" decor="template/template.vspx" style="template/template.xsl" fast-render="1" xmlns:v="http://www.openlinksw.com/vspx/" xmlns:vm="http://www.openlinksw.com/vspx/macro" doctype="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <vm:pagetitle>Settings</vm:pagetitle>
+  <vm:pagewrapper>
+    <vm:header/>
+    <vm:variables>
+      <v:variable name="vSubAction" param-name="sa" type="varchar" default="''" />
+      <v:variable name="v_tabNo" param-name="tabNo" type="varchar" default="1"/>
+      <v:variable name="s_url" type="varchar" default="''" />
+    </vm:variables>
+    <vm:pagebody>
+      <v:before-render>
+        <![CDATA[
+          self.F1.uf_action := ODRIVE.WA.utf2wide (ODRIVE.WA.page_url (self.domain_id, 'settings.vspx'));
+        ]]>
+      </v:before-render>
+      <?vsp
+        if (0)
+        {
+      ?>
+          <v:button name="command" action="simple" value="Submit">
+            <v:on-post>
+              <![CDATA[
+                declare params, action any;
+
+                params := e.ve_params;
+
+                action := get_keyword ('select', params);
+                if (action = 'settings')
+                {
+                  self.vSubAction := get_keyword ('mode', params, '');
+                }
+                else if (action = 'back')
+                {
+                  self.vc_redirect('home.vspx');
+                }
+                self.vc_data_bind(e);
+               ]]>
+             </v:on-post>
+          </v:button>
+      <?vsp
+        }
+      ?>
+      <table id="MTB2">
+        <tr>
+          <td id="LC2">
+            <div class="lc lc_close">
+              <span onclick="javascript: vspxPost('command', 'select', 'settings', 'mode', '');" title="Settings" class="gems2">Settings</span>
+              <span onclick="javascript: vspxPost('command', 'select', 'settings', 'mode', 'bookmarklet');" title="Bookmarklet" class="gems2">Bookmarklet</span>
+              <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+              <span onclick="javascript: vspxPost('command', 'select', 'back');" title="Back" class="gems2">Back</span>
+        </div>
+          </td>
+          <td id="RC2">
+            <div class="new-form-header" style="margin-top: 6px;">
+              <?vsp
+                declare S, T varchar;
+
+                S := 'Preferences: ';
+                T := '';
+                if (self.vSubAction = '')
+                {
+                  T := 'Settings';
+                }
+                else if (self.vSubAction = 'bookmarklet')
+                {
+                  T := 'Bookmarklet';
+                }
+                http (S || T);
+              ?>
+            </div>
+            <vm:if test="self.vSubAction = ''">
+              <v:text name="tabNo" xhtml_id="tabNo" type="hidden" value="--self.v_tabNo"/>
+        <div id="c1">
+          <div class="tabs">
+                  <vm:tabCaption tab="1" tabs="3" caption="Main"/>&amp;nbsp;
+                  <vm:tabCaption tab="2" tabs="3" caption="Grid"/>&amp;nbsp;
+                  <vm:tabCaption tab="3" tabs="3" caption="Mail Settings"/>&amp;nbsp;
+          </div>
+          <div class="contents">
+            <div id="1" class="tabContent" style="display: none;">
+              <table class="form-body" cellspacing="0">
+                <tr>
+                  <th width="30%">
+                  <v:label for="f_chars" value="File name display"/>
+                  </th>
+                  <td>
+                  <?vsp
+                    declare S varchar;
+    
+                    S := case when (ODRIVE.WA.settings_chars (self.settings) = 0) then 'checked="checked"' else '' end;
+                    http(sprintf('<input type="radio" name="r_chars" id="r_chars_0" value="0" %s />', S));
+                  ?>
+                          &amp;nbsp;<vm:label for="r_chars_0" value="--'show everything'" />
+                  </td>
+                </tr>
+                <tr>
+                <th />
+                  <td>
+                  <?vsp
+                    declare S varchar;
+    
+                    S := case when (ODRIVE.WA.settings_chars (self.settings) <> 0) then 'checked="checked"' else '' end;
+                    http(sprintf('<input type="radio" name="r_chars" id="r_chars_1" value="1" %s />', S));
+                  ?>
+                          &amp;nbsp;<vm:label for="r_chars_1" value="--'show no more than'" />&amp;nbsp;
+                  <v:text name="f_chars" null-value="--''" value="--ODRIVE.WA.settings_chars (self.settings)" xhtml_size="3"/>
+                          &amp;nbsp;<vm:label for="r_chars_1" value="--'characters'" />&amp;nbsp;
+                  </td>
+                </tr>
+                <tr>
+                <th />
+                  <td>
+                  <v:check-box name="f_tbLabels" xhtml_id="f_tbLabels" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_tbLabels (self.settings)" />
+                    <vm:label for="f_tbLabels" value="Show toolbar labels"/>
+                  </td>
+                </tr>
+                <tr>
+                <th>
+                  <v:label for="f_rows" value="Rows per page"/>
+                </th>
+                <td>
+                  <v:text name="f_rows" null-value="--''" value="--ODRIVE.WA.settings_rows (self.settings)" xhtml_size="3" />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <v:label for="f_hiddens" value="Hide files with prefixes (comma separated)"/>
+                </th>
+                <td>
+                  <v:text name="f_hiddens" null-value="--''" value="--ODRIVE.WA.settings_hiddens (self.settings)" xhtml_size="10" />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                    <v:label for="f_atomVersion" value="Atom File Version"/>
+                  </th>
+                  <td>
+                    <v:select-list name="f_atomVersion">
+                      <v:item value="0.3" name="0.3"/>
+                      <v:item value="1.0" name="1.0"/>
+                      <v:before-data-bind>
+                        <![CDATA[
+                        control.ufl_value := ODRIVE.WA.settings_atomVersion (self.settings);
+                        ]]>
+                      </v:before-data-bind>
+                    </v:select-list>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="2" class="tabContent" style="display: none;">
+              <table class="form-body" cellspacing="0">
+                <tr>
+                  <th width="30%">
+                    Show columns in detail view
+                  </th>
+                  <td>
+                  <v:check-box name="f_column_2" xhtml_id="f_column_2" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 2)" />
+                    <vm:label for="f_column_2" value="Tags"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_3" xhtml_id="f_column_3" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 3)" />
+                    <vm:label for="f_column_3" value="Size"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_4" xhtml_id="f_column_4" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 4)" />
+                    <vm:label for="f_column_4" value="Date Modified"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_5" xhtml_id="f_column_5" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 5)" />
+                    <vm:label for="f_column_5" value="Mime Type"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_6" xhtml_id="f_column_6" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 6)" />
+                    <vm:label for="f_column_6" value="Kind"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_7" xhtml_id="f_column_7" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 7)" />
+                    <vm:label for="f_column_7" value="User"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_8" xhtml_id="f_column_8" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 8)" />
+                    <vm:label for="f_column_8" value="Group"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th />
+                  <td>
+                  <v:check-box name="f_column_9" xhtml_id="f_column_9" is-boolean="1" true-value="1" false-value="0" value="--ODRIVE.WA.settings_column (self.settings, 9)" />
+                    <vm:label for="f_column_9" value="Permissions"/>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          <div id="3" class="tabContent" style="display: none;">
+            <table class="form-body" cellspacing="0">
+              <tr>
+                <th width="15%" valign="top">
+                  Share notification
+                </th>
+                <td>
+                  <v:textarea name="f_mailShare" value="--ODRIVE.WA.settings_mailShare (self.settings)" xhtml_style="width: 100%; height: 150px;" />
+                </td>
+              </tr>
+              <tr>
+                <th valign="top">
+                  Unshare notification
+                </th>
+                <td>
+                  <v:textarea name="f_mailUnshare" value="--ODRIVE.WA.settings_mailUnshare (self.settings)" xhtml_style="width: 100%; height: 150px;" />
+                </td>
+              </tr>
+            </table>
+          </div>
+          </div>
+        </div>
+        <div class="new-form-footer">
+          <v:button action="simple" value="Save" xhtml_class="form-button">
+            <v:on-post>
+              <![CDATA[
+                declare tmp, rows, chars any;
+
+                declare exit handler for SQLSTATE '*' {
+                  if (__SQL_STATE = 'TEST') {
+                    self.vc_error_message := ODRIVE.WA.test_clear(__SQL_MESSAGE);
+                 		self.vc_is_valid := 0;
+              		  return;
+              		}
+                  resignal;
+                };
+
+                rows := trim(self.f_rows.ufl_value);
+                chars := trim(self.f_chars.ufl_value);
+
+                ODRIVE.WA.test(rows, vector('name', 'Rows per page', 'class', 'integer', 'type', 'integer', 'minValue', 5, 'maxValue', 1000));
+                ODRIVE.WA.test(chars, vector('name', 'Max length of name', 'class', 'integer', 'type', 'integer', 'minValue', 0, 'maxValue', 1000));
+
+              self.settings := ODRIVE.WA.set_keyword('rows', self.settings, cast(cast(rows as integer) as varchar));
+              self.settings := ODRIVE.WA.set_keyword('chars', self.settings, cast(cast(chars as integer) as varchar));
+              self.settings := ODRIVE.WA.set_keyword('tbLabels', self.settings, self.f_tbLabels.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('hiddens', self.settings, self.f_hiddens.ufl_value);
+              self.settings := ODRIVE.WA.set_keyword('atomVersion', self.settings, self.f_atomVersion.ufl_value);
+              self.settings := ODRIVE.WA.set_keyword('column_#2', self.settings, self.f_column_2.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#3', self.settings, self.f_column_3.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#4', self.settings, self.f_column_4.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#5', self.settings, self.f_column_5.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#6', self.settings, self.f_column_6.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#7', self.settings, self.f_column_7.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#8', self.settings, self.f_column_8.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('column_#9', self.settings, self.f_column_9.ufl_selected);
+              self.settings := ODRIVE.WA.set_keyword('mailShare', self.settings, self.f_mailShare.ufl_value);
+              self.settings := ODRIVE.WA.set_keyword('mailUnshare', self.settings, self.f_mailUnshare.ufl_value);
+
+              insert replacing ODRIVE.WA.SETTINGS (USER_ID, USER_SETTINGS)
+                values(self.account_id, serialize(self.settings));
+
+                      self.vc_data_bind(e);
+        	    ]]>
+        	  </v:on-post>
+          </v:button>
+                <v:button action="simple" value="Clear" xhtml_onclick="javascript: return confirm (\'Do you want to reset settings to default?\');" xhtml_class="form-button">
+            <v:on-post>
+              <![CDATA[
+                      delete from ODRIVE.WA.SETTINGS where USER_ID = self.account_id;
+                      self.settings := vector_concat (vector ('app', DB.DBA.WA_USER_APP_ENABLE (self.account_id)), BMK.WA.settings (self.domain_id));
+
+                      self.vc_data_bind(e);
+        	    ]]>
+        	  </v:on-post>
+          </v:button>
+        </div>
+        <script>
+          <![CDATA[
+            initTab(2, 1);
+          ]]>
+        </script>
+            </vm:if>
+
+            <vm:if test="self.vSubAction = 'bookmarklet'">
+              <v:after-data-bind>
+                <![CDATA[
+                  self.s_url := sprintf('<a onClick="alert(''To drag the button to your toolbar, left click the link and while holding the mouse button down, drag it to the browser toolbar and release the button.''); return false;" href="javascript:location.href=''%shome.vspx?URL=''+location.href+''&amp;TITLE=''+document.title">Resource with Briefcase</a>', ODRIVE.WA.odrive_url(self.domain_id));
+                ]]>
+              </v:after-data-bind>
+              <table class="form-body" cellspacing="0">
+                <tr>
+                  <td>
+                     <br />
+                     You can bookmark URL from anywhere with the BM Bookmark button.
+                     <h3>Internet Explorer Users</h3>
+                     <ol>
+                       <li>To install the button, right click on this url <?vsp http(self.s_url); ?> and select the 'Add to Favorites' link. You may see a warning dialog -- click 'OK' to continue.</li>
+                       <li>To subscribe to the site you're currently viewing in your browser, just click the <b>Resource with Briefcase</b> button from within your Favorites menu.</li>
+                     </ol>
+                     <h3>Firefox Users</h3>
+                     <ol>
+                       <li>To install the button on your browser, first make sure that the 'Bookmarks Toolbar' toolbar is visible in your browser. Click 'View'->'Toolbars' and verify that the 'Bookmarks Toolbar' item is checked.</li>
+                       <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmarks Toolbar' toolbar.</li>
+                       <li>A <b>Resource with Briefcase</b> button should now appear in your 'Bookmarks Toolbar'.</li>
+                       <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Mozilla/Netscape Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Personal Toolbar' toolbar is visible in your browser. Click 'View'->'Show/Hide' and verify that the 'Personal Toolbar' item is checked.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Personal Toolbar' toolbar.</li>
+                      <li>A <b>Resource with Briefcase</b> button should now appear in your 'Personal Toolbar'.</li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Safari Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Bookmark Bar' toolbar is visible in your browser. Click 'View'->'Menu' and verify that the 'Bookmark Bar' item is checked.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmark Bar' toolbar.</li>
+                      <li>A <b>Resource with Briefcase</b> button should now appear in your 'Bookmark Bar'. </li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                    <h3>Chrome Users</h3>
+                    <ol>
+                      <li>To install the button on your browser, first make sure that the 'Bookmark Bar' toolbar is visible in your browser. Click the wrench icon in the upper right and then check 'Always show bookmarks bar'.</li>
+                      <li>Drag this url <?vsp http(self.s_url); ?> to the 'Bookmark Bar' toolbar.</li>
+                      <li>A <b>Resource with Briefcase</b> button should now appear in your 'Bookmark Bar'. </li>
+                      <li>To subscribe to the site you're currently viewing in your browser, just click the button.</li>
+                    </ol>
+                  </td>
+                </tr>
+              </table>
+            </vm:if>
+          </td>
+        </tr>
+      </table>
+    </vm:pagebody>
+  </vm:pagewrapper>
+</v:page>

@@ -1,0 +1,138 @@
+#
+# $Id$
+#
+
+ADONETVERSION=ADONET2
+#ADONETVERSION=ADONET1
+
+SOURCES1= \
+	ArrayOfLongPacked.cs \
+	AssemblyInfo.cs \
+	BlobHandle.cs \
+	BufferType.cs \
+	CLI.cs \
+	ConnectionOptions.cs \
+	ConnectionPool.cs \
+	ConnectionStringParser.cs \
+	DataType.cs \
+	DateTimeMarshaler.cs \
+	Diagnostics.cs \
+	DTC.cs \
+	ExplicitString.cs \
+	Future.cs \
+	FutureList.cs \
+	IConvertData.cs \
+	ICreateErrors.cs \
+	IInnerCommand.cs \
+	IInnerConnection.cs \
+	IMarshal.cs \
+	InnerConnectionBase.cs \
+	ISession.cs \
+	IVirtuosoError.cs \
+	ManagedCommand.cs \
+	ManagedConnection.cs \
+	ManagedErrors.cs \
+	Marshaler.cs \
+	MD5.cs \
+	MemoryHandle.cs \
+	Platform.cs \
+	RPC.cs \
+	Service.cs \
+	SqlXml.cs \
+	SqlExtendedString.cs \
+	SqlRdfBox.cs \
+	TcpConnection.cs \
+	TcpSession.cs \
+	Unix.cs \
+	VirtDbType.cs \
+	VirtuosoCommandBuilder.cs \
+	VirtuosoCommand.cs \
+	VirtuosoConnection.cs \
+	VirtuosoDataAdapter.cs \
+	VirtuosoDataReader.cs \
+	VirtuosoDateTime.cs \
+	VirtuosoDateTimeOffset.cs \
+	VirtuosoErrorCollection.cs \
+	VirtuosoError.cs \
+	VirtuosoException.cs \
+	VirtuosoInfoMessage.cs \
+	VirtuosoParameterCollection.cs \
+	VirtuosoParameter.cs \
+	VirtuosoPermissionAttribute.cs \
+	VirtuosoPermission.cs \
+	VirtuosoTimeSpan.cs \
+	VirtuosoTransaction.cs \
+	VirtuosoWarning.cs \
+	Win32.cs
+
+SOURCES2= \
+	VirtuosoClientFactory.cs \
+	VirtuosoCodeAccessPermission.cs \
+	VirtuosoConnectionStringBuilder.cs
+
+ODBC_SOURCES = \
+	StatementList.cs \
+	OdbcCommand.cs \
+	OdbcConnection.cs \
+	OdbcErrors.cs \
+	ParameterData.cs
+
+RESOURCES= \
+	/resource:OpenLink.Data.VirtuosoClient.VirtuosoConnection.bmp \
+	/resource:OpenLink.Data.VirtuosoClient.VirtuosoCommand.bmp \
+	/resource:OpenLink.Data.VirtuosoClient.VirtuosoDataAdapter.bmp
+
+
+
+ifeq  (ADONET2, $(ADONETVERSION))
+
+CSC		= gmcs
+
+#CSFLAGS	= -debug+ /d:MONO /d:DEBUG /d:DEBUG_IO /d:ADONET2
+CSFLAGS		= /optimize+ /d:MONO /d:ADONET2
+
+# Set this if using MONO 1.2.3.1
+CSFLAGS 	+= /d:MONO1231
+
+
+
+SOURCES		= $(SOURCES1) $(SOURCES2)
+REFERENCES	= /r:System.Data /r:System.EnterpriseServices /r:System.Drawing
+
+else
+
+CSC		= mcs
+
+#CSFLAGS	= -debug+ /d:MONO /d:DEBUG /d:DEBUG_IO
+CSFLAGS		= /optimize+ /d:MONO
+
+SOURCES		= $(SOURCES1)
+REFERENCES	= /r:System.Data /r:System.EnterpriseServices
+
+endif
+
+
+
+all: OpenLink.Data.Virtuoso.dll #OpenLink.Data.VirtuosoClient.dll OpenLink.Data.VirtuosoOdbcClient.dll
+
+OpenLink.Data.Virtuoso.dll: $(SOURCES) 
+	$(CSC) /unsafe /target:library /out:$@ $(CSFLAGS) $(SOURCES) $(REFERENCES) $(RESOURCES)
+
+OpenLink.Data.VirtuosoClient.dll: $(SOURCES) $(ODBC_SOURCES)
+	$(CSC) /unsafe /target:library /out:$@ /d:CLIENT /d:UNMANAGED_ODBC $(CSFLAGS) $(SOURCES) $(ODBC_SOURCES) $(REFERENCES) $(RESOURCES)
+
+OpenLink.Data.VirtuosoOdbcClient.dll: $(SOURCES) $(ODBC_SOURCES)
+	$(CSC) /unsafe /target:library /out:$@ /d:ODBC_CLIENT /d:UNMANAGED_ODBC $(CSFLAGS) $(SOURCES) $(ODBC_SOURCES) $(REFERENCES) $(RESOURCES)
+
+
+clean:
+	rm -rf \
+		OpenLink.Data.Virtuoso.dll \
+		OpenLink.Data.VirtuosoClient.dll \
+		OpenLink.Data.VirtuosoOdbcClient.dll \
+		OpenLink.Data.Virtuoso.Design.dll \
+		OpenLink.Data.Virtuoso.pdb \
+		OpenLink.Data.VirtuosoClient.pdb \
+		OpenLink.Data.VirtuosoOdbcClient.pdb \
+		OpenLink.Data.Virtuoso.Design.pdb \
+		VirtuosoConnection.resx

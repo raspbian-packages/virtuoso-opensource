@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<!--
+ -
+  -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -
+-->
+<v:page name="export" xmlns:v="http://www.openlinksw.com/vspx/" doctype="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <v:variable name="v_mode" type="varchar" default="''" param-name="mode"/>
+
+  <v:variable name="domain_id" type="integer" default="-1" />
+  <v:variable name="account_id" type="integer" default="-1" />
+
+  <v:variable name="v_output" type="varchar" param-name="output" default="''"/>
+  <v:variable name="v_keywords" type="varchar" default="''" param-name="keywords"/>
+  <v:variable name="v_expression" type="varchar" default="''" param-name="expression"/>
+  <v:variable name="v_tags" type="varchar" default="''" param-name="tags"/>
+  <v:variable name="v_updatedAfter" type="varchar" default="''" param-name="updated_after"/>
+  <v:variable name="v_updatedBefore" type="varchar" default="''" param-name="updated_before"/>
+  <v:variable name="v_folder_id" type="integer" default="-1" param-name="folder"/>
+  <v:variable name="v_grants" type="varchar" default="''" param-name="grants"/>
+
+  <v:variable name="v_own" type="integer" default="1" param-name="own"/>
+  <v:variable name="v_shared" type="integer" default="1" param-name="shared"/>
+  <v:variable name="v_max" type="varchar" default="'100'" param-name="max"/>
+  <v:variable name="v_order" type="varchar" default="'_NAME'" param-name="order"/>
+  <v:variable name="v_direction" type="varchar" default="'asc'" param-name="direction"/>
+
+  <![CDATA[
+    <?vsp
+      declare data, sql, sqlParams, state, msg, meta, rows, maxRows any;
+
+      set http_charset = 'UTF-8';
+      http_rewrite ();
+      http_request_status ('HTTP/1.1 200 OK');
+      
+      self.domain_id := BMK.WA.session_domain (params);
+      self.account_id := BMK.WA.domain_owner_id (self.domain_id);
+
+      if (self.v_mode = 'opensearchdescription') 
+      {
+        http_header ('Content-Type: text/xml\r\n'); 
+        http (         '<?xml version="1.0" encoding="UTF-8"?>\n');
+        http (         '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">');
+        http (sprintf ('<Url type="text/html" template="%Vsearch.vspx?mode=opensearch&amp;q={searchTerms}&amp;cnt={count}&amp;page={startPage}" />', BMK.WA.bookmarks_url (self.domain_id)));
+        http (sprintf ('<ShortName>%V</ShortName>', BMK.WA.domain_name (self.domain_id)));
+        http (sprintf ('<LongName>%V</LongName>', BMK.WA.domain_description (self.domain_id)));
+        http (sprintf ('<Description>About: %V</Description>', BMK.WA.domain_description (self.domain_id)));
+        http (         '<Tags>contacts</Tags>');
+        http (sprintf ('<Image height="16" width="16" type="image/png">%V/ods/images/icons/ods_bookmarks_16.png</Image>', BMK.WA.host_url ()));
+        http (sprintf ('<Image height="32" width="32" type="image/png">%V/ods/images/icons/ods_bookmarks_32.png</Image>', BMK.WA.host_url ()));
+        http (sprintf ('<Developer>%V</Developer>', BMK.WA.account_name (self.account_id)));
+        http (sprintf ('<Contact>%V</Contact>', BMK.WA.account_mail (self.account_id)));
+        http (sprintf ('<Attribution>%V</Attribution>', (select top 1 WS_COPYRIGHT from WA_SETTINGS)));
+        http (         '<SyndicationRight>open</SyndicationRight>');
+        http (         '<AdultContent>false</AdultContent>');
+        http (         '</OpenSearchDescription>');
+      }
+      else if (self.v_output = 'BMK')
+      {
+        declare params any;
+
+        params := self.vc_page.vc_event.ve_params;
+
+        http_header(sprintf ('Content-type: application/x-download\r\nContent-Disposition: inline; filename="%s"\r\n', get_keyword('file', params, 'Bookmarks.html')));
+        http_value(xslt (BMK.WA.xslt_full (get_keyword('format', params, 'Netscape') || '.xsl'), xtree_doc(BMK.WA.bookmark_export(self.domain_id, null))));
+      }
+      else if (self.v_output = 'OPML')
+        {
+          http(BMK.WA.xml2string(BMK.WA.export_opml_xml(self.domain_id, self.account_id)));
+        }
+        else if (self.v_output in ('rss', 'rdf', 'xbel', 'atom03', 'atom10'))
+        {
+        declare _header, _links varchar;
+
+        _header := case when (self.v_output like '%atom%') then 'Content-Type: application/atom+xml\r\n' else 'Content-Type: text/xml\r\n' end;
+        if (self.v_output <> 'xbel')
+        {
+          _links := ODS..PSH_HEADER_LINKS (self.domain_id);
+          if (length (_links))
+            _header := _header || sprintf ('Link: %s\r\n', _links);
+        }
+        http_header (_header);
+
+          BMK.WA.xml_set('keywords', data, self.v_keywords);
+          BMK.WA.xml_set('expression', data, self.v_expression);
+          BMK.WA.xml_set('tags', data, self.v_tags);
+          BMK.WA.xml_set ('updatedBefore', data, self.v_updatedBefore);
+          BMK.WA.xml_set ('updatedAfter', data, self.v_updatedAfter);
+          if (self.v_own = 1)
+          {
+            BMK.WA.xml_set('myBookmarks', data, self.v_own);
+            if (self.v_folder_id > 0)
+              BMK.WA.xml_set('folder', data, self.v_folder_id);
+          }
+          if (self.v_shared = 1)
+          {
+            BMK.WA.xml_set('mySharedBookmarks', data, self.v_shared);
+            if (self.v_grants <> '')
+              BMK.WA.xml_set('grants', data, self.v_grants);
+          }
+          if (self.v_folder_id <> -1)
+            BMK.WA.xml_set('folder', data, self.v_folder_id);
+
+          if (length(xpath_eval('//entry', data, 0)) = 0)
+            goto _error;
+
+          state := '00000';
+          sql := 'select distinct <MAX> rs.* from BMK.WA.shared_sql (rs0, rs1, rs2, rs3)(_TYPE integer, _ID integer, _NODE varchar, _NAME varchar, _URI varchar, _VISITED datetime, _UPDATED datetime, _CREATED datetime, _FOLDER_ID integer, _FOLDER_NAME varchar, _GRANT_ID integer) rs where rs0 = ? and rs1 = ? and rs2 = ? and rs3 = ?';
+            maxRows := self.v_max;
+            if (maxRows <> '')
+              maxRows := 'TOP ' || maxRows;
+            sql := replace(sql, '<MAX>', maxRows);
+          sqlParams := vector (self.domain_id, self.account_id, data, self.v_max);
+          sql := concat(sql, 'order by ', self.v_order, ' ', self.v_direction);
+          exec(sql, state, msg, sqlParams, 0, meta, rows);
+          if (state <> '00000')
+            goto _error;
+
+            http ('<?xml version="1.0" encoding="UTF-8"?>\n');
+            http ('<rss version="2.0">\n');
+            http ('<channel>\n');
+            for (select U_NAME, U_FULL_NAME, U_E_MAIL from DB.DBA.SYS_USERS where U_ID = self.account_id) do
+            {
+              http ('<title>');
+                http_value (BMK.WA.utf2wide(BMK.WA.domain_name (self.domain_id)));
+              http ('</title>\n');
+              http ('<description>');
+                http_value (BMK.WA.utf2wide(BMK.WA.domain_description (self.domain_id)));
+              http ('</description>\n');
+              http ('<managingEditor>');
+                http_value (U_E_MAIL);
+              http ('</managingEditor>\n');
+              http ('<pubDate>');
+                http_value (BMK.WA.dt_rfc1123 (now()));
+              http ('</pubDate>\n');
+              http ('<generator>');
+                http_value ('Virtuoso Universal Server ' || sys_stat('st_dbms_ver'));
+              http ('</generator>\n');
+              http ('<webMaster>');
+                http_value (U_E_MAIL);
+              http ('</webMaster>\n');
+              http ('<link>');
+                http_value (BMK.WA.bookmarks_url (self.domain_id));
+              http ('</link>\n');
+          if (self.v_output like '%atom%')
+          {
+            _links := ODS..PSH_ATOM_LINKS (self.domain_id);
+            if (length (_links))
+              http (_links);
+          }
+            }
+            foreach (any row in rows) do
+            {
+              http ('<item>\n');
+                http ('<title>');
+                  http_value (BMK.WA.utf2wide (row[3]));
+                http ('</title>\n');
+                http ('<description>');
+                  http_value (BMK.WA.utf2wide (BMK.WA.bookmark_description (row[1])));
+                http ('</description>\n');
+                http ('<link>');
+                  http_value (row[4]);
+                http ('</link>\n');
+                http ('<guid>');
+                  http_value (row[2]);
+                http ('</guid>\n');
+                http ('<pubDate>');
+                  http_value (BMK.WA.dt_rfc1123 (row[7]));
+                http ('</pubDate>\n');
+                for (select BTV_TAG from BMK..TAGS_VIEW, BMK.WA.BOOKMARK_DOMAIN where domain_id = self.domain_id and account_id = self.account_id and item_id = BD_BOOKMARK_ID and BD_ID = row[1]) do
+                {
+                  http ('<category>');
+                    http_value (BTV_TAG);
+                  http ('</category>\n');
+                }
+                if (self.v_output <> 'rss')
+                {
+                  http ('<ods:modified xmlns:ods="http://www.openlinksw.com/ods/">');
+                    http_value (BMK.WA.dt_iso8601 (row[6]));
+                  http ('</ods:modified>\n');
+                }
+              http ('</item>\n');
+            }
+            http ('</channel>\n');
+            http ('</rss>');
+
+            if (self.v_output = 'atom03')
+              http_xslt (BMK.WA.xslt_full ('rss2atom03.xsl'));
+
+            else if (self.v_output = 'atom10')
+              http_xslt (BMK.WA.xslt_full ('rss2atom.xsl'));
+
+            else if (self.v_output = 'rdf')
+              http_xslt (BMK.WA.xslt_full ('rss2rdf.xsl'));
+
+            else if (self.v_output = 'xbel')
+              http_xslt (BMK.WA.xslt_full ('rss2xbel.xsl'));
+      }
+    _end:
+      return;
+
+    _error:
+      http('<?xml version="1.0" ?><empty />');
+    ?>
+  ]]>
+</v:page>

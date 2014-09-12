@@ -1,0 +1,136 @@
+<refentry id="vc_code_file">
+  <refmeta>
+  <refentrytitle>code-file</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>code-file</refname>
+  <refpurpose>Code-behind file containing SQL script.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_code_file">
+    <funcprototype id="vc_proto_code_file">
+      <funcdef>
+            &lt;<function>code-file</function> <attribute>
+          <parameter>url</parameter> (required) </attribute>
+        <attribute>
+          <parameter>debug-srcfile</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-srcline</parameter> (optional) </attribute>
+        <attribute>
+          <parameter>debug-log</parameter> (optional) </attribute>
+ /&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_code_file">
+  <title>Description</title>
+  <para>This element is used to load an external SQL
+	  script after page class compilation and before page execution.
+	  This script may contain page subclass or custom control definitions.
+	  In this way SQL code can be separated from VSPX markup, or in other words
+	  to separate page design from application logic.
+      </para>
+  </refsect1>
+  <refsect1 id="vc_attrs_code_file">
+  <title>Attributes</title>
+  <formalpara>
+    <title>url</title>
+    <para>URL of file to be loaded after VSPX page compilation.
+		If relative then the base is the page where the control resides
+		(i.e. same URL resolution rules applied as for includes).
+          </para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcfile</title>
+    <para>URI of the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-srcline</title>
+    <para>Line number in the source document where the tag comes from.</para>
+  </formalpara>
+  <formalpara>
+    <title>debug-log</title>
+    <para>This defines what sort of data are saved to the debugging log.
+</para>
+  </formalpara>
+  </refsect1>
+  <refsect1 id="vc_ex_code_file">
+  <title>Examples</title>
+   <example id="vc_ex_code_file__0">
+    <title>
+  Code-behind SQL script
+</title>
+    <para>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!--
+ -  
+ -  $Id$
+ -
+ -  This file is part of the OpenLink Software Virtuoso Open-Source (VOS)
+ -  project.
+ -  
+ -  Copyright (C) 1998-2012 OpenLink Software
+ -  
+ -  This project is free software; you can redistribute it and/or modify it
+ -  under the terms of the GNU General Public License as published by the
+ -  Free Software Foundation; only version 2 of the License, dated June 1991.
+ -  
+ -  This program is distributed in the hope that it will be useful, but
+ -  WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ -  General Public License for more details.
+ -  
+ -  You should have received a copy of the GNU General Public License along
+ -  with this program; if not, write to the Free Software Foundation, Inc.,
+ -  51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -  
+ -  
+
+
+The script of a button&#39;s post event is in separate SQL file.
+
+The code_file__0.sql contents:
+drop type my_page_subclass
+;
+
+create type my_page_subclass under DB.dba.page__vspx_code__file____0_vspx
+temporary self as ref
+overriding method vc_post_b1 (control vspx_button, e vspx_event) returns any,
+method button_change (control vspx_button) returns any
+;
+
+create method vc_post_b1 (inout control vspx_button, inout e vspx_event) for my_page_subclass
+ {
+   if (not control.vc_focus) return;
+   self.button_change (control);
+   return;
+ }
+;
+
+create method button_change (inout control vspx_button) for my_page_subclass
+ {
+   self.var1 := self.var1 + 1;
+   control.ufl_value := &#39;Activated&#39;;
+ }
+;
+
+
+</para>
+    <screen>
+&lt;v:page name=&quot;page1&quot; xmlns:v=&quot;http://www.openlinksw.com/vspx/&quot; page-subclass=&quot;my_page_subclass&quot;&gt;
+  &lt;html&gt;
+    &lt;body&gt;
+      &lt;v:code-file  url=&quot;code_file__0.sql&quot;/&gt;
+      &lt;v:variable name=&quot;var1&quot; type=&quot;int&quot; default=&quot;0&quot; param-name=&quot;id&quot; persist=&quot;pagestate&quot; /&gt;
+      &lt;v:form type=&quot;simple&quot; name=&quot;f1&quot;&gt;
+	&lt;v:label name=&quot;l1&quot; value=&quot;--self.var1&quot; format=&quot;%d&quot; /&gt;
+	&lt;v:button action=&quot;simple&quot; name=&quot;b1&quot; value=&quot;Submit&quot; /&gt;
+      &lt;/v:form&gt;
+    &lt;/body&gt;
+  &lt;/html&gt;
+&lt;/v:page&gt;
+</screen>
+   </example>
+  </refsect1>
+</refentry>

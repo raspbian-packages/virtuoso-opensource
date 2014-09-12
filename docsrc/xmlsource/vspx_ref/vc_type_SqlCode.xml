@@ -1,0 +1,23 @@
+<refentry id="vc_type_SqlCode">
+  <refmeta>
+  <refentrytitle>SqlCode</refentrytitle>
+  <refmiscinfo>vspx_simple_type</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>SqlCode</refname>
+  <refpurpose>The type of a string value that is a Text of a Virtuoso/PL procedure.</refpurpose>
+  </refnamediv>
+  <refsect1 id="vc_desc_SqlCode">
+  <title>Description</title>
+  <para>Text of an event handler or other Virtuoso/PL procedure. This is
+expected to be a complete statement or sequence of statements, hence
+to be terminated like a statement, unlike the &#39;calculatable value&#39;
+expression case.
+</para>
+  <para>
+The type identifier &#39;SqlCode&#39; is introduced only for diagnostic purposes, you will never use it in VSPX code.
+When Virtuoso server tries to compile an invalid VSPX page, you might see a diagnostic messages like &#39;the value of attribute X of a control Y does not match pattern ... for type SqlCode&#39;.
+If you see this then you should check the syntax of the value of the specified attribute.
+</para>
+  </refsect1>
+ </refentry>

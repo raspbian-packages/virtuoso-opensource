@@ -1,0 +1,790 @@
+/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* Skeleton interface for Bison's Yacc-like parsers in C
+
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
+
+/* As a special exception, you may create a larger work that contains
+   part or all of the Bison parser skeleton and distribute that work
+   under terms of your choice, so long as that work isn't itself a
+   parser generator using the skeleton or a modified version thereof
+   as a parser skeleton.  Alternatively, if you modify or redistribute
+   the parser skeleton itself, you may (at your option) remove this
+   special exception, which will cause the skeleton and the resulting
+   Bison output files to be licensed under the GNU General Public
+   License without this special exception.
+
+   This special exception was added by the Free Software Foundation in
+   version 2.2 of Bison.  */
+
+/* Tokens.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     NAME = 258,
+     STRING = 259,
+     WSTRING = 260,
+     UNAME_LITERAL = 261,
+     INTNUM = 262,
+     IRI_LIT = 263,
+     APPROXNUM = 264,
+     NUM_ERROR = 265,
+     AMMSC = 266,
+     PARAMETER_L = 267,
+     NAMED_PARAMETER = 268,
+     BEGIN_EQCALL_X = 269,
+     HTMLSTR = 270,
+     SQL_TSI = 271,
+     TIMESTAMP_FUNC = 272,
+     BINARYNUM = 273,
+     MSSQL_XMLCOL_NAME = 274,
+     MSSQL_XMLCOL_NAME1 = 275,
+     MSSQL_XMLCOL_NAMEYZ = 276,
+     MSSQL_XMLCOL_NAMEZ = 277,
+     MSSQL_XMLCOL_INTNUM = 278,
+     TYPE = 279,
+     FINAL_L = 280,
+     METHOD = 281,
+     CHECKED = 282,
+     SYSTEM = 283,
+     GENERATED = 284,
+     SOURCE = 285,
+     RESULT = 286,
+     LOCATOR = 287,
+     INSTANCE_L = 288,
+     CONSTRUCTOR = 289,
+     SELF_L = 290,
+     OVERRIDING = 291,
+     STYLE = 292,
+     SQL_L = 293,
+     GENERAL = 294,
+     DETERMINISTIC = 295,
+     NO_L = 296,
+     CONTAINS = 297,
+     READS = 298,
+     DATA = 299,
+     DISABLE_L = 300,
+     NOVALIDATE_L = 301,
+     ENABLE_L = 302,
+     VALIDATE_L = 303,
+     MODIFIES = 304,
+     INPUT = 305,
+     CALLED = 306,
+     ADA = 307,
+     C = 308,
+     COBOL = 309,
+     FORTRAN = 310,
+     MUMPS = 311,
+     PASCAL_L = 312,
+     PLI = 313,
+     NAME_L = 314,
+     TEXT_L = 315,
+     JAVA = 316,
+     INOUT_L = 317,
+     REMOTE = 318,
+     KEYSET = 319,
+     VALUE = 320,
+     PARAMETER = 321,
+     VARIABLE = 322,
+     ADMIN_L = 323,
+     ROLE_L = 324,
+     TEMPORARY = 325,
+     CLR = 326,
+     ATTRIBUTE = 327,
+     __SOAP_DOC = 328,
+     __SOAP_DOCW = 329,
+     __SOAP_HEADER = 330,
+     __SOAP_HTTP = 331,
+     __SOAP_NAME = 332,
+     __SOAP_TYPE = 333,
+     __SOAP_XML_TYPE = 334,
+     __SOAP_FAULT = 335,
+     __SOAP_DIME_ENC = 336,
+     __SOAP_ENC_MIME = 337,
+     __SOAP_OPTIONS = 338,
+     FOREACH = 339,
+     POSITION_L = 340,
+     ARE = 341,
+     REF = 342,
+     STATIC_L = 343,
+     SPECIFIC = 344,
+     DYNAMIC = 345,
+     COLUMN = 346,
+     START_L = 347,
+     __TAG_L = 348,
+     RDF_BOX_L = 349,
+     VECTOR_L = 350,
+     FOR = 351,
+     ORDER = 352,
+     EXCEPT = 353,
+     UNION = 354,
+     INTERSECT = 355,
+     AS = 356,
+     DOUBLE_COLON = 357,
+     COLON = 358,
+     OR = 359,
+     AND = 360,
+     NOT = 361,
+     COMPARISON = 362,
+     EQUALS = 363,
+     STRING_CONCAT_OPERATOR = 364,
+     UMINUS = 365,
+     ALL = 366,
+     ANY = 367,
+     ATTACH = 368,
+     ASC = 369,
+     AUTHORIZATION = 370,
+     BETWEEN = 371,
+     BIGINT = 372,
+     BREAKUP = 373,
+     BY = 374,
+     CASCADE = 375,
+     CHARACTER = 376,
+     CHECK = 377,
+     CLOSE = 378,
+     COMMIT = 379,
+     CONSTRAINT = 380,
+     CONTINUE = 381,
+     CREATE = 382,
+     CUBE = 383,
+     CURRENT = 384,
+     CURSOR = 385,
+     DECIMAL_L = 386,
+     DECLARE = 387,
+     DEFAULT = 388,
+     DELETE_L = 389,
+     DESC = 390,
+     DISTINCT = 391,
+     DOUBLE_L = 392,
+     DROP = 393,
+     ESCAPE = 394,
+     EXISTS = 395,
+     FETCH = 396,
+     FLOAT_L = 397,
+     FOREIGN = 398,
+     FOUND = 399,
+     FROM = 400,
+     GOTO = 401,
+     GO = 402,
+     GRANT = 403,
+     GROUP = 404,
+     GROUPING = 405,
+     HAVING = 406,
+     IN_L = 407,
+     INDEX = 408,
+     INDEX_NO_FILL = 409,
+     INDEX_ONLY = 410,
+     INDICATOR = 411,
+     INSERT = 412,
+     INTEGER = 413,
+     INTO = 414,
+     IS = 415,
+     KEY = 416,
+     LANGUAGE = 417,
+     ENCODING = 418,
+     LIKE = 419,
+     NULLX = 420,
+     NUMERIC = 421,
+     OF = 422,
+     ON = 423,
+     OPEN = 424,
+     OPTION = 425,
+     PRECISION = 426,
+     PRIMARY = 427,
+     PRIVILEGES = 428,
+     PROCEDURE = 429,
+     PUBLIC = 430,
+     REAL = 431,
+     REFERENCES = 432,
+     RESTRICT = 433,
+     ROLLBACK = 434,
+     ROLLUP = 435,
+     SCHEMA = 436,
+     SELECT = 437,
+     SET = 438,
+     SMALLINT = 439,
+     SOME = 440,
+     SQLCODE = 441,
+     SQLERROR = 442,
+     TABLE = 443,
+     TO = 444,
+     UNIQUE = 445,
+     UPDATE = 446,
+     USER = 447,
+     VALUES = 448,
+     VIEW = 449,
+     WHENEVER = 450,
+     WHERE = 451,
+     WITH = 452,
+     WORK = 453,
+     WITHOUT_L = 454,
+     ARRAY = 455,
+     CONTIGUOUS = 456,
+     OBJECT_ID = 457,
+     BITMAPPED = 458,
+     UNDER = 459,
+     CLUSTER = 460,
+     CLUSTERED = 461,
+     VARCHAR = 462,
+     VARBINARY = 463,
+     BINARY = 464,
+     LONG_L = 465,
+     REPLACING = 466,
+     SOFT = 467,
+     HASH = 468,
+     LOOP = 469,
+     IRI_ID = 470,
+     IRI_ID_8 = 471,
+     SAME_AS = 472,
+     TRANSITIVE = 473,
+     QUIETCAST_L = 474,
+     SPARQL_L = 475,
+     SHUTDOWN = 476,
+     CHECKPOINT = 477,
+     BACKUP = 478,
+     REPLICATION = 479,
+     SYNC = 480,
+     ALTER = 481,
+     ADD = 482,
+     RENAME = 483,
+     DISCONNECT = 484,
+     MODIFY = 485,
+     BEFORE = 486,
+     AFTER = 487,
+     INSTEAD = 488,
+     TRIGGER = 489,
+     REFERENCING = 490,
+     OLD = 491,
+     AGGREGATE = 492,
+     FUNCTION = 493,
+     OUT_L = 494,
+     HANDLER = 495,
+     IF = 496,
+     THEN = 497,
+     ELSE = 498,
+     ELSEIF = 499,
+     WHILE = 500,
+     BEGINX = 501,
+     ENDX = 502,
+     RETURN = 503,
+     CALL = 504,
+     RETURNS = 505,
+     DO = 506,
+     EXCLUSIVE = 507,
+     PREFETCH = 508,
+     SQLSTATE_L = 509,
+     SQLWARNING = 510,
+     SQLEXCEPTION = 511,
+     EXIT = 512,
+     RESIGNAL = 513,
+     REVOKE = 514,
+     PASSWORD = 515,
+     OFF = 516,
+     LOGX = 517,
+     TIMESTAMP = 518,
+     DATE_L = 519,
+     DATETIME = 520,
+     TIME = 521,
+     EXECUTE = 522,
+     REXECUTE = 523,
+     MODULE = 524,
+     BEGIN_FN_X = 525,
+     BEGIN_CALL_X = 526,
+     BEGIN_OJ_X = 527,
+     BEGIN_U_X = 528,
+     CONVERT = 529,
+     CASE = 530,
+     WHEN = 531,
+     IDENTITY = 532,
+     LEFT = 533,
+     RIGHT = 534,
+     FULL = 535,
+     OUTER = 536,
+     INNER = 537,
+     CROSS = 538,
+     NATURAL = 539,
+     USING = 540,
+     JOIN = 541,
+     USE = 542,
+     COALESCE = 543,
+     CAST = 544,
+     NULLIF = 545,
+     NEW = 546,
+     CORRESPONDING = 547,
+     BEST = 548,
+     TOP = 549,
+     PERCENT = 550,
+     TIES = 551,
+     XML = 552,
+     XPATH = 553,
+     PERSISTENT = 554,
+     INTERVAL = 555,
+     INCREMENT_L = 556,
+     COMPRESS = 557,
+     PARTITION = 558,
+     DTD = 559,
+     INTERNAL = 560,
+     EXTERNAL = 561,
+     COLLATE = 562,
+     NCHAR = 563,
+     NVARCHAR = 564,
+     INCREMENTAL = 565,
+     NONINCREMENTAL = 566,
+     PURGE = 567,
+     SNAPSHOT = 568,
+     IDENTIFIED = 569,
+     EXTRACT = 570,
+     KWD_TAG = 571,
+     LEXICAL_ERROR = 572,
+     CURRENT_DATE = 573,
+     CURRENT_TIME = 574,
+     CURRENT_TIMESTAMP = 575,
+     PERMISSION_SET = 576,
+     AUTOREGISTER_L = 577,
+     LIBRARY_L = 578,
+     ASSEMBLY_L = 579,
+     SAFE_L = 580,
+     UNRESTRICTED_L = 581,
+     TRANSACTION_L = 582,
+     ISOLATION_L = 583,
+     LEVEL_L = 584,
+     READ_L = 585,
+     COMMITTED_L = 586,
+     UNCOMMITTED_L = 587,
+     REPEATABLE_L = 588,
+     SERIALIZABLE_L = 589,
+     T_FINAL_AS = 590,
+     T_MIN = 591,
+     T_MAX = 592,
+     T_IN = 593,
+     T_OUT = 594,
+     T_SHORTEST_ONLY = 595,
+     T_DISTINCT = 596,
+     T_EXISTS = 597,
+     T_NO_ORDER = 598,
+     T_NO_CYCLES = 599,
+     T_CYCLES_ONLY = 600,
+     T_END_FLAG = 601,
+     T_DIRECTION = 602,
+     WS_WHITESPACE = 603,
+     WS_SPARQL_SKIP = 604,
+     WS_PRAGMA_LINE = 605,
+     WS_PRAGMA_PREFIX_1 = 606,
+     WS_PRAGMA_PREFIX_2 = 607,
+     WS_PRAGMA_PREFIX_3 = 608,
+     WS_PRAGMA_C_ESC = 609,
+     WS_PGRAGMA_UTF8_ESC = 610,
+     WS_PRAGMA_PL_DEBUG = 611,
+     WS_PRAGMA_SRC = 612,
+     WS_COMMENT_EOL = 613,
+     WS_COMMENT_BEGIN = 614,
+     WS_COMMENT_END = 615,
+     WS_COMMENT_LONG = 616,
+     __COST = 617
+   };
+#endif
+/* Tokens.  */
+#define NAME 258
+#define STRING 259
+#define WSTRING 260
+#define UNAME_LITERAL 261
+#define INTNUM 262
+#define IRI_LIT 263
+#define APPROXNUM 264
+#define NUM_ERROR 265
+#define AMMSC 266
+#define PARAMETER_L 267
+#define NAMED_PARAMETER 268
+#define BEGIN_EQCALL_X 269
+#define HTMLSTR 270
+#define SQL_TSI 271
+#define TIMESTAMP_FUNC 272
+#define BINARYNUM 273
+#define MSSQL_XMLCOL_NAME 274
+#define MSSQL_XMLCOL_NAME1 275
+#define MSSQL_XMLCOL_NAMEYZ 276
+#define MSSQL_XMLCOL_NAMEZ 277
+#define MSSQL_XMLCOL_INTNUM 278
+#define TYPE 279
+#define FINAL_L 280
+#define METHOD 281
+#define CHECKED 282
+#define SYSTEM 283
+#define GENERATED 284
+#define SOURCE 285
+#define RESULT 286
+#define LOCATOR 287
+#define INSTANCE_L 288
+#define CONSTRUCTOR 289
+#define SELF_L 290
+#define OVERRIDING 291
+#define STYLE 292
+#define SQL_L 293
+#define GENERAL 294
+#define DETERMINISTIC 295
+#define NO_L 296
+#define CONTAINS 297
+#define READS 298
+#define DATA 299
+#define DISABLE_L 300
+#define NOVALIDATE_L 301
+#define ENABLE_L 302
+#define VALIDATE_L 303
+#define MODIFIES 304
+#define INPUT 305
+#define CALLED 306
+#define ADA 307
+#define C 308
+#define COBOL 309
+#define FORTRAN 310
+#define MUMPS 311
+#define PASCAL_L 312
+#define PLI 313
+#define NAME_L 314
+#define TEXT_L 315
+#define JAVA 316
+#define INOUT_L 317
+#define REMOTE 318
+#define KEYSET 319
+#define VALUE 320
+#define PARAMETER 321
+#define VARIABLE 322
+#define ADMIN_L 323
+#define ROLE_L 324
+#define TEMPORARY 325
+#define CLR 326
+#define ATTRIBUTE 327
+#define __SOAP_DOC 328
+#define __SOAP_DOCW 329
+#define __SOAP_HEADER 330
+#define __SOAP_HTTP 331
+#define __SOAP_NAME 332
+#define __SOAP_TYPE 333
+#define __SOAP_XML_TYPE 334
+#define __SOAP_FAULT 335
+#define __SOAP_DIME_ENC 336
+#define __SOAP_ENC_MIME 337
+#define __SOAP_OPTIONS 338
+#define FOREACH 339
+#define POSITION_L 340
+#define ARE 341
+#define REF 342
+#define STATIC_L 343
+#define SPECIFIC 344
+#define DYNAMIC 345
+#define COLUMN 346
+#define START_L 347
+#define __TAG_L 348
+#define RDF_BOX_L 349
+#define VECTOR_L 350
+#define FOR 351
+#define ORDER 352
+#define EXCEPT 353
+#define UNION 354
+#define INTERSECT 355
+#define AS 356
+#define DOUBLE_COLON 357
+#define COLON 358
+#define OR 359
+#define AND 360
+#define NOT 361
+#define COMPARISON 362
+#define EQUALS 363
+#define STRING_CONCAT_OPERATOR 364
+#define UMINUS 365
+#define ALL 366
+#define ANY 367
+#define ATTACH 368
+#define ASC 369
+#define AUTHORIZATION 370
+#define BETWEEN 371
+#define BIGINT 372
+#define BREAKUP 373
+#define BY 374
+#define CASCADE 375
+#define CHARACTER 376
+#define CHECK 377
+#define CLOSE 378
+#define COMMIT 379
+#define CONSTRAINT 380
+#define CONTINUE 381
+#define CREATE 382
+#define CUBE 383
+#define CURRENT 384
+#define CURSOR 385
+#define DECIMAL_L 386
+#define DECLARE 387
+#define DEFAULT 388
+#define DELETE_L 389
+#define DESC 390
+#define DISTINCT 391
+#define DOUBLE_L 392
+#define DROP 393
+#define ESCAPE 394
+#define EXISTS 395
+#define FETCH 396
+#define FLOAT_L 397
+#define FOREIGN 398
+#define FOUND 399
+#define FROM 400
+#define GOTO 401
+#define GO 402
+#define GRANT 403
+#define GROUP 404
+#define GROUPING 405
+#define HAVING 406
+#define IN_L 407
+#define INDEX 408
+#define INDEX_NO_FILL 409
+#define INDEX_ONLY 410
+#define INDICATOR 411
+#define INSERT 412
+#define INTEGER 413
+#define INTO 414
+#define IS 415
+#define KEY 416
+#define LANGUAGE 417
+#define ENCODING 418
+#define LIKE 419
+#define NULLX 420
+#define NUMERIC 421
+#define OF 422
+#define ON 423
+#define OPEN 424
+#define OPTION 425
+#define PRECISION 426
+#define PRIMARY 427
+#define PRIVILEGES 428
+#define PROCEDURE 429
+#define PUBLIC 430
+#define REAL 431
+#define REFERENCES 432
+#define RESTRICT 433
+#define ROLLBACK 434
+#define ROLLUP 435
+#define SCHEMA 436
+#define SELECT 437
+#define SET 438
+#define SMALLINT 439
+#define SOME 440
+#define SQLCODE 441
+#define SQLERROR 442
+#define TABLE 443
+#define TO 444
+#define UNIQUE 445
+#define UPDATE 446
+#define USER 447
+#define VALUES 448
+#define VIEW 449
+#define WHENEVER 450
+#define WHERE 451
+#define WITH 452
+#define WORK 453
+#define WITHOUT_L 454
+#define ARRAY 455
+#define CONTIGUOUS 456
+#define OBJECT_ID 457
+#define BITMAPPED 458
+#define UNDER 459
+#define CLUSTER 460
+#define CLUSTERED 461
+#define VARCHAR 462
+#define VARBINARY 463
+#define BINARY 464
+#define LONG_L 465
+#define REPLACING 466
+#define SOFT 467
+#define HASH 468
+#define LOOP 469
+#define IRI_ID 470
+#define IRI_ID_8 471
+#define SAME_AS 472
+#define TRANSITIVE 473
+#define QUIETCAST_L 474
+#define SPARQL_L 475
+#define SHUTDOWN 476
+#define CHECKPOINT 477
+#define BACKUP 478
+#define REPLICATION 479
+#define SYNC 480
+#define ALTER 481
+#define ADD 482
+#define RENAME 483
+#define DISCONNECT 484
+#define MODIFY 485
+#define BEFORE 486
+#define AFTER 487
+#define INSTEAD 488
+#define TRIGGER 489
+#define REFERENCING 490
+#define OLD 491
+#define AGGREGATE 492
+#define FUNCTION 493
+#define OUT_L 494
+#define HANDLER 495
+#define IF 496
+#define THEN 497
+#define ELSE 498
+#define ELSEIF 499
+#define WHILE 500
+#define BEGINX 501
+#define ENDX 502
+#define RETURN 503
+#define CALL 504
+#define RETURNS 505
+#define DO 506
+#define EXCLUSIVE 507
+#define PREFETCH 508
+#define SQLSTATE_L 509
+#define SQLWARNING 510
+#define SQLEXCEPTION 511
+#define EXIT 512
+#define RESIGNAL 513
+#define REVOKE 514
+#define PASSWORD 515
+#define OFF 516
+#define LOGX 517
+#define TIMESTAMP 518
+#define DATE_L 519
+#define DATETIME 520
+#define TIME 521
+#define EXECUTE 522
+#define REXECUTE 523
+#define MODULE 524
+#define BEGIN_FN_X 525
+#define BEGIN_CALL_X 526
+#define BEGIN_OJ_X 527
+#define BEGIN_U_X 528
+#define CONVERT 529
+#define CASE 530
+#define WHEN 531
+#define IDENTITY 532
+#define LEFT 533
+#define RIGHT 534
+#define FULL 535
+#define OUTER 536
+#define INNER 537
+#define CROSS 538
+#define NATURAL 539
+#define USING 540
+#define JOIN 541
+#define USE 542
+#define COALESCE 543
+#define CAST 544
+#define NULLIF 545
+#define NEW 546
+#define CORRESPONDING 547
+#define BEST 548
+#define TOP 549
+#define PERCENT 550
+#define TIES 551
+#define XML 552
+#define XPATH 553
+#define PERSISTENT 554
+#define INTERVAL 555
+#define INCREMENT_L 556
+#define COMPRESS 557
+#define PARTITION 558
+#define DTD 559
+#define INTERNAL 560
+#define EXTERNAL 561
+#define COLLATE 562
+#define NCHAR 563
+#define NVARCHAR 564
+#define INCREMENTAL 565
+#define NONINCREMENTAL 566
+#define PURGE 567
+#define SNAPSHOT 568
+#define IDENTIFIED 569
+#define EXTRACT 570
+#define KWD_TAG 571
+#define LEXICAL_ERROR 572
+#define CURRENT_DATE 573
+#define CURRENT_TIME 574
+#define CURRENT_TIMESTAMP 575
+#define PERMISSION_SET 576
+#define AUTOREGISTER_L 577
+#define LIBRARY_L 578
+#define ASSEMBLY_L 579
+#define SAFE_L 580
+#define UNRESTRICTED_L 581
+#define TRANSACTION_L 582
+#define ISOLATION_L 583
+#define LEVEL_L 584
+#define READ_L 585
+#define COMMITTED_L 586
+#define UNCOMMITTED_L 587
+#define REPEATABLE_L 588
+#define SERIALIZABLE_L 589
+#define T_FINAL_AS 590
+#define T_MIN 591
+#define T_MAX 592
+#define T_IN 593
+#define T_OUT 594
+#define T_SHORTEST_ONLY 595
+#define T_DISTINCT 596
+#define T_EXISTS 597
+#define T_NO_ORDER 598
+#define T_NO_CYCLES 599
+#define T_CYCLES_ONLY 600
+#define T_END_FLAG 601
+#define T_DIRECTION 602
+#define WS_WHITESPACE 603
+#define WS_SPARQL_SKIP 604
+#define WS_PRAGMA_LINE 605
+#define WS_PRAGMA_PREFIX_1 606
+#define WS_PRAGMA_PREFIX_2 607
+#define WS_PRAGMA_PREFIX_3 608
+#define WS_PRAGMA_C_ESC 609
+#define WS_PGRAGMA_UTF8_ESC 610
+#define WS_PRAGMA_PL_DEBUG 611
+#define WS_PRAGMA_SRC 612
+#define WS_COMMENT_EOL 613
+#define WS_COMMENT_BEGIN 614
+#define WS_COMMENT_END 615
+#define WS_COMMENT_LONG 616
+#define __COST 617
+
+
+
+
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE
+#line 68 "./sql3.y"
+{
+  long intval;
+  char *strval;
+  sql_tree_t *tree;
+  caddr_t box;
+  dk_set_t list;
+  long subtok;
+  sqlp_join_t join;
+}
+/* Line 1529 of yacc.c.  */
+#line 783 "sql3.h"
+	YYSTYPE;
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
+#endif
+
+extern YYSTYPE yylval;
+

@@ -1,0 +1,1185 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix virtrdf: <http://www.openlinksw.com/schemas/virtrdf#> .
+
+<!--  -->
+<!-- $Id$ -->
+<!--  -->
+<!-- This file is part of the OpenLink Software Virtuoso Open-Source (VOS) -->
+<!-- project. -->
+<!--  -->
+<!-- Copyright (C) 1998-2012 OpenLink Software -->
+<!--  -->
+<!-- This project is free software; you can redistribute it and/or modify it -->
+<!-- under the terms of the GNU General Public License as published by the -->
+<!-- Free Software Foundation; only version 2 of the License, dated June 1991. -->
+<!--  -->
+<!-- This program is distributed in the hope that it will be useful, but -->
+<!-- WITHOUT ANY WARRANTY; without even the implied warranty of -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU -->
+<!-- General Public License for more details. -->
+<!--  -->
+<!-- You should have received a copy of the GNU General Public License along -->
+<!-- with this program; if not, write to the Free Software Foundation, Inc., -->
+<!-- 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA -->
+<!--  -->
+<!--  -->
+<!-- Flags that describe restrictions on possible values of the variable or the use of the var -->
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR__ALL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0xFFFF -- OR of everything, do not forget to edit when new bits are added." ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_SPRINTFF>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0001 -- The values of a variable is always made according to one of specified formats" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_IS_REF>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0002 -- The value is a node reference, IRI or blank" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_IS_IRI>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0004 -- The value is an IRI node reference" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_IS_BLANK>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0008 -- The value is a blank node reference" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_IRI_CALC>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0010 -- The variable an IRI calculated by other data, e_iri_classes of equiv class will contain known formats of possible values of the variable" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_IS_LIT>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0020 -- The value is a literal" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_TYPED>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0040 -- The value is a literal of a known type and the type is saved as e_datatype of equiv class" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_FIXED>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0080 -- The value is known and e_fixedvalue contains either SQL representation of the literal or IRI string of the IRI node reference" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_NOT_NULL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0100 -- The variable is always bound, can't be NULL" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_LONG_EQ_SQL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0200 -- The value is a number of some sort or a datetime or NULL, not string or RDF box." ;
+	.
+<!-- Flags listed below this line are for temporary use, they never appear in databases sho they may be changed. -->
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_ALWAYS_NULL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0400 -- The variable is never bound, can't have value other than NULL" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_GLOBAL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0800 -- The variable is a global parameter" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_EXTERNAL>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x1000 -- The variable is in scalar subquery and is bound outside" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_EXPORTED>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x2000 -- The variable is exported to the final result-set" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_CONFLICT>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x4000 -- The variable should match conflicting requirements or should appear in the result set of an empty union, so it is never bound" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_VARR_EQ_VAR>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x8000 -- This is to indicate that the equivalence class saves some equalities that no longer exists as filters" ;
+	.
+<!-- Flags of actions to be done in case of match of triple pattern to conditions of the quad map -->
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QM_EMPTY>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0002 -- The quad map does not contain real mapping but it's a root of tree of submaps and it can set a common 'exclusive'" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QM_EXCLUSIVE>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0004 -- The quad map is an almost-exclusive storage for triples whose fields match fixed fields of the map. Red cut in the pattern matching search. This takes precedence over SPART_QM_SOFT_EXCLUSIVE" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QM_OK_FOR_ANY_QUAD>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0008 -- The quad map may contain any quad so it can be used as a default qm of the storage" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QM_SOFT_EXCLUSIVE>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0010 -- The quad map is either exclusive or not, discretion is made by compiler" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QS_NO_IMPLICIT_USER_QM>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0001 -- The quad storage disables user quad maps for triple patterns with unbound graph" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SPART_QS_BLOCK_DEFAULT_QM>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0002 -- The quad storage disables the use of default quad map and signals an error if no other qm matches" ;
+	.
+<!-- Flags that are responsible for various serialization features. -->
+<!-- Some features are labeled as "blocking", because if such a feature is required but flag is not set, an error is signaled. -->
+<!-- An occurrence of a non-blocking feature provides some hint to the optimizer of the SPARQL service endpoint; a blocking one alters semantics. -->
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_QUAD_MAP>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0001 -- Allows the use of QUAD MAP groups in the output" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_OPTION>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0002 -- Allows the use of OPTION keyword in the output" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_BREAKUP>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0004 -- Flags if BREAKUP hint options should be printed, this has no effect w/o SSG_SD_OPTION" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_PKSELFJOIN>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0008 -- Flags if PKSELFJOIN hint options should be printed, this has no effect w/o SSG_SD_OPTION" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_RVR>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0010 -- Flags if RVR hint options should be printed, this has no effect w/o SSG_SD_OPTION" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_IN>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0020 -- Allows the use of IN operator, non-blocking because can be replaced with '='" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_LIKE>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0040 -- Allows the use of LIKE operator, blocking" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_GLOBALS>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0080 -- Allows the use of global variables (with colon at the front of the name), blocking in most of cases" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_BI>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0100 -- Allows the use of SPARQL-BI extensions, blocking in most of cases" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_VIRTSPECIFIC>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0200 -- Allows the use of Virtuoso-specific features not listed above, say DEFINE, blocking in most of cases" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_VOS_509>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x03FF -- Allows everything that is supported by Virtuoso Open Source 5.0.9" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_SERVICE>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0400 -- Allows the use of SERVICE extension, blocking" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_VOS_5_LATEST>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x0FFF -- Allows everything that is supported by CVS head of Virtuoso Open Source 5.x.x" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_TRANSIT>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x1000 -- Allows the use of transitivity extension, blocking" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_VOS_6>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x1FFF -- Allows everything that is supported by Virtuoso Open Source 6.0.0" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_SPARQL11_DRAFT>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x2000 -- Allows the use of SPARQL 1.1 aggregates, BINDINGS, new built-in functions, MINUS, EXISTS syntax" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SSG_SD_SPARQL11_MORE>
+	rdf:type virtrdf:CDefine ;
+	rdfs:comment  "0x4000 -- Allows the use of SPARQL 1.1 BIND, path expressions, entilement" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-ValRange>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#ValRange>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of set of possible values of a variable or a format or an pattern item" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Natural restrictions on values stored at the field" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Datatype of stored values, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Language, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Value of stored values, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrSprintffs>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Sprintf formats that cover possible IRI values" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrSprintffCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of used items of rvrSprintffs" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrIriClasses>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Possible types of the IRI, if the IRI is calculable" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrIriClassCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of used items of rvrIRIClasses" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrRedCuts>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Impossible values, blocked by option (EXCLUSIVE) of earlier quad maps" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#rvrRedCutCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of used items of rvrRedCuts" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#ValRange> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Don't forget to add NULLS to SPART_RVR_LIST_OF_NULLS when adding fields here -->
+# end of description of rdf_val_range
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapFormat>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of single field where RDF data may come from" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Name used for error messages and debugging" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates that convert raw column into other types (can be applied to both field and not field expression) -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "'short' value template" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfLongTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "'long' value template" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfSqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "'sqlval' value template" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfDatatypeTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "datatype value template, compiler will use qmfDatatypeOfShortTmpl if this one is not set" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfLanguageTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "language value template, compiler will use qmfLanguageOfShortTmpl if this one is not set" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfBoolTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Boolean value template" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates of booleans that tell whether the short is of some sort: -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsrefOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is ref" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsuriOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is uri" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsblankOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is blank node ref" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIslitOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is literal" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsnumericOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is number (unlike SSG_VALMODE_NUM, no DATE/TIME etc., only number)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates of 0/1 integer expressions that tell whether the short is of some sort: -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmf01uriOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is uri, result is 1 or 0" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmf01blankOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... whether the short is blank node ref, result is 1 or 0" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates that convert short value into other types (can be applied to both field and not field expression) -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfLongOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... long from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfSqlvalOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... SQL value from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfDatatypeOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... datatype IRI STRING from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfLanguageOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... language ID STRING from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfBoolOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... boolean value from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIidOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... URI_ID from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfUriOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... URI STRING from short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfStrsqlvalOfShortTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... SQL representation of the STRING value of short" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates of expressions that make short values from other representations -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortOfTypedsqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... makes short by SQL value with specified type and/or language" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortOfSqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... makes short by sqlvalue with no language and a datatype specified by SQL type" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortOfLongTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... makes short by long" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortOfUriTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... makes short by uri" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfShortOfNiceSqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... works like qmfShortOfSqlvalTmpl for values of one selected data type, not suitable for other types" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfDtpOfNiceSqlval>
+	rdf:type rdf:Property ;
+	rdfs:comment  "The 'nice' DTP that is an acceptable type of qmfShortOfNiceSqlvalTmpl, zero or unset if no nice type" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Templates of expressions that find existing short values from other representations -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfExistingShortOfTypedsqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... finds existing obj by SQL value with specified type and/or language" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfExistingShortOfSqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... finds existing obj by sqlvalue with no language and a datatype specified by SQL type" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfExistingShortOfLongTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... finds existing obj by long" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfExistingShortOfUriTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... finds existing obj by uri" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfExistingShortOfNiceSqlvalTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "... works like qmfExistingShortOfSqlvalTmpl for values of one selected data type, not suitable for other types" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Misc -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsBijection>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if the format is bijection so long values are equal IFF short values of the type are equal" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfDerefFlags>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Flags of IRI dereferencing" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsStable>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if sql values are in order IFF of short values are in order" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsSubformatOfLong>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if the format is subformat of LONG valmode" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsSubformatOfLongWhenEqToSql>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if the format is subformat of LONG valmode for values that have same representation in LONG and SQL valmodes" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfIsSubformatOfLongWhenRef>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if the format is subformat of LONG valmode for values that are IRIs or blank nodes" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfCmpFuncName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Name of comparison function that acts like strcmp but args are of this type" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfTypeminTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Template of expn that returns the smallest value of the type of value of arg" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfTypemaxTmpl>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Template of expn that returns the biggest possible value of the type of value of arg" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfWrapDistinct>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if SELECT DISTINCT requires RDF_DIST_SER_LONG/RDF_DIST_DESER_LONG wrapping." ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+<!-- Metadata about values that can be stored in this field -->
+ <http://www.openlinksw.com/schemas/virtrdf#qmfColumnCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of columns of the original data (usually 1, zero if variable and not yet set)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfOkForAnySqlvalue>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Nonzero if the field format can store any possible SQL value (even if the field itself can not)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfUriIdOffset>
+	rdf:type rdf:Property ;
+	rdfs:comment  "The value that should be added to locally stored ref id in order to get portable ref id" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfCustomString1>
+	rdf:type rdf:Property ;
+	rdfs:comment  "The value that can be used as a value of ^{custom-string-1}^ in templates" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfArgDtps>
+	rdf:type rdf:Property ;
+	rdfs:comment  "String of dtp_t bytes, can be used as a value of ^{opt-comma-arg-dtps}^ in templates" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfSuperFormats>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Array of formats that can store any value that current format can store" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapFormat> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrSprintffs>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmfValRange-rvrSprintffCount>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of qm_format
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapATable>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of single source RDBMS table alias" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvaAlias>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Table alias where the column comes from" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvaTableName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Column name" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of qm_atable
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapColumn>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of single source RDBMS column" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvcAlias>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Table alias where the column comes from" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvcColumnName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Column name" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvcColumnFromIRI>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of qm_column
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapFText>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Free text or geo parameters of a quad map value" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftAlias>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Alias of a table with free-text data" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftAuxAlias>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Alias of a table that links free-text data back to object (if needed)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftTableName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Name of a table with free-text data" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftAuxTableName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Name of a table that links free-text data back to object (if needed)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftColumnName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Name of a column with free-text data" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftConds>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Templates of filters and join conditions related to the free-text indexing table" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvftXmlIndex>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Flags if the free-text index is XML so can use xcontains (ditto xpath_contains)" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of qm_ftext
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapValue>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of one of four column patterns of a mapping pattern" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvTableName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Table name that is used if no alias is used" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvATables>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Aliased tables whose aliases are used in columns" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapATable> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvColumns>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Relational columns used as a source for qmvFormat" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapColumn> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvConds>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Templates of filters and join conditions related to the value" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvFormat>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Quad map format used to convert relational data into RDF nodes" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvFText>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Free text parameters" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvGeo>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Geo parameters" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvColumnsFormKey>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Flags whether columns of qmvColumns form a unique key of the relational table" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:boolean ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvColumnsToIRI>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvIriClass>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Known IRI class, if the IRI is calculable" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Natural restrictions on values stored at the field" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Datatype of stored values, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Language, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmvRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Value of stored values, if fixed" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of qm_value
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadMap>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Description of single mapping pattern, including its subpatterns" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmGraphRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmGraphRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmGraphRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmGraphRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmSubjectRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmSubjectRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmSubjectRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmSubjectRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPredicateRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPredicateRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPredicateRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPredicateRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmObjectRange-rvrRestrictions>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmObjectRange-rvrDatatype>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmObjectRange-rvrLanguage>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:anyURI ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmObjectRange-rvrFixedValue>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmGraphMap>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Graph map if triple has a variable in graph position" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmSubjectMap>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Subject map if triple has a variable in subject position" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPredicateMap>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Predicate map if triple has a variable in predicate position" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmObjectMap>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Object map if triple has a variable in object position" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmTableName>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Table name where mapped rows are from, if this is the only table. Use only if there's no alias and hence no qmvATable" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmATables>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Aliased tables whose aliases are used in qmConds but not in qmvConds" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapATable> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmConds>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Join conditions and filters not included into qmvConds of columns" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmTableRowFilter>
+	rdf:type rdf:Property ;
+	rdfs:comment  "DEPRECATED Filter expression that is true for rows that should be mapped, will appear in WHERE clauses" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmUserSubMaps>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Array of user-defined submaps, should never appear in MJVs or default storage" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmMatchingFlags>
+	rdf:type rdf:Property ;
+	rdfs:comment  "What should be done in case of match of triple pattern to conditions of the quad map" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmPriorityOrder>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Integer to specify default order in parent's qmUserSubMaps" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmAliasesKeyrefdByQuad>
+	rdf:type rdf:Property ;
+	rdfs:comment  "List of aliases such that any quad made by the quad map can be made from exactly one row from the alias, so quad identifies the row there" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmAllATableUses>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Complete list of all qmatu made for qmATables and qmvATables, sorted alphabetically by qmatu_alias" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmAllATableUseCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of used elements in qmAllATableUseCount" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmAllConds>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Complete list of all join conditions from qmConds and qmvConds, sorted alphabetically" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qmAllCondCount>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Number of used elements in qmAllCondCount" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of quad_map
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-SparqlMacroLibrary>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "Library of SPARQL macro definitions that are loaded automatically when the storage is used" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#smlSourceText>
+	rdf:type rdf:Property ;
+	rdfs:comment  "Source text of the library" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary> ;
+	rdfs:Range xsd:string ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#smlCompilationState>
+	rdf:type rdf:Property ;
+	rdfs:comment  "2 for completely (and successfull compilation, 1 for compilation in progress, 0 for not even started" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary> ;
+	rdfs:Range xsd:integer ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#smlIncludes>
+	rdf:type rdf:Property ;
+	rdfs:comment  "IRIs of included macro libraries" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#smlList>
+	rdf:type rdf:Property ;
+	rdfs:comment  "The compiled library" ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of sparql_macro_library
+
+ <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadStorage>
+	rdf:type rdfs:Class ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#QuadStorage>
+	rdf:type rdfs:Class ;
+	rdfs:comment  "All mapping patterns plus tracking info" ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsMjvMaps>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsUserMaps>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsDefaultMap>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#QuadMap> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsMacroLibrary>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range  <http://www.openlinksw.com/schemas/virtrdf#SparqlMacroLibrary> ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsMatchingFlags>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range xsd:unsignedInteger ;
+	virtrdf:cardinality 'single' ;
+	.
+ <http://www.openlinksw.com/schemas/virtrdf#qsAlterInProgress>
+	rdf:type rdf:Property ;
+	rdfs:Domain  <http://www.openlinksw.com/schemas/virtrdf#QuadStorage> ;
+	rdfs:Range xsd:any ;
+	virtrdf:cardinality 'single' ;
+	.
+# end of description of quad_storage
+

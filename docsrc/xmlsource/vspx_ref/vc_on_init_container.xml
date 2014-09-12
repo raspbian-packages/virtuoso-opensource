@@ -1,0 +1,21 @@
+<refentry id="vc_on_init_container">
+  <refmeta>
+  <refentrytitle>on-init-container</refentrytitle>
+  <refmiscinfo>vspx_control</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+  <refname>on-init-container</refname>
+  <refpurpose>This is identical to v:on-init.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+   <funcsynopsis id="vc_syn_on_init_container">
+    <funcprototype id="vc_proto_on_init_container">
+      <funcdef>
+            &lt;<function>on-init-container</function>&gt;(EventHandler)&lt;/<function>on-init-container</function>&gt;</funcdef>
+    </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="vc_desc_on_init_container">
+  <title>Description</title>
+  </refsect1>
+ </refentry>

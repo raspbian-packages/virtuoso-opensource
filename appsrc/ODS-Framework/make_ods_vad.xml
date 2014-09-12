@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!DOCTYPE sticker SYSTEM "vad_sticker.dtd">
+<sticker version="1.0.010505A" xml:lang="en-UK">
+<caption>
+  <name package="Framework">
+    <prop name="Title" value="ODS Framework"/>
+    <prop name="Developer" value="OpenLink Software"/>
+    <prop name="Copyright" value="(C) 1998-2012 OpenLink Software"/>
+    <prop name="Download" value="http://www.openlinksw.com/virtuoso"/>
+    <prop name="Download" value="http://www.openlinksw.co.uk/virtuoso"/>
+  </name>
+  <version package="1.87.26">
+    <prop name="Release Date" value="2012-08-02 00:24"/>
+    <prop name="Build" value="Release, optimized"/>
+  </version>
+</caption>
+<dependencies/>
+<procedures uninstallation="supported">
+  <sql purpose="pre-install"><![CDATA[
+    declare ini, case_mode, cname, dyn, is_api varchar; 
+    ini := virtuoso_ini_path (); 
+    case_mode := cfg_item_value (ini, 'Parameters', 'CaseMode'); 
+    cname := cfg_item_value (ini, 'URIQA', 'DefaultHost'); 
+    dyn := cfg_item_value (ini, 'URIQA', 'DynamicLocal'); 
+    is_api := registry_get ('__blog_api_tests__'); 
+    if (lt (sys_stat ('st_dbms_ver'), '05.00.3028') or __proc_exists ('HTTP_STATUS_SET',2) is null) 
+      { 
+         result ('ERROR', 'The ods package requires server version 05.00.3028 or greater'); 
+	 signal ('FATAL', 'The ods package requires server version 05.00.3028 or greater'); 
+      } 
+     if (VAD_CHECK_VERSION ('wa') is not null and VAD_CHECK_VERSION ('Framework') is null) 
+       {
+          DB.DBA.VAD_RENAME ('wa', 'Framework');
+       }
+      if (not isstring (is_api) and case_mode <> '2') { 
+	  result ('ERROR', 'The ODS Framework needs server to run in CaseMode 2, please check your INI file.'); 
+	  signal ('FATAL', 'The ODS Framework needs server to run in CaseMode 2, please check your INI file.'); 
+	}
+      if (not isstring (is_api) and length (cname) = 0) { 
+	  result ('ERROR', 'The ODS Framework needs DefaultHost to be specified in URIQA INI section.'); 
+	  signal ('FATAL', 'The ODS Framework needs DefaultHost to be specified in URIQA INI section.'); 
+ 	}
+  ]]></sql>
+  <sql purpose="post-install"></sql>
+</procedures>
+<ddls>
+  <sql purpose="pre-install"></sql>
+  <sql purpose="post-install">
+    <![CDATA[
+      declare rc any; 
+      registry_set('_wa_path_', '/DAV/VAD/wa/');
+      registry_set('_wa_version_', '1.87.26');
+      registry_set('_wa_build_', '2012-08-02 00:24');
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/sn.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/hosted_services.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/registration_xml.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/tags.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/dashboard.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/wa_search_procs.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/wa_maps.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/provinces.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/wa_template.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/url_rew.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/gdata.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/openid.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/ldap.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/oauth/oauth.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/facebook.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/nav_framework_api.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/semping.sql', 1, 'report', 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/trs_export.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/trs_export_all.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/href_export.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/foaf.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/ufoaf.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      rc := DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/ufoaf.xml', 'xml-sql-encoding', 'UTF-8', 'dav', null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/afoaf.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      DB.DBA.DAV_PROP_SET_INT ('/DAV/VAD/wa/sfoaf.xml', 'xml-template', 'execute', http_dav_uid (), null, 0, 0, 1);
+      vhost_remove (lpath=>'/wa');
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/web_svc.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/ods_api.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/ods_api_users.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/ods_controllers.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/sioc.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/scot.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/sql_rdf.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/user_rdf.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/sioc_priv.sql', 1, 'report', 1);
+      DB.DBA."RDFData_MAKE_DET_COL" ('/DAV/VAD/wa/RDFData/', sioc..get_graph (), NULL);
+      DB.DBA.wa_users_rdf_data_det_upgrade ();
+      DB.DBA.VHOST_REMOVE (lpath=>'/ods/data/rdf');
+      DB.DBA.VHOST_DEFINE (lpath=>'/ods/data/rdf', ppath=>'/DAV/VAD/wa/RDFData/All/', is_dav=>1, vsp_user=>'dba');
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/opensocial.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/oauth/foaf_ssl.sql', 0, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/webfinger.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/salmon.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/SWD.sql', 1, 'report', 1);
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/ods_upstream.sql', 1, 'report', 1);
+      DB.DBA.VHOST_REMOVE (lpath=>'/oauth');
+      DB.DBA.VHOST_DEFINE (lpath=>'/oauth', ppath=>'/DAV/VAD/wa/oauth/', vsp_user=>'dba', is_dav=>1, is_brws=>0, def_page=>'index.vsp');
+      if (ODS.ODS_API.getDefaultHttps () is not null) 
+	DB.DBA.wa_redefine_vhosts (); 
+	    DB.DBA.WA_USER_OL_ACCOUNTS_SET_UP (); 
+    ]]>
+  </sql>
+  <sql purpose="pre-uninstall">
+    <![CDATA[
+      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/wa/drop.sql', 1, 'report', 1);
+    ]]>
+  </sql>
+</ddls>
+<resources>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/SWD.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/aboutus.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/access_box.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/access_dropbox.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/access_google.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/access_skydrive.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/accounts.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/add_rule.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/admin.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/advertise.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/afoaf.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/apml.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_instance_limits.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_menu.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_menu_settings.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_my_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_sent_inv.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/app_settings.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/back_nav.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/cert.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/LICENSE.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/ckeditor.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/config.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/contents.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/images/spacer.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/lang/en.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/clipboard/dialogs/paste.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/colordialog/dialogs/colordialog.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/dialog/dialogDefinition.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/find/dialogs/find.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/flash/dialogs/flash.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/flash/images/placeholder.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/image/dialogs/image.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/link/dialogs/anchor.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/link/dialogs/link.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/link/images/anchor.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/pastetext/dialogs/pastetext.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/scayt/dialogs/options.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/scayt/dialogs/toolbar.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_address.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_blockquote.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_div.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h2.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h3.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h4.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h5.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_h6.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_p.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/showblocks/images/block_pre.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/dialogs/smiley.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/angel_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/angry_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/broken_heart.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/confused_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/cry_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/devil_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/embaressed_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/envelope.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/heart.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/kiss.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/lightbulb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/omg_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/regular_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/sad_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/shades_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/teeth_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/thumbs_down.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/thumbs_up.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/tounge_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/whatchutalkingabout_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/smiley/images/wink_smile.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/specialchar/dialogs/specialchar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/specialchar/lang/en.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/styles/styles/default.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/table/dialogs/table.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/tabletools/dialogs/tableCell.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/templates/dialogs/templates.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/templates/templates/default.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/templates/templates/images/template1.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/templates/templates/images/template2.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/templates/templates/images/template3.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/wsc/dialogs/ciframe.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/wsc/dialogs/tmpFrameset.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/wsc/dialogs/wsc.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/plugins/wsc/dialogs/wsc.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/dialog.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/editor.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/icons.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/icons_rtl.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/dialog_sides.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/dialog_sides.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/dialog_sides_rtl.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/mini.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/noimage.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/sprites.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/sprites_ie6.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/images/toolbar_start.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/skin.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/skins/kama/templates.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ckeditor/themes/default/theme.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/common.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/common.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/community.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/app_inst_menu.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/app_search.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/apps.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/check.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/check_register.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/dashboard.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/dashboard_style.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/dav_browser.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/help.xml" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/help.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/home.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/inst.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/login.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/make_sp.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/map_control.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/map_control.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/members.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/membership.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/ods_bar.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/page.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/register.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/render.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/rss2atom.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/rss2rdf.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/rss2xbel.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/services.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/settings.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/site_home.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/store.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/comp/tagging.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/conf.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/conf_app.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/contact.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/dashboard.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/dav.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/default.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/delete_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/dock.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/drop.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/drop_sioc_proc.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/drop_sioc_trig.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/dropbox_access.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/edit_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/edit_interests_popup.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/edit_rule.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/error.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/facebook.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/facebook_helper.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/faq.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/fb_dummy.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/fb_front.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/fb_popup.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/foaf.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/foaf.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/foaf.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/freeze.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/gdata.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/generic.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/get_tags_popup.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/google_access.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/gtags.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/help.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/home.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/home.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/hosted_services.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/href_export.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/image.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/Empty-folder.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/Folder-full.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/Folder-up.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/Folder.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/Open-folder.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/PoweredByVirtuoso.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/actionbarback1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_blog.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_bookmarks.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_briefcase.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_calendar.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_discussion.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_feeds.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_message.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_newsdesk.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_photos.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_poll.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_webmail.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/app_ads/ods_bann_wiki.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/atom03.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/atom10.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/back_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/banbck1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/binding.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/blue-icon-16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/bookmark.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/bottom_bkg_grad.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/boxheader1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/business.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/button_back.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/conductor_lg.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/contact.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/containercorner1.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/containercorner2.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/close_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/confg_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/edit_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/file_gen_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/folder_new.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/foldr_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/foldr_up_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/go_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/open_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/dav_browser/up_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/default_widget.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/document.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/eaeaeecorner.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/excl_16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/exit.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/facebook_logo_full.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/foaf.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/folder.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/folder_full.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/folder_up.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/footer_widget.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/globe_xl.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/gohome.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/help.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/about_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/add_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/add_16_gr.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/apps_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/apps_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/audio_16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/backup_database_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/blog_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/blog_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/close_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/close_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/confg_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/contact.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/database_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/dav_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/del_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/disconnect_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/docs_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/docs_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/edit_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/enews_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/enews_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/facebook_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/favs_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/filter_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/filter_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/filter_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/first_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/foaf.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/foldr_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/go_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/group_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/group_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/last_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/link_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/lock_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/mail_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/mail_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/mail_new.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/messagebox_warning.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/minus.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/new_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/next_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/odrive_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/odrive_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_ab_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_ab_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_ab_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_bookmarks_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_bookmarks_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_bookmarks_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_briefcase_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_briefcase_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_briefcase_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_calendar_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_calendar_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_calendar_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_community_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_community_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_community_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_feeds_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_feeds_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_feeds_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_gallery_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_gallery_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_gallery_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_grey_poll_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_grey_poll_new_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_grey_poll_public_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_im_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_im_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_im_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_mail_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_mail_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_mail_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_poll_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_poll_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_poll_new_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_poll_public_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_poll_shared_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_weblog_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_weblog_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_weblog_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_wiki_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_wiki_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ods_wiki_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ogallery_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ogallery_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/open_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/orderdown_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/orderup_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/plus.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/polls_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/polls_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/prefs_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/previous_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/rdf_11.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/ref_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/rss-icon-12.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/sioc_button.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/smarrblk.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/stop_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/stop_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/table_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/tour_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/trash_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/unlock_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/up_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/user_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/user_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/vcard.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/web_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/web_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/wiki_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/icons/wiki_24.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/info.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/lft_nav_grad1.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/linkedin-large.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/lock.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/login-bg.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/mail_16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/mail_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/main_bkg_grad.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/menu_dd_handle.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/missing_person_tnail.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/missing_profile_picture.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/myoplbanner2.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/nav_arrrow1.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/navlv1default.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/navlv1sel.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/navlv2default.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/news8icon.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Ajax_throbber.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Blank.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Combobox_select.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Combobutton_select.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Combolist_select.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_file.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_folder.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_go.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_new_folder.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_throbber.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_throbber_disabled.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_up.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_view_details.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Dav_view_icons.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Grid_asc.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Grid_desc.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Grid_header.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Grid_header_hover.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Grid_none.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/LoDLogo.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MSWin_lt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MSWin_rt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_blank.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_close.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_close_hover.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_left.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_lt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_maximize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_maximize_hover.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_minimize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_minimize_hover.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_right.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_rt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MacWin_top.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MsWin_close.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MsWin_maximize.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MsWin_minimize.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/MsWin_resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_first.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_help.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_last.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_next.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_prev.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_rdf.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_relations.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_search.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RDF_xhtml.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_close.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_lb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_lb.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_lt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_lt.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_rb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_rb.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_rt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RectWin_rt.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RoundWin_close.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/RoundWin_resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Slider.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Timeline_circle.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Timeline_zigzag.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_blank.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_dots-full.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_dots-horiz.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_dots-part.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_leaf.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_minus.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_node-collapsed.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_node-expanded.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_RDFB_plus.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_blank.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_dots-full.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_dots-horiz.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_dots-part.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_leaf.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_minus.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_node-collapsed.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_node-expanded.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/Tree_plus.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_close.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_contentbg.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_lb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_lt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_rb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_rt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/WinODS_titlebg.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/arrow_down_anim.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/cancel.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/clipOff.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/clipOn.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/drag.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/icon_find.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/icon_views.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/01.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/02.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/03.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/04.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/05.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/06.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/07.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/08.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/09.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/10.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/11.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/12.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/book.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/camera.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/car.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/coffee.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/creditcards.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/dollar.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/drink.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/football.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/house.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/info.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/mail.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p01.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p02.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p03.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p04.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p05.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p06.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p07.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p08.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p09.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p10.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p11.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/p12.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/shield.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/shoppingcart.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/markers/star.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/progress.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/shadow_bottom.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/shadow_corner.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/shadow_right.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/submenu.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/sw-cube.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/throbber.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/throbber_small.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/virt_power_no_border.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_arrow_lb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_arrow_lt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_arrow_rb.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_arrow_rt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_b.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_l.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_lb.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_lt.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_r.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_rb.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_resize.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_rt.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/oat/winround_t.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_banner.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_banner_32.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_bar_handle_c.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_bar_handle_l.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_bar_handle_m.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_button_32.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_main_footer.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/ods_signin_container1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odsbar_spacer.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odslogo_200.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odslogo_200x25.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odslogosml.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odslogosml2.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/odslogosml_new.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/open_folder.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/openid_trans_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/opensearch.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/opl.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/opslogobanner2_sml3.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/opsys_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/orange-icon-16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/profile.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/profile_small.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/rdf-icon-16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/rdf.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/rss201.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/search.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/search.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sel_nav2_grad2.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sel_nav_grad2.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/select.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/service.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/amazon.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/ameba.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/backtype.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/baidu.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/blog.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/brightkite.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/dailymotion.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/delicious.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/digg.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/diigo.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/disqus.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/facebook.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/feed.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/flickr.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/fotolog.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/friendfeed.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/furl.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/goodreads.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/google.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/googlereader.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/googleshared.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/googletalk.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/hatena.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/identica.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/ilike.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/intensedebate.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/jaiku.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/joost.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/lastfm.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/librarything.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/linkedin.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/livejournal.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/magnolia.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/meneame.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/misterwong.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/mixx.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/myspace.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/netflix.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/netvibes.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/pandora.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/photobucket.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/picasa.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/plurk.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/polyvore.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/pownce.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/reddit.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/seesmic.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/skyrock.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/slideshare.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/smotri.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/smugmug.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/stumbleupon.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/tipjoy.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/tumblr.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/twelveseconds.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/twine.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/twitter.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/upcoming.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/vimeo.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/wakoopa.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/yahoo.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/yelp.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/youtube.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/services/zooomr.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/side_box_bkg_grad.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sign-in-with-twitter-d.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sioc_button.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sioc_button.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/default_widget.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/menu_dd_handle_close.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/menu_dd_handle_close_h.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/navlv1default.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/navlv2default.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/nicubunu_Abstract_people.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/notify_bkg.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/notify_remove_btn.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/ods_main_footer.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/settings_btn.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/settings_btn_h.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/sw-cube.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/virt_power_no_border.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/default/w_title_bar_btn_h.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_first.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_first_gr.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_last.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_last_gr.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_next.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_next_gr.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_prev.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/skin/pager/p_prev_gr.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sky_blu_grad.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/sky_blu_grad.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/slnav2.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/slvnav.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/stl_blu1_grad.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/stl_blu2_grad.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/t_default.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/tab_r_bg.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/tablv1default.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/tablv1sel.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/throbber.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/unlock.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vblog2_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vblog_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vcard.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vdocs2_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vdocs_32.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vert-line.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vglobe_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/vgress.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/virt.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/virt_power_no_border.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/virtuoso_banner.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/virtuosologo.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/wa_thin400_2.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/wa_thin550.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/wait_16.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/warn_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/wnew_widget.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/xbel01.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/yac_banner.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/yac_banner.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/images/yac_splash.jpg" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/index.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/index.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/index.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/index.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/index_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/init.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/inst_ping.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/join.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ldap.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ldap_search.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/linkedin_login.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/login.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/login.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/login_keys.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/mail.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/mail_preview.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/map_svc.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/mc.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/member.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/member_edit.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/members.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/members_inv.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/mm_menu.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/moat.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/moat_ruleset_tags.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/moat_tags.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/mv.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/myhome.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/nav_framework.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/nav_framework.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/nav_framework_api.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/new_inst.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/OpenLayers.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/ajax.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/anchor.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/animation.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/barchart.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/bezier.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/bindings.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/calendar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/canvas.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/color.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/combobox.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/combobutton.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/combolist.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/connection.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/crypto.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/datasource.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dav.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/declarative.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dereference.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dialog.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dimmer.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dock.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/drag.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/dstransport.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/fisheye.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/form.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/formobject.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/fresnel.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/geometry.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/ghostdrag.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/graph.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/graphsidebar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/graphsvg.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/grid.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/instant.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/jsobj.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/json.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/keyboard.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/layers.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/linechart.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/loader.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/location.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/macwin.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/map.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/menu.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/mswin.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/n3.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/notify.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/panelbar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/piechart.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/pivot.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/profiler.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/quickedit.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rdf.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rdfbrowser.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rdfmini.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rdfstore.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rdftabs.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rectwin.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/resize.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rotator.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/roundwin.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/rssreader.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/schema.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/simplefx.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/slidebar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/slider.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/soap.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/sparkline.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/sparql.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/sqlquery.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/statistics.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/grid.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/pivot.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/rdftabs.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/timeline.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/webclip.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/webdav.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/winmac.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/winms.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/winods.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/winrect.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/styles/winround.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/svg.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/svgsparql.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/tab.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/tagcloud.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/ticker.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/timeline.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/tlscale.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/toolbar.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/tree.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/upload.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/validation.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/webclip.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/webclipbinding.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/win.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/window.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/ws.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xml.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xmla.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xpath.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/designview.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/formview.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/fresnel2html.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/grid.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/pivotview.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/query.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/rdfbrowser.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oat/xslt/tree.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/default.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/error.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/foaf_ssl.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/del_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/edit_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/messagebox_warning.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/oauth.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/ods_main_footer.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/ods_signin_container1.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/odslogo_200.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/stl_blu1_grad.gif" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/virt_power_no_border.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/images/warn_16.png" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/index.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/login.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/login.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/make_vad.sh" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/oauth.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/oauth_apps.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/oauth_authorize.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/oauth_error.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/sel_user.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/sparql.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/sparql_acl.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth/vad_version" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth_apps.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth_authorize.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth_sid.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/oauth_test.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods-bar.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_api.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_api_users.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_bar.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_controllers.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_ubiquity.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_ubiquity.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_ubiquity.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ods_upstream.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid_helper.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid_login.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid_login.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/openid_oauth_test.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/opensocial.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/pass_recovery.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ping_log.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ping_svc.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/popup_browser.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/privacy.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/provinces.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rabuse.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdf_storage.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdf_storage_state.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdfb.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdfb.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdfm.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/rdfm.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/register.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/register.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/registration_xml.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/related_apps.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/s3.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/salmon.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/scot.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/search.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/search_ajax.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/security.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/semping.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/semping_app.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/semping_log.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/server.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/services.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/settings.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sfoaf.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sfront.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sioc.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sioc_priv.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/siocref_qrs.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/site_settings.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_connections.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_delete.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_export.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_make_inv.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_profile.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_rec_inv.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_sent_inv.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_settings.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sn_user_export.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sparql_load.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sparql_save.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/sql_rdf.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/stat.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tags.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tags.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tbl.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/templates/default/default.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/templates/default/home.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/terms.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/SN_INV_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_APPROVE_BY_USER_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_CHANGE_BY_OWNER_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_INV_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_JOIN_APPROVE_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_JOIN_REJECT_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_MEM_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_NOT_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_REG_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_REJECT_BY_USER_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_TERM_BY_OWNER_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tmpl/WS_TERM_BY_USER_TEMPLATE" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/tools.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/trs_export.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/trs_export_all.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/twitter_login.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/typeahead.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/typeahead.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/ufoaf.xml" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uhome.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_acl.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_acls.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_ann.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_buss.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_buss_0.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_buss_1.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_buss_2.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_buss_3.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_bz.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_groups.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_grp.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_knows.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_ldap.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_ldap_include.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_likes.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_nav.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_offerlist.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_others.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_owns.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_0.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_1.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_2.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_3.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_4.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_5.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_personal_6.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_prj.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_pwd.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_related.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_sec.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_svc.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_val.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_validation.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_visb.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_wishlist.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/uiedit_ws.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/url_rew.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/url_rule.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/user_rdf.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/user_template.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/Readme.txt" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/css/users.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/js/users.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.jsp" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.php" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.rb" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/users/users.xsl" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/users_select.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/users_select.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/validate.js" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/vhost.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/vhost_simple.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/view.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/view_file.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/wa_login.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/wa_maps.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/wa_maps.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/wa_search_procs.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/wa_template.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/web_header.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/web_svc.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webfinger.sql" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/webid/webid_check.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/webid/webid_demo.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/webid/webid_demo.php" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/webid/webid_demo.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="http" source="data" target_uri="wa/webid/webid_verify.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webid_check.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webid_demo.html" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webid_demo.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webid_select.vspx" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/webid_verify.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/winrect.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/winround.css" dav_owner="dav" dav_grp="administrators" dav_perm="110100100NN" makepath="yes"/>
+  <file overwrite="yes" type="dav" source="data" target_uri="wa/yadis.vsp" dav_owner="dav" dav_grp="administrators" dav_perm="111101101NN" makepath="yes"/>
+</resources>
+<registry>
+</registry>
+</sticker>
