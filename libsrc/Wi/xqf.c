@@ -38,7 +38,9 @@
 #include "xpf.h"
 #include "xqf.h"
 
-#include "util/pcrelib/pcre.h"
+// Debian maintainer: replaced by external PCRE
+// #include "util/pcrelib/pcre.h"
+#include "pcre.h"
 
 #define ecm_isname(c) \
   ( ((c) & ~0xFF) ? (ecm_utf8props[(c)] & ECM_ISNAME) : \
