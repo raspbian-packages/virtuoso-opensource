@@ -1,0 +1,379 @@
+commit f78a4b20bd38ce064e62bc154dcca8a2109e015a
+Author: Maximiliano Curia <maxy@gnuservers.com.ar>
+Date:   Wed Jun 5 11:26:01 2013 +0200
+
+    Check log fix
+
+diff --git a/appsrc/ODS-Addressbook/make_vad.sh b/appsrc/ODS-Addressbook/make_vad.sh
+index 756dd3a..434bc83 100755
+--- a/appsrc/ODS-Addressbook/make_vad.sh
++++ b/appsrc/ODS-Addressbook/make_vad.sh
+@@ -447,7 +447,7 @@ chmod 644 ods_addressbook_dav.vad
+ chmod 644 ods_addressbook_filesystem.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Blog/make_vad.sh b/appsrc/ODS-Blog/make_vad.sh
+index 9559f77..cd91272 100755
+--- a/appsrc/ODS-Blog/make_vad.sh
++++ b/appsrc/ODS-Blog/make_vad.sh
+@@ -473,7 +473,7 @@ chmod 644 ods_blog_dav.vad
+ #chmod 644 virtuoso.trx
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Bookmark/make_vad.sh b/appsrc/ODS-Bookmark/make_vad.sh
+index fa6b1e7..e982830 100755
+--- a/appsrc/ODS-Bookmark/make_vad.sh
++++ b/appsrc/ODS-Bookmark/make_vad.sh
+@@ -445,7 +445,7 @@ chmod 644 ods_bookmark_dav.vad
+ chmod 644 ods_bookmark_filesystem.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Briefcase/make_vad.sh b/appsrc/ODS-Briefcase/make_vad.sh
+index 89e01ea..e1cb2c4 100755
+--- a/appsrc/ODS-Briefcase/make_vad.sh
++++ b/appsrc/ODS-Briefcase/make_vad.sh
+@@ -468,7 +468,7 @@ chmod 644 ods_briefcase_filesystem.vad
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Calendar/make_vad.sh b/appsrc/ODS-Calendar/make_vad.sh
+index 3149aae..056deb7 100755
+--- a/appsrc/ODS-Calendar/make_vad.sh
++++ b/appsrc/ODS-Calendar/make_vad.sh
+@@ -447,7 +447,7 @@ chmod 644 ods_calendar_dav.vad
+ chmod 644 ods_calendar_filesystem.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Community/make_vad.sh b/appsrc/ODS-Community/make_vad.sh
+index fa44417..8b1df06 100755
+--- a/appsrc/ODS-Community/make_vad.sh
++++ b/appsrc/ODS-Community/make_vad.sh
+@@ -418,7 +418,7 @@ STOP_SERVER
+ chmod 644 ods_community_dav.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Discussion/make_vad.sh b/appsrc/ODS-Discussion/make_vad.sh
+index 307d69e..20d8033 100755
+--- a/appsrc/ODS-Discussion/make_vad.sh
++++ b/appsrc/ODS-Discussion/make_vad.sh
+@@ -416,7 +416,7 @@ virtuoso_shutdown
+ chmod 644 ods_discussion_dav.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-FeedManager/make_vad.sh b/appsrc/ODS-FeedManager/make_vad.sh
+index a4ab1e4..6b017a4 100755
+--- a/appsrc/ODS-FeedManager/make_vad.sh
++++ b/appsrc/ODS-FeedManager/make_vad.sh
+@@ -462,7 +462,7 @@ chmod 644 $VAD_DAV
+ chmod 644 $VAD_FS
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Framework/make_vad.sh b/appsrc/ODS-Framework/make_vad.sh
+index 6abbd54..ec7b609 100755
+--- a/appsrc/ODS-Framework/make_vad.sh
++++ b/appsrc/ODS-Framework/make_vad.sh
+@@ -575,7 +575,7 @@ chmod 644 ods_framework_dav.vad
+ #chmod 644 virtuoso.trx
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Framework/oauth/make_vad.sh b/appsrc/ODS-Framework/oauth/make_vad.sh
+index ae1d085..243bf71 100755
+--- a/appsrc/ODS-Framework/oauth/make_vad.sh
++++ b/appsrc/ODS-Framework/oauth/make_vad.sh
+@@ -433,7 +433,7 @@ chmod 644 $VAD_NAME_RELEASE
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Gallery/make_vad.sh b/appsrc/ODS-Gallery/make_vad.sh
+index 81989fb..4719c4f 100755
+--- a/appsrc/ODS-Gallery/make_vad.sh
++++ b/appsrc/ODS-Gallery/make_vad.sh
+@@ -436,7 +436,7 @@ STOP_SERVER
+ chmod 644 ods_gallery_dav.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Polls/make_vad.sh b/appsrc/ODS-Polls/make_vad.sh
+index 364062e..a246669 100755
+--- a/appsrc/ODS-Polls/make_vad.sh
++++ b/appsrc/ODS-Polls/make_vad.sh
+@@ -419,7 +419,7 @@ chmod 644 ods_polls_dav.vad
+ chmod 644 ods_polls_filesystem.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-WebMail/make_vad.sh b/appsrc/ODS-WebMail/make_vad.sh
+index 391032e..8bd9558 100755
+--- a/appsrc/ODS-WebMail/make_vad.sh
++++ b/appsrc/ODS-WebMail/make_vad.sh
+@@ -449,7 +449,7 @@ chmod 644 ods_webmail_dav.vad
+ chmod 644 ods_webmail_filesystem.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/appsrc/ODS-Wiki/make_vad.sh b/appsrc/ODS-Wiki/make_vad.sh
+index 9529747..3ad2fe0 100755
+--- a/appsrc/ODS-Wiki/make_vad.sh
++++ b/appsrc/ODS-Wiki/make_vad.sh
+@@ -515,7 +515,7 @@ echo `pwd`
+ chmod 644 ods_wiki_dav.vad
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/b3s/make_vad.sh b/binsrc/b3s/make_vad.sh
+index 9504d80..456f44e 100755
+--- a/binsrc/b3s/make_vad.sh
++++ b/binsrc/b3s/make_vad.sh
+@@ -497,7 +497,7 @@ chmod 644 $VAD_NAME_RELEASE
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/bpel/make_vad.sh b/binsrc/bpel/make_vad.sh
+index 58d245b..fb53651 100755
+--- a/binsrc/bpel/make_vad.sh
++++ b/binsrc/bpel/make_vad.sh
+@@ -687,7 +687,7 @@ chmod 644 $VAD_NAME_RELEASE
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/dbpedia/make_vad.sh b/binsrc/dbpedia/make_vad.sh
+index 2bb8903..fe8a97a 100755
+--- a/binsrc/dbpedia/make_vad.sh
++++ b/binsrc/dbpedia/make_vad.sh
+@@ -443,7 +443,7 @@ chmod 644 $VAD_NAME_DEVEL
+ chmod 644 $VAD_NAME_RELEASE
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/isparql/make_vad.sh b/binsrc/isparql/make_vad.sh
+index 310cf06..ea35ad8 100755
+--- a/binsrc/isparql/make_vad.sh
++++ b/binsrc/isparql/make_vad.sh
+@@ -433,7 +433,7 @@ chmod 644 virtuoso.trx
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/rdb2rdf/make_vad.sh b/binsrc/rdb2rdf/make_vad.sh
+index ad98e23..838f573 100755
+--- a/binsrc/rdb2rdf/make_vad.sh
++++ b/binsrc/rdb2rdf/make_vad.sh
+@@ -354,7 +354,7 @@ else
+ fi
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/rdf_mappers/make_vad.sh b/binsrc/rdf_mappers/make_vad.sh
+index 1128298..9bde2a8 100755
+--- a/binsrc/rdf_mappers/make_vad.sh
++++ b/binsrc/rdf_mappers/make_vad.sh
+@@ -525,7 +525,7 @@ chmod 644 $VAD_NAME_DEVEL
+ chmod 644 $VAD_NAME_RELEASE
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/samples/demo/make_vad.sh b/binsrc/samples/demo/make_vad.sh
+index 230ee37..f98dee8 100755
+--- a/binsrc/samples/demo/make_vad.sh
++++ b/binsrc/samples/demo/make_vad.sh
+@@ -589,7 +589,7 @@ chmod 644 virtuoso.trx
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/samples/demo/mkdemo.sh b/binsrc/samples/demo/mkdemo.sh
+index 33d9119..dcb90fd 100755
+--- a/binsrc/samples/demo/mkdemo.sh
++++ b/binsrc/samples/demo/mkdemo.sh
+@@ -392,7 +392,7 @@ DO_COMMAND shutdown
+ 
+ BREAK
+ 
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	exit 1
+@@ -433,7 +433,7 @@ fi
+ #  Show final results of run
+ #
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	exit 1
+diff --git a/binsrc/samples/demo/mkdoc.sh b/binsrc/samples/demo/mkdoc.sh
+index f313640..cf9e87a 100755
+--- a/binsrc/samples/demo/mkdoc.sh
++++ b/binsrc/samples/demo/mkdoc.sh
+@@ -628,7 +628,7 @@ BREAK
+ 
+ BANNER "COMPLETED DOCUMENTATION demo (mkdoc.sh)"
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f "$VAD_NAME_RELEASE"
+diff --git a/binsrc/samples/sparql_demo/make_vad.sh b/binsrc/samples/sparql_demo/make_vad.sh
+index 57c4e8b..b5e198d 100755
+--- a/binsrc/samples/sparql_demo/make_vad.sh
++++ b/binsrc/samples/sparql_demo/make_vad.sh
+@@ -413,7 +413,7 @@ chmod 644 virtuoso.trx
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/sync/make_vad.sh b/binsrc/sync/make_vad.sh
+index 996e577..b3f5415 100755
+--- a/binsrc/sync/make_vad.sh
++++ b/binsrc/sync/make_vad.sh
+@@ -377,7 +377,7 @@ chmod 644 syncml_dav.vad
+ directory_clean
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/tutorial/make_vad.sh b/binsrc/tutorial/make_vad.sh
+index 4bfd89a..2268ddc 100755
+--- a/binsrc/tutorial/make_vad.sh
++++ b/binsrc/tutorial/make_vad.sh
+@@ -633,7 +633,7 @@ else
+ fi
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/vsp/admin/debug/make_vad.sh b/binsrc/vsp/admin/debug/make_vad.sh
+index 6611d63..7efa4f8 100755
+--- a/binsrc/vsp/admin/debug/make_vad.sh
++++ b/binsrc/vsp/admin/debug/make_vad.sh
+@@ -335,7 +335,7 @@ directory_clean
+ 
+ 
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	$myrm -f *.vad
+diff --git a/binsrc/yacutia/mkvad.sh b/binsrc/yacutia/mkvad.sh
+index e85718c..6d9b897 100755
+--- a/binsrc/yacutia/mkvad.sh
++++ b/binsrc/yacutia/mkvad.sh
+@@ -468,7 +468,7 @@ chmod 644 conductor_filesystem.vad
+ #  Show final results of run
+ #
+ CHECK_LOG
+-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
++RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+ if test $STATUS -eq 0
+ then
+ 	rm -f *.vad
