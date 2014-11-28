@@ -525,7 +525,7 @@ chmod 644 $VAD_NAME_DEVEL
 chmod 644 $VAD_NAME_RELEASE
 
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	$myrm -f *.vad
