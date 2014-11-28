@@ -1,0 +1,19 @@
+commit 34f4d6e586e32fde027cea323237ae8e0d7c64fd
+Author: Maximiliano Curia <maxy@gnuservers.com.ar>
+Date:   Wed Jun 5 10:23:30 2013 +0200
+
+    Disable the full test suite
+
+diff --git a/binsrc/tests/Makefile.am b/binsrc/tests/Makefile.am
+index 2736231..2a81e8a 100644
+--- a/binsrc/tests/Makefile.am
++++ b/binsrc/tests/Makefile.am
+@@ -19,7 +19,7 @@
+ #  
+ #  
+ 
+-SUBDIRS = . biftest suite dotnet tpcrun oledb rdf wb lubm bsbm
++SUBDIRS = . biftest dotnet tpcrun oledb rdf wb lubm bsbm
+ 
+ MAKEVER = $(SHELL) $(top_srcdir)/bin/makever
+ 
