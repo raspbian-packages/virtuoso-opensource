@@ -587,7 +587,7 @@ tcpses_accept (session_t * ses, session_t * new_ses)
 {
   int rc;
   int new_socket;
-  socklen_t addrlen = sizeof (saddr_t);
+  socklen_t addrlen = sizeof (struct sockaddr);
 
   dbg_printf_1 (("tcpses_accept."));
 
@@ -2481,7 +2481,7 @@ unixses_listen (session_t * ses)
       return (SER_CNTRL);
     }
 
-  if ((rc = bind (s, (saddr_t *) p_addr, sizeof (saddrun_t))) < 0)
+  if ((rc = bind (s, (struct sockaddr *) p_addr, sizeof (saddrun_t))) < 0)
     {
 
       test_eintr (ses, rc, errno);
