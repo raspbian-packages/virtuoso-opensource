@@ -445,7 +445,7 @@ chmod 644 ods_bookmark_dav.vad
 chmod 644 ods_bookmark_filesystem.vad
 
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	$myrm -f *.vad
