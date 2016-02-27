@@ -41,7 +41,7 @@ else
 fi
 pwddir=`pwd`
 cd "${cutterdir}"
-gmake
+make
 cd "${pwddir}"
 
 begin_xml ()
