@@ -502,6 +502,8 @@ AC_CHECK_LIB(inet, gethostbyname, [VLIBS="-linet $VLIBS"], [], -lnsl) # Sequent
 AC_CHECK_LIB(socket, socket, [VLIBS="-lsocket $VLIBS"], [], $VLIBS) # SVR4 sockets
 fi
 AC_CHECK_LIB(m, cos, [VLIBS="-lm $VLIBS"]) # complex math
+# Added by Debian maintainer, replaces shipped pcre
+AC_CHECK_LIB(pcre, pcre_compile)
 
 ##########################################################################
 ##									##
