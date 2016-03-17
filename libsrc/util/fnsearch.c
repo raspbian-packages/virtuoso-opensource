@@ -40,14 +40,31 @@
 char *
 fnsearch (const char *filename, const char *path)
 {
-  static char namebuf[MAXPATHLEN];
+  static char *namebuf = NULL;
+  static size_t namebuf_size = 0;
+  size_t new_size;
   const char *cp;
   char *np;
 
   if (path == NULL)
     return NULL;
-  np = namebuf;
   cp = path;
+
+  /* Avoid a call to realloc, whenever possible */
+  new_size = strlen(path) + strlen(filename) + 2;
+  if (namebuf_size < new_size)
+    {
+      /* Ask more than enough space to store the result */
+      /* (realloc of NULL behaves like malloc) */
+      np = realloc(namebuf, new_size);
+      if (np == NULL)
+        return NULL;
+      namebuf_size = new_size;
+      namebuf = np;
+    }
+  else
+    np = namebuf;
+
   while (1)
     {
       if (*cp == PATHSEP || *cp == '\0')
