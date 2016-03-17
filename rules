@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+export DEBIANPKG=virtuoso-opensource-6.1
+export MONO_DISABLE_SHM=1
+
+DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+DH_WITH := --with autoreconf,pkgkde_symbolshelper
+ifneq (,$(filter %-cil, $(shell dh_listpackages)))
+	DH_WITH := $(DH_WITH),cli
+	VIRTUOSO_CIL = yes
+endif
+
+# Needed for memmmem at least in hurd and kfreebsd*
+CFLAGS += -D_GNU_SOURCE
+
+%:
+	dh $@ --parallel $(DH_WITH)
+
+override_dh_autoreconf:
+	dh_autoreconf --as-needed
+
+override_dh_auto_configure:
+	dh_auto_configure -- --with-layout=debian --program-transform-name='s/isql$$/isql-vt/;s/isqlw/isqlw-vt/' --with-readline --without-internal-zlib
+
+override_dh_auto_build:
+	dh_auto_build
+	# manpages
+	find debian -maxdepth 1 -type f -name '*.1.xml' -execdir docbook2x-man --solinks {} \;
+	# libvirtuoso5.5-cil
+ifdef VIRTUOSO_CIL
+	make -C binsrc/VirtuosoClient.Net -f Makefile.mono
+	chmod -x binsrc/VirtuosoClient.Net/OpenLink.Data.Virtuoso.dll
+endif
+
+override_dh_install:
+	dh_install -plibvirtodbc0 usr/lib/*/virtodbc*.so usr/lib/$(DEB_HOST_MULTIARCH)/odbc
+	dh_install --remaining-packages
+
+override_dh_installinit:
+	dh_installinit --noscripts
+
+override_dh_auto_clean:
+	# manpages clean
+	rm -f debian/*.1
+	# libvirtuoso5.5-cil clean
+ifdef VIRTUOSO_CIL
+	make -C binsrc/VirtuosoClient.Net -f Makefile.mono clean
+endif
+	dh_auto_clean
+
