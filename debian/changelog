@@ -1,0 +1,316 @@
+virtuoso-opensource (6.1.6+dfsg2-4) unstable; urgency=medium
+
+  * QA upload.
+  * Add patch to fix FTBFS with OpenSSL 1.1.
+    Thanks to Sebastian Andrzej Siewior <sebastian@breakpoint.cc> for the
+    patch.  Closes: #828594
+  * d/control: drop make from build-deps, as it's build-essential and that
+    version is old enough.
+  * Bump debhelper compat level to 10.
+    + --with autoreconf is now defuault.
+    + --parallel is now default.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 10 Jan 2017 12:56:02 +0100
+
+virtuoso-opensource (6.1.6+dfsg2-3) unstable; urgency=medium
+
+  * QA upload.
+  * Set Maintainer to Debian QA Group.  (See #813499)
+  * Move packaging repository to
+    git://git.debian.org/collab-maint/virtuoso-opensource.git
+  * Remove the saddr_t typedef, which clashes with system headers on s390x,
+    thanks to Colin Watson.  (Closes: #805157)
+  * Rebuild against current mono.  (Closes: #804109)
+
+ -- Andreas Beckmann <anbe@debian.org>  Sat, 27 Feb 2016 19:07:25 +0100
+
+virtuoso-opensource (6.1.6+dfsg2-2) unstable; urgency=medium
+
+  * Update ignore-netstat-failure.patch including new tests (Closes: #761371).
+  * Update Standards-Version to 3.9.5, no changes required.
+
+ -- Lisandro Damián Nicanor Pérez Meyer <lisandro@debian.org>  Mon, 15 Sep 2014 14:48:35 -0300
+
+virtuoso-opensource (6.1.6+dfsg2-1) unstable; urgency=medium
+
+  * New patch: 17-fix-imagemagick-detection.patch (Closes: #758459)
+    Thanks to bastien ROUCARIES
+  * Further dfsgfied version
+  * New patch: remove_ckeditor_mini
+
+ -- Maximiliano Curia <maxy@debian.org>  Fri, 12 Sep 2014 15:42:01 +0200
+
+virtuoso-opensource (6.1.6+dfsg-4) unstable; urgency=low
+
+  [ Lisandro Damián Nicanor Pérez Meyer ]
+  * Add docbook-xml as build dependency to avoid downloading it.
+
+  [ Maximiliano Curia ]
+  * libvirtodbc0: add Breaks against non m-a aware libsoprano4 versions.
+  * Increase wait timeout, mips needs more time.
+
+ -- Maximiliano Curia <maxy@debian.org>  Sat, 23 Nov 2013 19:33:33 +0100
+
+virtuoso-opensource (6.1.6+dfsg-3) unstable; urgency=low
+
+  [ Maximiliano Curia ]
+  * Remove mono package for armhf.
+  * Update path: do_not_depend_on_MAXPATHLEN.patch.
+  * Merge with 6.1.4+dfsg1-7.
+
+  [ Lisandro Damián Nicanor Pérez Meyer ]
+  * Remove ia64 mono support, as upstream has dropped it (Closes: #727592).
+    - As build-dep.
+    - From libvirtuoso5.5-cil archs list.
+  * Fix typo in control file which led lintian to believe this a NMU.
+
+ -- Lisandro Damián Nicanor Pérez Meyer <lisandro@debian.org>  Wed, 06 Nov 2013 00:32:18 -0300
+
+virtuoso-opensource (6.1.6+dfsg-2) experimental; urgency=low
+
+  * New patch: do_not_depend_on_MAXPATHLEN.patch.
+  * Add _GNU_SOURCE definition.
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 10 Jun 2013 15:50:21 +0200
+
+virtuoso-opensource (6.1.6+dfsg-1) experimental; urgency=low
+
+  [ José Manuel Santamaría Lema ]
+  * New upstream release.
+  * Update patches:
+    - remove portable-method-for-escaping-symbol-gawk.diff, applied upstream.
+    - refresh other patches to make them apply without any offset.
+
+  [ Ralf Jung ]
+  * Update VCS links
+
+  [ Maximiliano Curia ]
+  * Update aclocal and automake versions.
+  * Migrate to dh 9.
+  * Update dirs files.
+  * Update install files.
+  * Update Pre-Depends for m-a.
+  * New patch, disable-full-test-suite.patch.
+  * New patch, check_log_fix.patch.
+  * Use relative paths for the odbc drivers.
+  * Update libvirtodbc0 debconf use.
+
+ -- Debian Krap Maintainers <debian-qt-kde@lists.debian.org>  Thu, 06 Jun 2013 10:34:05 +0200
+
+virtuoso-opensource (6.1.4+dfsg1-7) unstable; urgency=low
+
+  [ Lisandro Damián Nicanor Pérez Meyer ]
+  * Add Sune and myself to Uploaders.
+
+  [ Ralf Jung ]
+  * init script: Use start-stop-daemon (Closes: 704521)
+  * init script: Do not use "set -e", that's incompatible with
+    lsb/init-scripts
+  * init script: Stop attemtping to restart when stopping failed
+  * Change maintainer to Debian Krap team
+  * Remove obsolete DM-Upload-Allowed
+
+ -- Debian Krap Maintainers <debian-qt-kde@lists.debian.org>  Wed, 17 Apr 2013 21:30:26 +0200
+
+virtuoso-opensource (6.1.4+dfsg1-6) unstable; urgency=low
+
+  * Add safer-timeout.patch, avoids random FTBFS'es. These random FTBFS'es
+    depend on the time of the day and are more prone to happen on slow
+    architectures. (Closes: #699785)
+  * Remove build-short-timeout.patch, no longer needed because of
+    safer-timeout.patch.
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Mon, 25 Feb 2013 13:49:33 +0100
+
+virtuoso-opensource (6.1.4+dfsg1-5) unstable; urgency=low
+
+  * Remove arm and armfh also from libvirtuoso5.5-cil list of architectures.
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Sat, 02 Feb 2013 17:15:43 +0100
+
+virtuoso-opensource (6.1.4+dfsg1-4) unstable; urgency=low
+
+  * Update mono architectures: remove arm and armfh. (Closes: 695743)
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Fri, 01 Feb 2013 17:55:57 +0100
+
+virtuoso-opensource (6.1.4+dfsg1-3) unstable; urgency=low
+
+  * The previous upload didn't actually fix the bug #677286: "unowned files
+    after purge (/root/.odbc.ini)". Looks like this is happening because of a
+    bug in odbcinst, which ignores the -l option (when passing -l it should
+    deal with /etc/odbc.ini and not touch $HOME/.odbc.ini). So I workarounded
+    the bug changing again virtuoso-opensource-6.1.prerm; I removed the
+    previous workaround and now odbinst is executed thus:
+    ODBCSEARCH=ODBC_SYSTEM_DSN odbcinst <arguments_and_stuff>
+    Setting that environment variable should override the arguments given in the
+    command line, it works both as a workaround for the "unowned files after
+    purge" problem and forces obdcinst to actually use the system DSN so it
+    will use /etc/odbc.ini, never $HOME/.odbc.ini (Closes: #677286).
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Tue, 15 Jan 2013 23:19:48 +0100
+
+virtuoso-opensource (6.1.4+dfsg1-2) unstable; urgency=low
+
+  * Add portable-method-for-escaping-symbol-gawk.diff, fixes the conductor web
+    interface (Closes: #680764).
+  * Changed virtuoso-opensource-6.1.prerm to not leave an unowned file
+    (/root/.odbc.ini) after package removal (Closes: #677286).
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Tue, 01 Jan 2013 22:41:57 +0100
+
+virtuoso-opensource (6.1.4+dfsg1-1) unstable; urgency=low
+
+  * New upstream release (Closes: #650281).
+  * Switch to source format 3.0 (quilt).
+  * Update patches:
+    - drop fix-wide-char-encoding.patch, applied upstream.
+    - update repack-zlib.patch.
+    - refresh other patches in order to make them apply without any offset.
+    - add ignore-netstat-failure.patch, to avoid FTBFS on various
+      architectures, thanks to Steven Chamberlain (Closes: #663010).
+  * Bump debhelper compatibility level to 9.
+  * Build also with LDFLAGS provided by dpkg-buildflags. Doing this with the
+    debhelper compatibility level set to 9 should enable all the default
+    hardening flags.
+  * Bump build dependency on cli-common-dev to (>= 0.8~).
+  * Bump Standards-Version to 3.9.3:
+    - moved virtuoso-opensource, virtuoso-server and virtuoso-minimal to the
+      new "metapackages" section.
+  * Metapackages now have versioned Depends (>= ${binary:Version}) against
+    other virtuoso packages.
+  * Fix a bug in the init script, now uses start-stop-daemon with "--user",
+    this makes the script work when you are running it under Plasma (the KDE
+    workspace) with Nepomuk, which may already execute a /usr/bin/virtuoso-t
+    process making start-stop-daemon fail.
+  * The init script now removes the pid file when you stop the process, thus it
+    won't kill innocent processes with unfortunate pids when restarting.
+  * /etc/virtuoso-opensource-6.1/virtuoso.ini isn't a conffile anymore, it's
+    just handled by maintainer scripts (Closes: #656087).
+  * Now virtuoso-opensource-6.1.postrm stops the server.
+  * Add README.source explaining how the upstream tarball repacking was done.
+    Just for the record the zlib removal is handled different compared to
+    previous versions of this package, hence why repack-zlib.patch was updated.
+  * Fix Vcs-Browser field, now points to a valid URL.
+  * Changes in debian/copyright:
+    - remove pcre information since it's removed with the repackaging.
+    - remove the "Virtuoso may be linked against..." statements.
+    - remove various duplicated mentions about SHA/MD5 Javascript routines.
+    - remove "DocBk XML" part, since looks like the file(s) involved aren't
+      there anymore.
+    - extend information about works from the GNU C Library.
+    - add the license for a couple of DocBook DTD's.
+    - add Minizip and Info-ZIP licenses.
+    - mention the files involved in each license statement from other projects.
+    - add myself to the copyright holders for the debian packaging.
+  * Add debian/not-installed.
+  * Install README.UPGRADE.
+  * Add pt_BR debconf translation (Closes: #649152).
+  * Update debian/TODO.Debian:
+    - remove explanation about broken parallel building, right now looks like
+      the problem is just gone.
+  * Set myself as maintainer since looks like Obey Arthur Liu is MIA. Arthur,
+    you are very wellcomed to come back.
+  * Enable the DM-Upload-Allowed flag.
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Sun, 10 Jun 2012 23:21:02 +0200
+
+virtuoso-opensource (6.1.3+dfsg1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload
+  * Refresh list of Mono architectures in debian/control
+    (Closes: #657781)
+  * Use system default Mono compiler by using the mono-devel package
+    and the mono-csc command therein (Closes: #658166)
+
+ -- Jo Shields <directhex@apebox.org>  Tue, 31 Jan 2012 18:25:09 +0000
+
+virtuoso-opensource (6.1.3+dfsg1-2) unstable; urgency=low
+
+  * Apply wide char encoding fix from KDE bug 271664,
+    thanks Sebastian Trueg.
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Fri, 14 Oct 2011 02:02:42 +0200
+
+virtuoso-opensource (6.1.3+dfsg1-1) unstable; urgency=low
+
+  * New upstream release (Closes: #626253).
+  * Bump standards to 3.9.2.
+  * Add missingok to logrotate (LP: #666391).
+  * Update translations for cs, da, de, es, fr, it, ja, nl, pt, ru, sk, sv, vi
+    (Closes: #605343, #626568, #635150).
+  * Relax readline build-depend version requirement (Closes: #634443).
+  * Use SIGINT instead of SIGTERM to stop daemon (Closes: #632060).
+  * Enable LDAP support (Closes: #633563).
+  * Sourcefull rebuild for libmagick transition (Closes: #625561).
+  * Make installation paths more Debian compatible.
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Fri, 29 Jul 2011 11:08:42 +0200
+
+virtuoso-opensource (6.1.2+dfsg1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Bump standards to 3.9.0.
+  * Retroactively fix typo in closed bug in previous upload changelog.
+  * Improve init/postinst sequence to avoid mangling /etc/default.
+  * Fix missing odbcinst dependency for the postinst of libvirtodbc0,
+    thanks Jonathan Thomas <echidnaman@kubuntu.org>.
+  * Shorten tests initialization timeouts to 60 seconds to prevent buildd
+    resources tie-ups. Thanks Marc 'HE' Brockschmidt <he@debian.org>
+    (Closes: #581267).
+  * Debconf translation update:
+    - Danish (Joe Dalton) (Closes: #587431)
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Sun, 11 Jul 2010 11:11:42 -0700
+
+virtuoso-opensource (6.1.1+dfsg1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Correctly fix FTBFS on s390 related to SHM (closes: #574018).
+  * Fix FTBFS on alpha due to recent binutils change (closes: 575942).
+  * Fix missing-debian-source-format lintian warning.
+
+  [Christian Perrier]
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project. Closes: #573404
+  * [Debconf translation updates]
+    - Czech (Michal Simunek).  Closes: #573772
+    - Russian (Yuri Kozlov).  Closes: #573861
+    - Portuguese (Américo Monteiro).  Closes: #573927
+    - Vietnamese (Clytie Siddall).  Closes: #574430
+    - French (David Prévot).  Closes: #575042
+    - Italian (Vincenzo Campanella).  Closes: #575099
+    - German (Martin Eberhard Schauer).  Closes: #575594
+    - Swedish (Martin Ågren).  Closes: #575635
+    - Spanish (Francisco Javier Cuadrado).  Closes: #575373
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Sun, 04 Apr 2010 13:21:42 +0200
+
+virtuoso-opensource (6.1.0+dfsg2-3) unstable; urgency=high
+
+  * Emergency rollback of the fix for FTBFS on armel from 6.1.0+dfsg2-2
+    causing database binary format incompatibility, closes: #575173.
+    There should be no data loss.
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Wed, 24 Mar 2010 02:03:42 +0100
+
+virtuoso-opensource (6.1.0+dfsg2-2) unstable; urgency=medium
+
+  * Set ODBC registration debconf question for libvirtodbc0 to low priority,
+    defaults to Yes.
+  * Fix FTBFS on kFreeBSD.
+  * Fix FTBFS on armel. Thanks to Sune Vuorela <debian@pusling.com>.
+  * Fix FTBFS on s390 by complying with Debian CLI policy, closes: #574018.
+  * Fix lintian errors referring to old-fsf-address.
+  * Added README.source pointing to quilt README.
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Mon, 15 Mar 2010 14:04:42 +0200
+
+virtuoso-opensource (6.1.0+dfsg2-1) unstable; urgency=low
+
+  * Initial release (Closes: #508048)
+  * Many thanks to the following people who helped bring this package into
+    existence: Sune Vuorela <debian@pusling.com>, Will Daniels
+    <mail@willdaniels.co.uk> and Miriam Ruiz <little_miry@yahoo.es>.
+
+ -- Obey Arthur Liu <arthur@milliways.fr>  Mon, 22 Feb 2010 22:42:42 +0100
