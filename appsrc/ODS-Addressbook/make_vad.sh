@@ -447,7 +447,7 @@ chmod 644 ods_addressbook_dav.vad
 chmod 644 ods_addressbook_filesystem.vad
 
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	$myrm -f *.vad
