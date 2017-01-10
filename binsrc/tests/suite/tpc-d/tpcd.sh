@@ -207,7 +207,7 @@ START_SERVER ()
       rm -f *.lck
       $SERVER +foreground -c tpcd.ini $* 1>/dev/null & 
       stat="true"
-      while true 
+      for i in $(seq 1 15) 
 	do
 	  sleep 4
 	      stat=`netstat -an | grep "[\.\:]$PORT " | grep LISTEN` 
