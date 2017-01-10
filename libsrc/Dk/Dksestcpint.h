@@ -42,7 +42,6 @@
 
 
 typedef struct sockaddr_in saddrin_t;
-typedef struct sockaddr saddr_t;
 #ifdef COM_UNIXSOCK
 typedef struct sockaddr_un saddrun_t;
 #endif
@@ -53,7 +52,7 @@ typedef union
 #ifdef COM_UNIXSOCK
   saddrun_t 	u;
 #endif
-  saddr_t 	a;
+  struct sockaddr 	a;
 } usaddr_t;
 #define TCP_HOSTNAMELEN     100				   /* Something */
 
