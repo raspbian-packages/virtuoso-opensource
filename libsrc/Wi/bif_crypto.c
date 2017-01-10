@@ -181,21 +181,26 @@ box_hmac (caddr_t box, caddr_t key, int alg)
   unsigned char temp[EVP_MAX_MD_SIZE];
   unsigned int size = 0;
   caddr_t res = NULL;
-  HMAC_CTX ctx;
+  HMAC_CTX *ctx;
   const EVP_MD *md = EVP_sha1 ();
 
   if (alg == 1)
     md = EVP_ripemd160 ();
 
-  HMAC_Init (&ctx, key, box_length (key) - DV_STRINGP (key) ? 1 : 0, md);
-  box_hmac_1 (box, &ctx);
-  HMAC_Final (&ctx, temp, &size);
+  ctx = HMAC_CTX_new();
+  if (!ctx)
+	  return res;
+
+  HMAC_Init_ex (ctx, key, box_length (key) - DV_STRINGP (key) ? 1 : 0, md, NULL);
+  box_hmac_1 (box, ctx);
+  HMAC_Final (ctx, temp, &size);
   if (size)
     {
       res = dk_alloc_box (size + 1, DV_SHORT_STRING);
       memcpy (res, temp, size);
       res[size] = 0;
     }
+  HMAC_CTX_free(ctx);
   return res;
 }
 
@@ -347,14 +352,12 @@ asn1_parse_to_xml (BIO * bp, unsigned char **pp, long length, int offset, int de
 	    {
 	      int ii;
 
-	      opp = op;
-	      ii = d2i_ASN1_BOOLEAN (NULL, &opp, len + hl);
-	      if (ii < 0)
+	      if (len + hl < 1)
 		{
 		  if (BIO_write (bp, "Bad boolean\n", 12))
 		    goto end;
 		}
-	      BIO_printf (bp, "%d", ii);
+	      BIO_printf (bp, "%d", p[0]);
 	    }
 	  else if (tag == V_ASN1_BMPSTRING)
 	    {
@@ -415,7 +418,7 @@ asn1_parse_to_xml (BIO * bp, unsigned char **pp, long length, int offset, int de
 		}
 	      if (os != NULL)
 		{
-		  M_ASN1_OCTET_STRING_free (os);
+		  ASN1_STRING_free (os);
 		  os = NULL;
 		}
 	    }
@@ -448,7 +451,7 @@ asn1_parse_to_xml (BIO * bp, unsigned char **pp, long length, int offset, int de
 		  if (BIO_write (bp, "BAD INTEGER", 11) <= 0)
 		    goto end;
 		}
-	      M_ASN1_INTEGER_free (bs);
+	      ASN1_STRING_free (bs);
 	    }
 	  else if (tag == V_ASN1_ENUMERATED)
 	    {
@@ -479,7 +482,7 @@ asn1_parse_to_xml (BIO * bp, unsigned char **pp, long length, int offset, int de
 		  if (BIO_write (bp, "BAD ENUMERATED", 11) <= 0)
 		    goto end;
 		}
-	      M_ASN1_ENUMERATED_free (bs);
+	      ASN1_STRING_free (bs);
 	    }
 	  else if (len > 0 && dump)
 	    {
@@ -515,7 +518,7 @@ end:
   if (o != NULL)
     ASN1_OBJECT_free (o);
   if (os != NULL)
-    M_ASN1_OCTET_STRING_free (os);
+    ASN1_STRING_free (os);
   *pp = p;
   return (ret);
 }
@@ -854,16 +857,20 @@ bif_smime_sign (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args)
     }
 
   certs = sk_X509_new_null ();
-  if (store && store->objs)
+
+  if (store && X509_STORE_get0_objects(store))
     {
-      for (inx = 0; inx < sk_X509_OBJECT_num (store->objs); inx++)
+      STACK_OF(X509_OBJECT) *store_objs = X509_STORE_get0_objects(store);
+
+      for (inx = 0; inx < sk_X509_OBJECT_num (store_objs); inx++)
 	{
-	  X509_OBJECT *obj = sk_X509_OBJECT_value (store->objs, inx);
-	  if (obj->type == X509_LU_X509)
-	    sk_X509_push (certs, X509_dup (obj->data.x509));
+	  X509_OBJECT *obj = sk_X509_OBJECT_value (store_objs, inx);
+	  if (X509_OBJECT_get_type(obj) == X509_LU_X509)
+	    sk_X509_push (certs, X509_dup (X509_OBJECT_get0_X509(obj)));
 	}
 
     }
+
   if (store)
     X509_STORE_free (store);
   in_bio = BIO_new_mem_buf (msg, box_length (msg) - 1);
@@ -935,15 +942,19 @@ bif_smime_encrypt (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args)
     sqlr_new_error ("42000", "CR006", "No recipient certificates");
 
   certs = sk_X509_new_null ();
-  if (store && store->objs)
+
+  if (store && X509_STORE_get0_objects(store))
     {
-      for (inx = 0; inx < sk_X509_OBJECT_num (store->objs); inx++)
+      STACK_OF(X509_OBJECT) *store_objs = X509_STORE_get0_objects(store);
+
+      for (inx = 0; inx < sk_X509_OBJECT_num (store_objs); inx++)
 	{
-	  X509_OBJECT *obj = sk_X509_OBJECT_value (store->objs, inx);
-	  if (obj->type == X509_LU_X509)
-	    sk_X509_push (certs, X509_dup (obj->data.x509));
+	  X509_OBJECT *obj = sk_X509_OBJECT_value (store_objs, inx);
+	  if (X509_OBJECT_get_type(obj) == X509_LU_X509)
+	    sk_X509_push (certs, X509_dup (X509_OBJECT_get0_X509(obj)));
 	}
     }
+
   if (store)
     X509_STORE_free (store);
   in_bio = BIO_new_mem_buf (msg, box_length (msg) - 1);
@@ -1111,7 +1122,7 @@ x509_certificate_verify_cb (int ok, X509_STORE_CTX * ctx)
   char *opts = (char *) X509_STORE_CTX_get_app_data (ctx);
   if (!ok && opts)
     {
-      switch (ctx->error)
+      switch (X509_STORE_CTX_get_error(ctx))
 	{
 	case X509_V_ERR_CERT_HAS_EXPIRED:
 	  if (strstr (opts, "expired"))
@@ -1208,7 +1219,7 @@ bif_x509_certificate_verify (caddr_t * qst, caddr_t * err_ret, state_slot_t ** a
   if (!i)
     {
       const char *err_str;
-      err_str = X509_verify_cert_error_string (csc->error);
+      err_str = X509_verify_cert_error_string (X509_STORE_CTX_get_error(csc));
       *err_ret = srv_make_new_error ("22023", "CR015", "X509 error: %s", err_str);
     }
 
@@ -1229,20 +1240,16 @@ err_ret:
 #define VIRT_CERT_EXT "2.16.840.1.1113.1"
 
 static caddr_t
-BN_box (BIGNUM * x)
+BN_box (const BIGNUM *x)
 {
   size_t buf_len, n;
   caddr_t buf;
   buf_len = (size_t) BN_num_bytes (x);
-  if (buf_len <= BN_BYTES)
-    buf = box_num ((unsigned long) x->d[0]);
-  else
-    {
-      buf = dk_alloc_box (buf_len, DV_BIN);
-      n = BN_bn2bin (x, (unsigned char *) buf);
-      if (n != buf_len)
-	GPF_T;
-    }
+  /* did not figure out where buf is free()ed */
+  buf = dk_alloc_box (buf_len, DV_BIN);
+  n = BN_bn2bin (x, (unsigned char *) buf);
+  if (n != buf_len)
+	  GPF_T;
   return buf;
 }
 
@@ -1419,7 +1426,7 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 	int i;
 	char tmp[1024];
 	char *ext_oid = (char *) (BOX_ELEMENTS (args) > 4 ? bif_string_arg (qst, args, 4, "get_certificate_info") : VIRT_CERT_EXT);
-	STACK_OF (X509_EXTENSION) * exts = cert->cert_info->extensions;
+	const STACK_OF (X509_EXTENSION) * exts = X509_get0_extensions(cert);
 	for (i = 0; i < sk_X509_EXTENSION_num (exts); i++)
 	  {
 	    X509_EXTENSION *ex = sk_X509_EXTENSION_value (exts, i);
@@ -1431,7 +1438,7 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 		char *data_ptr;
 		BIO *mem = BIO_new (BIO_s_mem ());
 		if (!X509V3_EXT_print (mem, ex, 0, 0))
-		  M_ASN1_OCTET_STRING_print (mem, ex->value);
+		  ASN1_STRING_print (mem, X509_EXTENSION_get_data(ex));
 		len = BIO_get_mem_data (mem, &data_ptr);
 		if (len > 0 && data_ptr)
 		  {
@@ -1458,18 +1465,23 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 	if (k)
 	  {
 #ifdef EVP_PKEY_RSA
-	    if (k->type == EVP_PKEY_RSA)
+	    if (EVP_PKEY_id(k) == EVP_PKEY_RSA)
 	      {
-		RSA *x = k->pkey.rsa;
-		ret = list (3, box_dv_short_string ("RSAPublicKey"), BN_box (x->e), BN_box (x->n));
+		const BIGNUM *n, *e;
+
+		RSA_get0_key(EVP_PKEY_get0_RSA(k), &n, &e, NULL);
+
+		ret = list (3, box_dv_short_string ("RSAPublicKey"), BN_box (e), BN_box (n));
 	      }
 	    else
 #endif
 #ifdef EVP_PKEY_DSA
-	    if (k->type == EVP_PKEY_DSA)
+	    if (EVP_PKEY_id(k) == EVP_PKEY_DSA)
 	      {
-		DSA *x = k->pkey.dsa;
-		ret = list (2, box_dv_short_string ("DSAPublicKey"), BN_box (x->pub_key));
+		const BIGNUM *pub_key;
+
+		DSA_get0_key(EVP_PKEY_get0_DSA(k), &pub_key, NULL);
+		ret = list (2, box_dv_short_string ("DSAPublicKey"), BN_box (pub_key));
 	      }
 	    else
 #endif
@@ -1488,13 +1500,14 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 	int n, i, len;
 	char *s, *data_ptr;
 	BIO *mem = BIO_new (BIO_s_mem ());
-	for (i = 0; NULL != subj && i < sk_X509_NAME_ENTRY_num(subj->entries); i++)
+
+	for (i = 0; NULL != subj && i < X509_NAME_entry_count(subj); i++)
 	  {
-	    ne = sk_X509_NAME_ENTRY_value(subj->entries,i);
-	    n = OBJ_obj2nid (ne->object);
+	    ne = X509_NAME_get_entry(subj, i);
+	    n = OBJ_obj2nid (X509_NAME_ENTRY_get_object(ne));
 	    if ((n == NID_undef) || ((s = OBJ_nid2sn (n)) == NULL))
 	      {
-		i2t_ASN1_OBJECT (buffer, sizeof (buffer), ne->object);
+		i2t_ASN1_OBJECT (buffer, sizeof (buffer), X509_NAME_ENTRY_get_object(ne));
 		s = buffer;
 	      }
 	    if (!strcmp (s, attr))
@@ -1503,9 +1516,10 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 		break;
 	      }
 	  }
+
 	if (ne_ret)
 	  {
-	    ASN1_STRING_print (mem, ne_ret->value);
+	    ASN1_STRING_print (mem, X509_NAME_ENTRY_get_data(ne_ret));
 	    len = BIO_get_mem_data (mem, &data_ptr);
 	    if (len > 0 && data_ptr)
 	      {
@@ -1526,17 +1540,18 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 	dk_set_t set = NULL; 
 	caddr_t val;
 	BIO *mem = BIO_new (BIO_s_mem ());
-	for (i = 0; NULL != subj && i < sk_X509_NAME_ENTRY_num(subj->entries); i++)
+
+	for (i = 0; NULL != subj && i < X509_NAME_entry_count(subj); i++)
 	  {
 	    val = NULL;
-	    ne = sk_X509_NAME_ENTRY_value(subj->entries,i);
-	    n = OBJ_obj2nid (ne->object);
+	    ne = X509_NAME_get_entry(subj, i);
+	    n = OBJ_obj2nid (X509_NAME_ENTRY_get_object(ne));
 	    if ((n == NID_undef) || ((s = OBJ_nid2sn (n)) == NULL))
 	      {
-		i2t_ASN1_OBJECT (buffer, sizeof (buffer), ne->object);
+		i2t_ASN1_OBJECT (buffer, sizeof (buffer), X509_NAME_ENTRY_get_object(ne));
 		s = buffer;
 	      }
-	    ASN1_STRING_print (mem, ne->value);
+	    ASN1_STRING_print (mem, X509_NAME_ENTRY_get_data(ne));
 	    len = BIO_get_mem_data (mem, &data_ptr);
 	    if (len > 0 && data_ptr)
 	      {
@@ -1550,6 +1565,7 @@ bif_get_certificate_info (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args
 	  }
 	BIO_free (mem);
 	ret = list_to_array (dk_set_nreverse (set));
+
 	break;
       }
     default:
