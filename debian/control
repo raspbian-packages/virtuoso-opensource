@@ -6,13 +6,10 @@ Standards-Version: 3.9.5
 Homepage: http://virtuoso.openlinksw.com/wiki/main/Main/
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/virtuoso-opensource.git
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/virtuoso-opensource.git
-Build-Depends: autoconf (>= 2.57),
-               automake (>= 1.10),
-               autotools-dev,
+Build-Depends:
                bison (>= 1.35),
                cli-common-dev (>= 0.8~) [i386 kfreebsd-i386 powerpc amd64 kfreebsd-amd64 ia64 arm armel armhf sparc s390x ppc64],
-               debhelper (>= 9),
-               dh-autoreconf,
+               debhelper (>= 10),
                docbook2x,
                docbook-xml,
                flex (>= 2.5.4),
@@ -27,7 +24,6 @@ Build-Depends: autoconf (>= 2.57),
                libwbxml2-dev,
                libxml2-dev,
                m4 (>= 1.4.1),
-               make (>= 3.79.1),
                mono-devel (>= 2.4.3) [i386 kfreebsd-i386 powerpc amd64 kfreebsd-amd64 arm armel armhf sparc s390x ppc64],
                net-tools,
                pkg-kde-tools,

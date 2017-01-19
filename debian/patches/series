@@ -16,3 +16,4 @@ safer-timeout.patch
 17-fix-imagemagick-detection.patch
 remove_ckeditor_mini
 remove-saddr_t-typedef.patch
+ssl1.1.patch

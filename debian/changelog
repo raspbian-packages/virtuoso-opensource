@@ -1,9 +1,23 @@
-virtuoso-opensource (6.1.6+dfsg2-3+rpi1) stretch-staging; urgency=medium
+virtuoso-opensource (6.1.6+dfsg2-4+rpi1) stretch-staging; urgency=medium
 
   [changes brought forward from 6.1.6+dfsg2-2+rpi1 by Peter Michael Green <plugwash@raspbian.org> at Fri, 28 Nov 2014 06:38:56 +0000]
   * revert removal of armhf from mono/libvirtuoso5.5-cil architecture lists
 
- -- Raspbian forward porter <root@raspbian.org>  Thu, 17 Mar 2016 22:00:48 +0000
+ -- Raspbian forward porter <root@raspbian.org>  Thu, 19 Jan 2017 17:29:46 +0000
+
+virtuoso-opensource (6.1.6+dfsg2-4) unstable; urgency=medium
+
+  * QA upload.
+  * Add patch to fix FTBFS with OpenSSL 1.1.
+    Thanks to Sebastian Andrzej Siewior <sebastian@breakpoint.cc> for the
+    patch.  Closes: #828594
+  * d/control: drop make from build-deps, as it's build-essential and that
+    version is old enough.
+  * Bump debhelper compat level to 10.
+    + --with autoreconf is now defuault.
+    + --parallel is now default.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 10 Jan 2017 12:56:02 +0100
 
 virtuoso-opensource (6.1.6+dfsg2-3) unstable; urgency=medium
 

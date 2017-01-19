@@ -4,7 +4,7 @@ export MONO_DISABLE_SHM=1
 
 DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
-DH_WITH := --with autoreconf,pkgkde_symbolshelper
+DH_WITH := --with pkgkde_symbolshelper
 ifneq (,$(filter %-cil, $(shell dh_listpackages)))
 	DH_WITH := $(DH_WITH),cli
 	VIRTUOSO_CIL = yes
@@ -14,7 +14,7 @@ endif
 CFLAGS += -D_GNU_SOURCE
 
 %:
-	dh $@ --parallel $(DH_WITH)
+	dh $@ $(DH_WITH)
 
 override_dh_autoreconf:
 	dh_autoreconf --as-needed
