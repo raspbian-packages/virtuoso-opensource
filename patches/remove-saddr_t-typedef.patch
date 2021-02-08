@@ -1,0 +1,46 @@
+Description: Remove the saddr_t typedef
+ This clashes with system headers on s390x.
+Author: Colin Watson <cjwatson@ubuntu.com>
+Bug-Debian: https://bugs.debian.org/805157
+Forwarded: no
+Last-Update: 2015-12-24
+
+--- a/libsrc/Dk/Dksestcp.c
++++ b/libsrc/Dk/Dksestcp.c
+@@ -587,7 +587,7 @@ tcpses_accept (session_t * ses, session_
+ {
+   int rc;
+   int new_socket;
+-  socklen_t addrlen = sizeof (saddr_t);
++  socklen_t addrlen = sizeof (struct sockaddr);
+ 
+   dbg_printf_1 (("tcpses_accept."));
+ 
+@@ -2581,7 +2581,7 @@ unixses_listen (session_t * ses)
+       return (SER_CNTRL);
+     }
+ 
+-  if ((rc = bind (s, (saddr_t *) p_addr, sizeof (saddrun_t))) < 0)
++  if ((rc = bind (s, (struct sockaddr *) p_addr, sizeof (saddrun_t))) < 0)
+     {
+ 
+       test_eintr (ses, rc, errno);
+--- a/libsrc/Dk/Dksestcpint.h
++++ b/libsrc/Dk/Dksestcpint.h
+@@ -44,7 +44,6 @@
+ 
+ 
+ typedef struct sockaddr_in saddrin_t;
+-typedef struct sockaddr saddr_t;
+ #ifdef COM_UNIXSOCK
+ typedef struct sockaddr_un saddrun_t;
+ #endif
+@@ -55,7 +54,7 @@ typedef union
+ #ifdef COM_UNIXSOCK
+   saddrun_t 	u;
+ #endif
+-  saddr_t 	a;
++  struct sockaddr 	a;
+ } usaddr_t;
+ #define TCP_HOSTNAMELEN     100				   /* Something */
+ 
