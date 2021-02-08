@@ -8886,7 +8886,7 @@ ssl_server_set_certificate (SSL_CTX* ssl_ctx, char * cert_name, char * key_name,
 		  log_error ("SSL: The stored certificate '%s' can not be used as extra chain certificate", tok);
 		  break;
 		}
-	      CRYPTO_add(&k->xek_x509->references, 1, CRYPTO_LOCK_X509);
+	      X509_up_ref(k->xek_x509);
               tok = strtok_r (NULL, ",", &tok_s);
 	    }
 	  dk_free_box (str);
@@ -9949,7 +9949,7 @@ bif_https_renegotiate (caddr_t *qst, caddr_t * err_ret, state_slot_t **args)
 	  cli_ssl_get_error_string (err_buf, sizeof (err_buf));
 	  sqlr_new_error ("42000", "..002", "SSL_do_handshake failed %s", err_buf);
 	}
-      ssl->state = SSL_ST_ACCEPT;
+      SSL_set_accept_state(ssl);
       while (SSL_renegotiate_pending (ssl) && ctr < 1000)
 	{
 	  timeout_t to = { 0, 1000 };
