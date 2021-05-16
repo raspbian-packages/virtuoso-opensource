@@ -191,8 +191,8 @@ START_SERVER()
            nows=`expr $nows + $nowh \*  60`
            if test $nows -ge $timeout
            then
-       	ECHO "***FAILED: Could not start Virtuoso DOC Server within $timeout seconds"
-       	exit 1
+       	ECHO "***WARNING: Could not start Virtuoso DOC Server within $timeout seconds"
+       	return 1
            fi
        done
    fi

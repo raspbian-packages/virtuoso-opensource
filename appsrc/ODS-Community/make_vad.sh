@@ -165,8 +165,8 @@ virtuoso_start() {
     nows=`expr $nows + $nowh \*  60`
     if test $nows -ge $timeout
     then
-      LOG "***FAILED: Could not start $SERVER within $timeout seconds"
-      exit 1
+      LOG "***WARNING: Could not start $SERVER within $timeout seconds"
+      return 1
     fi
   done
 }
