@@ -1,0 +1,68 @@
+#!/usr/bin/make -f
+export DEBIANPKG=virtuoso-opensource-7
+export MONO_DISABLE_SHM=1
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+DH_WITH := --with pkgkde_symbolshelper
+ifneq (,$(filter %-cil, $(shell dh_listpackages)))
+	DH_WITH := $(DH_WITH),cli
+	VIRTUOSO_CIL = yes
+endif
+
+# Needed for memmmem at least in hurd and kfreebsd*
+CFLAGS += -D_GNU_SOURCE
+
+TEMPLATES	:= $(wildcard debian/*.in)
+AUTOGEN		+= $(patsubst %.in,%,$(TEMPLATES))
+
+%:
+	dh $@ $(DH_WITH)
+
+override_dh_autoreconf:
+	dh_autoreconf --as-needed
+
+override_dh_auto_configure: autogen
+	# Code copy of ckeditor was removed - bring this back into the code tree
+	cp -a /usr/share/javascript/ckeditor3 appsrc/ODS-Framework/ckeditor
+	dh_auto_configure -- --with-layout=Debian --program-transform-name='s/isql$$/isql-vt/;s/isqlw/isqlw-vt/' --with-readline --without-internal-zlib --enable-all-vads
+
+override_dh_auto_build:
+	dh_auto_build
+	# manpages
+	find debian -maxdepth 1 -type f -name '*.1.xml' -execdir docbook2x-man --solinks {} \;
+	# libvirtuoso5.5-cil
+ifdef VIRTUOSO_CIL
+	make -C binsrc/VirtuosoClient.Net -f Makefile.mono
+	chmod -x binsrc/VirtuosoClient.Net/OpenLink.Data.Virtuoso.dll
+endif
+
+override_dh_install:
+	dh_install -plibvirtodbc0 usr/lib/*/virtodbc*.so usr/lib/$(DEB_HOST_MULTIARCH)/odbc
+ifdef VIRTUOSO_CIL
+	dh_install -plibvirtuoso5.5-cil debian/virtuoso.pc usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig
+endif
+	dh_install --remaining-packages
+	# Remove code copy of ckeditor once it is not needed any more in source tree (could be also done in clean target, but why not doing it here)
+	rm -rf appsrc/ODS-Framework/ckeditor
+
+override_dh_installinit:
+	dh_installinit --noscripts
+
+override_dh_auto_clean:
+	# manpages clean
+	$(RM) $(patsubst %.xml,%,$(wildcard debian/*.1.xml))
+	# libvirtuoso5.5-cil clean
+ifdef VIRTUOSO_CIL
+	make -C binsrc/VirtuosoClient.Net -f Makefile.mono clean
+endif
+	dh_auto_clean
+	$(RM) $(AUTOGEN)
+
+override_dh_dwz:
+	echo "Skip dh_dwz"
+
+autogen: $(AUTOGEN) ;
+
+debian/%: debian/%.in
+	sed 's/@@DEB_HOST_MULTIARCH@@/$(DEB_HOST_MULTIARCH)/g' $< > $@
