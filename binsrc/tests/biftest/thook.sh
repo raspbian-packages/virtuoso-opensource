@@ -136,7 +136,7 @@ START_SERVER()
 	      rm $LOCKFILE
           fi
 	RUN $SERVER +foreground $* &
-	while true
+	for i in $(seq 1 12)
 	do
             sleep 5
 	    stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
@@ -145,19 +145,9 @@ START_SERVER()
 		LOG "PASSED: Virtuoso Server successfully started on port $port"
 		return 0
 	    fi
-	    nowh=`date | cut -f 2 -d :`
-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-	    nowh=`expr $nowh - $starth`
-	    nows=`expr $nows - $starts`
-
-	    nows=`expr $nows + $nowh \*  60`
-	    if test $nows -ge $timeout
-	    then
+	done
 		LOG "***WARNING: Could not start Virtuoso Server within $timeout seconds"
 		return 1
-	    fi
-	done
 }
 echo "STARTED : thook.sh"
 echo "STARTED : thook.sh" > $OUTPUT
