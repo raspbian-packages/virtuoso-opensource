@@ -1,0 +1,16 @@
+# The code created with this script is cc-by-nc-sa and thus links inside
+# the code are linking to it but the code itself is GPL
+virtuoso-opensource source: license-problem-cc-by-nc-sa appsrc/ODS-Framework/sioc.sql
+virtuoso-opensource source: license-problem-cc-by-nc-sa binsrc/rdf_mappers/xslt/main/cc2rdf.xsl
+#
+# These are just a bit long lines in non-compressed JS thus a false positives
+virtuoso-opensource source: source-is-missing appsrc/ODS-Framework/tbl.js line length is 543 characters (>512)
+virtuoso-opensource source: source-is-missing appsrc/ODS-Framework/typeahead.js line length is 292 characters (>256)
+virtuoso-opensource source: source-is-missing binsrc/yacutia/tbl.js line length is 538 characters (>512)
+virtuoso-opensource source: source-is-missing binsrc/oat/toolkit/OpenLayers.js line length is 654 characters (>512)
+virtuoso-opensource source: source-is-missing binsrc/oat/toolkit/xpath.js line length is 996 characters (>512)
+virtuoso-opensource source: source-is-missing binsrc/tutorial/syntax/shCore.js line length is 540 characters (>512)
+virtuoso-opensource source: source-is-missing binsrc/yacutia/dav/dav_tbl.js line length is 557 characters (>512)
+virtuoso-opensource source: source-is-missing binsrc/yacutia/syntax/shCore.js line length is 549 characters (>512)
+virtuoso-opensource source: source-is-missing appsrc/ODS-FeedManager/www/js/enews.js line length is 292 characters (>256)
+virtuoso-opensource source: source-is-missing binsrc/samples/sparql_demo/syntax/shCore.js line length is 9790 characters (>512)
