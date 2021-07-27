@@ -1,0 +1,24 @@
+Author: Jo Shields
+Last-Update: 2012-05-22 16:42:15 +0200
+Description: use debian default csharp compiler
+
+--- a/binsrc/VirtuosoClient.Net/Makefile.mono
++++ b/binsrc/VirtuosoClient.Net/Makefile.mono
+@@ -87,7 +87,7 @@ RESOURCES= \
+ 
+ ifeq  (ADONET2, $(ADONETVERSION))
+ 
+-CSC		= gmcs
++CSC		= mono-csc
+ 
+ #CSFLAGS	= -debug+ /d:MONO /d:DEBUG /d:DEBUG_IO /d:ADONET2
+ CSFLAGS		= /optimize+ /d:MONO /d:ADONET2
+@@ -102,7 +102,7 @@ REFERENCES	= /r:System.Data /r:System.En
+ 
+ else
+ 
+-CSC		= mcs
++CSC		= mono-csc
+ 
+ #CSFLAGS	= -debug+ /d:MONO /d:DEBUG /d:DEBUG_IO
+ CSFLAGS		= /optimize+ /d:MONO
