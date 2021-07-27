@@ -5161,10 +5161,12 @@ ssl_ctx_set_protocol_options(SSL_CTX *ctx, char *protocol)
       else if (!strcasecmp (name, "TLSv1_2") || !strcasecmp (name, "TLSv1.2"))
 	opt = SSL_PROTOCOL_TLSV1_2;
 #endif
+/*
 #if defined (SSL_OP_NO_TLSv1_3)
       else if (!strcasecmp (name, "TLSv1_3") || !strcasecmp (name, "TLSv1.3"))
 	opt = SSL_PROTOCOL_TLSV1_3;
 #endif
+*/
       else if (!strcasecmp (name, "ALL"))
 	opt = SSL_PROTOCOL_ALL;
       else
