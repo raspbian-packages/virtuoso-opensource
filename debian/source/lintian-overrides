@@ -1,0 +1,18 @@
+# The code created with this script is cc-by-nc-sa and thus links inside
+# the code are linking to it but the code itself is GPL
+virtuoso-opensource source: license-problem-cc-by-nc-sa appsrc/ODS-Framework/sioc.sql
+virtuoso-opensource source: license-problem-cc-by-nc-sa binsrc/rdf_mappers/xslt/main/cc2rdf.xsl
+#
+# These are just a bit long lines in non-compressed JS thus a false positives
+source-is-missing appsrc/ODS-FeedManager/www/js/enews.js
+source-is-missing appsrc/ODS-Framework/common.js
+source-is-missing appsrc/ODS-Framework/ods_ubiquity.js
+source-is-missing appsrc/ODS-Framework/tbl.js
+source-is-missing binsrc/oat/toolkit/OpenLayers.js
+source-is-missing binsrc/oat/toolkit/xpath.js
+source-is-missing binsrc/rdf_mappers/sponger_front_page/jquery.js
+source-is-missing binsrc/samples/sparql_demo/syntax/shCore.js
+source-is-missing binsrc/tutorial/syntax/shCore.js
+source-is-missing binsrc/yacutia/dav/dav_tbl.js
+source-is-missing binsrc/yacutia/syntax/shCore.js
+source-is-missing binsrc/yacutia/tbl.js
