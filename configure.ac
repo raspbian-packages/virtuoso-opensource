@@ -3019,7 +3019,6 @@ AC_CONFIG_FILES([
 	libsrc/util/Makefile
 	libsrc/Wi/Makefile
 	libsrc/Xml.new/Makefile
-	libsrc/zlib/Makefile
 	appsrc/Makefile
 	appsrc/ODS-Framework/Makefile
 	appsrc/ODS-Addressbook/Makefile
