@@ -5280,7 +5280,11 @@ ssl_server_init ()
   }
 #endif
 
-  SSLeay_add_all_algorithms ();
+#if OPENSSL_VERSION_NUMBER < 0x10100000
+  SSLeay_add_all_algorithms();
+#else
+  OpenSSL_add_all_algorithms();
+#endif
   PKCS12_PBE_add ();		/* stub */
 
 #ifdef NO_THREAD
