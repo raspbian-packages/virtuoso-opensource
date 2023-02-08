@@ -1,0 +1,25 @@
+Author: Andreas Beckmann <anbe@debian.org>
+Description: fix detection of wbxml2 0.11
+Bug-Debian: #993431
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -1412,7 +1412,7 @@ then
+     old_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+     case "$with_wbxml2" in
+ 	yes)
+-	   WBXML2_CFLAGS=""
++	   WBXML2_CFLAGS="-I/usr/include/libwbxml-1.0/wbxml"
+ 	   WBXML2_LDFLAGS="-lwbxml2"
+ 	   ;;
+ 	*)
+@@ -1434,7 +1434,8 @@ then
+ int
+ main ()
+ {
+-  WBXMLParser *wbxml_parser = wbxml_parser_create();
++  if (0)
++    wbxml_conv_xml2wbxml_withlen(0, 0, 0, 0, 0);
+ 
+   return 0;
+ }],
