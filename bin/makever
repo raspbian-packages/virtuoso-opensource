@@ -39,6 +39,11 @@ DATE=`date`
 UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
 UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
 
+if [ -n "$SOURCE_DATE_EPOCH" ]
+then
+	DATE=$(date --utc --date="@$SOURCE_DATE_EPOCH")
+	UNAME_RELEASE=
+fi
 
 #
 #  Parse command line

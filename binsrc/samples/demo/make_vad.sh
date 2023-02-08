@@ -34,7 +34,7 @@ LOGDIR=`pwd`
 LOGFILE="${LOGDIR}/make__demo_vad.log"
 STICKER_NAME="make__demo_vad.xml"
 STICKER="${LOGDIR}/${STICKER_NAME}"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-virtuoso}
 THOST=${THOST-localhost}
 TPORT=${TPORT-8440}
