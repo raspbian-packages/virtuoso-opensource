@@ -1,0 +1,44 @@
+#!/usr/bin/make -f
+export MONO_DISABLE_SHM=1
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+DH_WITH := --with pkgkde_symbolshelper
+ifneq (,$(filter %-cil, $(shell dh_listpackages)))
+	DH_WITH := $(DH_WITH),cli
+endif
+
+# Needed for memmmem at least in hurd and kfreebsd*
+CFLAGS += -D_GNU_SOURCE
+
+TEMPLATES	:= $(wildcard debian/*.in)
+AUTOGEN		+= $(patsubst %.in,%,$(TEMPLATES))
+
+%:
+	dh $@ $(DH_WITH)
+
+override_dh_auto_configure: autogen
+	# Code copy of ckeditor was removed - bring this back into the code tree
+	ln -sf /usr/share/javascript/ckeditor3 appsrc/ODS-Framework/ckeditor
+	dh_auto_configure -- --with-layout=Debian --program-transform-name='s/isql$$/isql-vt/;s/isqlw/isqlw-vt/' --with-readline --without-internal-zlib --enable-all-vads
+	test -f INSTALL || ln -sf INSTALL.md INSTALL
+
+execute_after_dh_auto_build:
+	# manpages
+	find debian -maxdepth 1 -type f -name '*.1.xml' -execdir docbook2x-man --solinks {} \;
+
+override_dh_installinit:
+	dh_installinit --noscripts
+
+execute_before_dh_auto_clean:
+	# manpages clean
+	$(RM) debian/*.1
+
+execute_after_dh_auto_clean:
+	$(RM) appsrc/ODS-Framework/ckeditor
+	$(RM) $(AUTOGEN)
+
+autogen: $(AUTOGEN) ;
+
+debian/%: debian/%.in
+	sed 's/@@DEB_HOST_MULTIARCH@@/$(DEB_HOST_MULTIARCH)/g' $< > $@
