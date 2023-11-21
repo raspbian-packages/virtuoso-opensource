@@ -123,7 +123,7 @@ virtuoso_start() {
     fi
 
     stat="true"
-    while true
+    for i in $(seq 1 15)
     do
 	sleep 4
 	echo "Waiting $SERVER start on port $PORT..."
@@ -134,17 +134,9 @@ virtuoso_start() {
 	    LOG "PASSED: $SERVER successfully started on port $PORT"
 	    return 0
 	fi
-	nowh=`date | cut -f 2 -d :`
-	nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-	nowh=`expr $nowh - $starth`
-	nows=`expr $nows - $starts`
-	nows=`expr $nows + $nowh \*  60`
-	if test $nows -ge $timeout
-	then
+    done
 	    LOG "***FAILED: Could not start $SERVER within $timeout seconds"
 	    exit 1
-	fi
-    done
 }
 
 
