@@ -1661,7 +1661,6 @@ OAT.Loader = {
 	svgsparql:"geometry",
 	timeline:["slider","tlscale","resize"],
 	tree:"ghostdrag",
-	webclip:"webclipbinding",
 	win:["drag","layers"],
 	ws:["xml","soap","ajax","schema","connection"],
 	xml:["xpath"],
