@@ -51,15 +51,16 @@ server_libs = \
 	$(top_builddir)/libsrc/langfunc/liblangfunc.la \
 	$(top_builddir)/libsrc/Tidy/libtidy.la \
 	$(top_builddir)/libsrc/util/libutil.la \
-	@srvrlibs@ 
+	@srvrlibs@ \
+	-lpcre -lminizip
 
 client_libs = \
 	$(top_builddir)/libsrc/Wi/libwic.la \
 	$(top_builddir)/libsrc/Dk/libdk1t.la \
 	$(top_builddir)/libsrc/Thread/libthrs.la \
 	$(top_builddir)/libsrc/util/libutil.la \
-	@clntlibs@
-
+	@clntlibs@ \
+	-lpcre -lminizip
 
 M2_SOURCES = chil.c
 M2_LDADD = \
