@@ -28,7 +28,9 @@
 #include "multibyte.h"
 #include "srvmultibyte.h"
 
-#include "util/pcrelib/pcre.h"
+// Debian maintainer: replaced by external PCRE
+// #include "util/pcrelib/pcre.h"
+#include "pcre.h"
 
 /*
    typedef struct rx_query_s {
