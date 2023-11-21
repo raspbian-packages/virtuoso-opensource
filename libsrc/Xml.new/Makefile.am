@@ -55,7 +55,7 @@ BUILT_SOURCES = xhtml_ent.h
 xhtml_ent.h: $(srcdir)/xhtml_ent.gperf
 	@${GEN} --stdout ${GPERF} \
                 -o xhtml_ent.h \
-                -aCDGptr \
+                -aCDGpt \
 		-Kentity \
 		-L ANSI-C \
 		-k1,2,3,4,5,$$ \

@@ -33,7 +33,7 @@ LOGDIR=`pwd`
 VERSION="1.00.00"  # see automatic versioning below "1.02.69"
 LOGFILE="${LOGDIR}/make_ods_vad.log"
 STICKER="make_ods_vad.xml"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-virtuoso}
 THOST=${THOST-localhost}
 PORT=${PORT-1970}
