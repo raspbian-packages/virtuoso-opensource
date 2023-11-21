@@ -1,0 +1,2 @@
+usr/lib/${DEB_HOST_MULTIARCH}/cli/virtuoso-opensource-7/*.dll	usr/lib/cli/virtuoso-5.5/
+debian/virtuoso.pc						usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/

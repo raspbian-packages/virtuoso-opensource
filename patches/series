@@ -1,0 +1,24 @@
+ftbfs-armel.patch
+use-debian-default-csharp-compiler.patch
+config-universal-variables.patch
+repack-oat.patch
+repack-tutorial.patch
+repack-pcre.patch
+repack-zlib.patch
+# build-generated-code-multiple-outputs.patch
+disable-full-test-suite.patch
+check_log_fix.patch
+do_not_depend_on_MAXPATHLEN.patch
+safer-timeout.patch
+remove_ckeditor_mini
+remove-saddr_t-typedef.patch
+use_debian_packaged_zlib.patch
+fix_type.patch
+ssl1.1.patch
+ssl1.1_more.patch
+prevent_privacy_breach.patch
+cross-compilation-safe_pkg-config.patch
+cil.patch
+wbxml2.patch
+tirpc.patch
+reproducible.patch
