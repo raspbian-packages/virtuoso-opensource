@@ -881,17 +881,6 @@ AC_TRY_COMPILE([
     ])
 
 AC_MSG_CHECKING([OpenSSL version])
-AC_TRY_COMPILE([
-#include <openssl/opensslv.h>
-],[
-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-#error OpenSSL version too new
-#endif
-    ],[
-      AC_MSG_RESULT([< 1.1.0])
-    ],[
-      AC_MSG_ERROR([OpenSSL version 1.1.0 or greater is currently not supported.])
-    ])
 
 AC_MSG_CHECKING([usability of the OpenSSL header files and library in ${openssl_dir}])
 AC_TRY_RUN([
