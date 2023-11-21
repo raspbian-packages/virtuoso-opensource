@@ -589,7 +589,7 @@ chmod 644 virtuoso.trx
 directory_clean
 
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	$myrm -f *.vad

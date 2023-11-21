@@ -462,7 +462,7 @@ chmod 644 $VAD_DAV
 chmod 644 $VAD_FS
 
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	$myrm -f *.vad
