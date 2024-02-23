@@ -174,7 +174,7 @@ START_SERVER()
        starth=`date | cut -f 2 -d :`
        starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
 
-       while true
+       for i in $(seq 1 10)
        do
            sleep 6
            if (netstat -an | grep "$PORT" | grep LISTEN > /dev/null)
@@ -182,19 +182,9 @@ START_SERVER()
        	ECHO "Virtuoso server started"
        	return 0
            fi
-           nowh=`date | cut -f 2 -d :`
-           nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-           nowh=`expr $nowh - $starth`
-           nows=`expr $nows - $starts`
-
-           nows=`expr $nows + $nowh \*  60`
-           if test $nows -ge $timeout
-           then
+       done
        	ECHO "***FAILED: Could not start Virtuoso DOC Server within $timeout seconds"
        	exit 1
-           fi
-       done
    fi
 }
 

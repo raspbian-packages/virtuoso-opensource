@@ -313,7 +313,7 @@ START_SERVER()
 	then
 	    return
 	fi
-	while true
+	for i in $(seq 1 120)
 	do
 	    stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
 	    if [ "z$stat" != "z" ]
@@ -322,25 +322,15 @@ START_SERVER()
 		return 0
 	    fi
             sleep 1
-	    nowh=`date | cut -f 2 -d :`
-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-	    nowh=`expr $nowh - $starth`
-	    nows=`expr $nows - $starts`
-
-	    nows=`expr $nows + $nowh \*  60`
-	    if test $nows -ge $timeout
-	    then
+	done
 		LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
 		exit 1
-	    fi
-	done
 }
 
 CHECK_PORT()
 {
   port=$1
-  while true
+  for i in $(seq 1 60)
   do
     stat=`netstat -an | grep "[\.\:]$port " | grep LISTEN`
     if [ "z$stat" = "z" ]
@@ -349,19 +339,9 @@ CHECK_PORT()
 	return 0
     fi
     sleep 1
-    nowh=`date | cut -f 2 -d :`
-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-    nowh=`expr $nowh - $starth`
-    nows=`expr $nows - $starts`
-
-    nows=`expr $nows + $nowh \*  60`
-    if test $nows -ge $timeout
-    then
+  done  
 	LOG "***FAILED: Port $port is not freed during $timeout seconds"
 	exit 1
-    fi
-  done  
 }
 
 STOP_SERVER()
