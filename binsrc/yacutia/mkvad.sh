@@ -37,7 +37,7 @@ _HTTPPORT=`expr $PORT + 10`
 HTTPPORT=${HTTPPORT-$_HTTPPORT}
 #PORT=1311
 #HTTPPORT=8311
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-}
 HOST=${HOST-localhost}
 STICKER_DAV="vad_dav.xml"

@@ -44,7 +44,7 @@ HOST_OS=`uname -s | grep WIN`
 NEED_VERSION=06.02.3130
 VERSION=1.00.0000  # see automatic versioning below
 
-BUILDDATE=`date +"%Y-%m-%d"`
+BUILDDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d"`
 
 if [ "x$1" = "xdev" ]
 then

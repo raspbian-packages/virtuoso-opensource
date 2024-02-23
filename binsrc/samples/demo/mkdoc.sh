@@ -62,7 +62,7 @@ VAD_NAME="doc"
 VAD_NAME_DEVEL="$VAD_NAME"_filesystem.vad
 VAD_NAME_RELEASE="$VAD_NAME"_dav.vad
 VERSION="1.1.18"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 
 HOST_OS=`uname -s | grep WIN`
 if [ "x$HOST_OS" != "x" ]
@@ -382,7 +382,7 @@ sticker_init() {
   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
   echo "  </name>" >> $STICKER
   echo "  <version package=\"$VERSION\">" >> $STICKER
-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
   echo "    <prop name=\"Build\" value=\"Release\"/>" >> $STICKER
   echo "  </version>" >> $STICKER
   echo "</caption>" >> $STICKER

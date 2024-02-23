@@ -185,7 +185,7 @@ sticker_init() {
   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
   echo "  </name>" >> $STICKER
   echo "  <version package=\"$VERSION\">" >> $STICKER
-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
   echo "    <prop name=\"Build\" value=\"Release, optimized\"/>" >> $STICKER
   echo "  </version>" >> $STICKER
   echo "</caption>" >> $STICKER
@@ -200,7 +200,7 @@ sticker_init() {
   echo "    <![CDATA[" >> $STICKER
   echo "      registry_set('_http_debug_path_', '/DAV/VAD/http_debug');" >> $STICKER
   echo "      registry_set('_http_debug_version_', '$VERSION');" >> $STICKER
-  echo "      registry_set('_http_debug_build_', '`date +"%Y-%m-%d %H:%M"`');" >> $STICKER
+  echo "      registry_set('_http_debug_build_', '`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`');" >> $STICKER
   echo "      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/http_debug/init.sql', 1, 'report', 1);" >> $STICKER
   echo "      vhost_remove (lpath=>'/http_debug');" >> $STICKER
   echo "      vhost_define (lpath=>'/http_debug', ppath=>'/DAV/VAD/http_debug/', is_dav=>1, vsp_user=>'dba', def_page=>'record.vspx');" >> $STICKER
