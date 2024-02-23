@@ -1,0 +1,16 @@
+Author: Andreas Beckmann <anbe@debian.org>
+Description: the /sdk:2 switch caused the -cil package to lose all its dependencies
+ due to the version override
+Bug-Debian: #991070
+
+--- a/binsrc/VirtuosoClient.Net/Makefile.am
++++ b/binsrc/VirtuosoClient.Net/Makefile.am
+@@ -27,7 +27,7 @@ endif
+ cli_SCRIPTS	= $(TARGET)
+ CLEANFILES	= $(TARGET)
+ 
+-MCS_FLAGS = /sdk:2 /optimize+ /d:MONO /d:ADONET2
++MCS_FLAGS = /optimize+ /d:MONO /d:ADONET2
+ 
+ SOURCES = \
+ 	$(srcdir)/ArrayOfLongPacked.cs \

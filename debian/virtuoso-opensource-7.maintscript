@@ -1,0 +1,1 @@
+rm_conffile /etc/virtuoso-opensource-7/virtuoso.ini 7.2.5.1+dfsg-1~ virtuoso-opensource-7
