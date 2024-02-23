@@ -41,7 +41,8 @@
 
 // Debian maintainer: replaced by external PCRE
 // #include "util/pcrelib/pcre.h"
-#include "pcre.h"
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
 
 #define ecm_isname(c) \
   ( ((c) & ~0xFF) ? (ecm_utf8props[(c)] & ECM_ISNAME) : \
@@ -1540,7 +1541,7 @@ xqf_starts_with  (xp_instance_t * xqi, XT * tree, xml_entity_t * ctx_xe)
 
 
 static void
-xqf_check_regexp (caddr_t pattern, int c_opts)
+xqf_check_regexp (caddr_t pattern, uint32_t c_opts)
 {
   caddr_t pre_res;
   int next;
@@ -1552,13 +1553,13 @@ xqf_check_regexp (caddr_t pattern, int c_opts)
     sqlr_new_error ("42001", "XRQ??", "invalid regular expression");
 }
 
-static int
+static uint32_t
 xqf_make_regexp_modes(const char * flag)
 {
-  int c_opts;
+  uint32_t c_opts;
   if ((c_opts=regexp_make_opts (flag)) == -1)
     sqlr_new_error ("42001", "XRQ??", "invalid regular expression flag");
-  c_opts |= PCRE_UTF8;
+  c_opts |= PCRE2_UTF;
   return c_opts;
 }
 
@@ -1570,7 +1571,7 @@ __xqf_tokenize (caddr_t str, caddr_t pattern, caddr_t flag)
   int next = 1;
   caddr_t str_inx = str;
   dk_set_t res_set = 0;
-  int c_opts;
+  uint32_t c_opts;
 
   c_opts=xqf_make_regexp_modes (flag);
   xqf_check_regexp (pattern, c_opts);
@@ -1628,7 +1629,7 @@ static void
 xqf_matches (xp_instance_t * xqi, XT * tree, xml_entity_t * ctx_xe)
 {
   caddr_t val1, val2, val3 = NULL;
-  int c_opts;
+  uint32_t c_opts;
 
   if (tree->_.xp_func.argcount)
     {
@@ -2003,7 +2004,7 @@ xqf_ends_with  (xp_instance_t * xqi, XT * tree, xml_entity_t * ctx_xe)
 #define XQF_REPL_OK	0
 
 static int
-xqf_write_replacement (dk_session_t * ses, caddr_t input, int * offvect, int offvect_sz, caddr_t replacement)
+xqf_write_replacement (dk_session_t * ses, caddr_t input, size_t * offvect, int offvect_sz, caddr_t replacement)
 {
   int repl_sz = box_length (replacement) - 1;
   int idx = 0;
@@ -2042,7 +2043,7 @@ xqf_replace  (xp_instance_t * xqi, XT * tree, xml_entity_t * ctx_xe)
   caddr_t pattern = xpf_arg (xqi, tree, ctx_xe, DV_STRING, 1);
   caddr_t replacement = xpf_arg (xqi, tree, ctx_xe, DV_STRING, 2);
   caddr_t flag = 0;
-  int c_opts;
+  uint32_t c_opts;
   if (tree->_.xp_func.argcount > 3)
     flag = xpf_arg (xqi, tree, ctx_xe, DV_STRING, 3);
 
@@ -2050,7 +2051,7 @@ xqf_replace  (xp_instance_t * xqi, XT * tree, xml_entity_t * ctx_xe)
   xqf_check_regexp (pattern, c_opts);
 
   {
-    int offvect[128];
+    size_t offvect[128];
     int res = regexp_split_parse (pattern, input, offvect, 128, c_opts);
     int utf8_str_len = box_length (input) - 1;
     if (res != -1)

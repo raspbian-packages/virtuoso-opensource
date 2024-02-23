@@ -559,7 +559,7 @@ libwi_la_SOURCES += \
 	$(libwi_base_la_sources)
 
 libwi_la_CFLAGS  = $(libwi_base_la_cflags)
-libwi_la_LDLAGS  = -static -lminizip -lpcre
+libwi_la_LDLAGS  = -static -lminizip -lpcre2-8
 
 #KUBL_UNIV_FILES_ODBC
 libwi_odbc_la_SOURCES += \

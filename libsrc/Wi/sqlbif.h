@@ -314,11 +314,11 @@ extern caddr_t file_native_name (caddr_t server_encoded_fname);
 extern caddr_t file_native_name_from_iri_path_nchars (const char *iri_path, size_t iri_path_len);
 caddr_t get_ssl_error_text (char *buf, int len);
 
-caddr_t regexp_match_01 (const char *pattern, const char *str, int c_opts);
-caddr_t regexp_match_01_const (const char* pattern, const char* str, int c_opts, void ** compiled_ret);
-caddr_t regexp_split_match (const char* pattern, const char* str, int* next, int c_opts);
-int regexp_make_opts (const char* mode);
-int regexp_split_parse (const char* pattern, const char* str, int* offvect, int offvect_sz, int c_opts);
+caddr_t regexp_match_01 (const char *pattern, const char *str, uint32 c_opts);
+caddr_t regexp_match_01_const (const char* pattern, const char* str, uint32_t c_opts, void ** compiled_ret);
+caddr_t regexp_split_match (const char* pattern, const char* str, int* next, uint32_t c_opts);
+uint32_t regexp_make_opts (const char* mode);
+int regexp_split_parse (const char* pattern, const char* str, size_t* offvect, uint32_t offvect_sz, uint32_t c_opts);
 
 /*! Wrapper for uu_decode_part,
  modifies \c src input string! */

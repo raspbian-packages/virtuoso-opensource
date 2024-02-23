@@ -414,8 +414,8 @@ extern int dbf_log_fsync;
 extern int dbf_assert_on_malformed_data;
 extern int dbf_max_itc_samples;
 
-extern int32 c_pcre_match_limit;
-extern int32 c_pcre_match_limit_recursion;
+extern uint32 c_pcre_match_limit;
+extern uint32 c_pcre_match_limit_recursion;
 extern int32 pcre_max_cache_sz;
 
 extern int32 shcompo_max_cache_sz;
