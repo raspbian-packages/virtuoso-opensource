@@ -6872,10 +6872,11 @@ signal_error:
 #define fopen64  fopen
 #endif
 
-#include "zlib/contrib/minizip/unzip.h"
-#include "zlib/contrib/minizip/ioapi.h"
-#include "zlib/contrib/minizip/ioapi.c"
-#include "zlib/contrib/minizip/unzip.c"
+#include "minizip/unzip.h"
+#include "minizip/ioapi.h"
+/*#include "minizip/ioapi.c"
+ *#include "minizip/unzip.c"
+ */
 
 static caddr_t
 bif_unzip_file (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args)
