@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html 
+    xmlns="http://www.w3.org/1999/xhtml" 
+    version="XHTML+RDFa 1.0" 
+    xml:lang="en"
+    xmlns:addthis="http://www.addthis.com/help/api-spec"
+    xmlns:fb="http://www.facebook.com/2008/fbml"
+>
+<?vsp
+
+   declare _G, _S, _S_save, odd_position any;
+   declare rdf_link, label, true_label, _subject any;
+   declare arr, data, meta, h1, h2, inx, gr, host, pars, cookievec any;
+   declare iri_type, iri_uri, links, langs, dspace, sid, error_message, cookiestr, dsn, ua, sp_mode, accept_mode varchar;
+   declare do_sponge, force_clean, do_refresh, local_lookup, sponge_type, proxy_iri_fn, expir int;
+
+   set http_charset='utf-8';
+   if (0 = DB.DBA.RDF_SPONGE_AUTH ('Virtuoso Sponger'))
+     {
+       http_rewrite ();
+       http_status_set (403);
+       http ('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><body>You are not allowed to sponge due to Access Control restrictions.</body></html>');
+       return;
+     }
+
+  --
+  -- Get AddthisKey from registry
+  --
+  --  if 0 then disable addthis support
+  --  if 1 use temp key to get basic social bookmarking
+  --  any other value should be a registered key
+  --
+  declare _addthis_key varchar;
+  _addthis_key := registry_get ('rdf_mappers_addthis_key');
+  if (0 = _addthis_key) _addthis_key := '0';
+  if ('1' = _addthis_key) _addthis_key := 'xa-4ce13e0065cdadc0';
+
+   label := '';
+   iri_type := 'unknown';
+   _subject := '';
+   error_message := null;
+   odd_position := 0;
+   do_refresh := null;
+   sponge_type := '';
+   rdf_link := '';
+   connection_set ('ns_ctr', 1); /* for unknown xmlns to print in RDFa */
+   host := http_request_header (http_request_header (), 'Host');
+   ua :=   http_request_header (http_request_header (), 'User-Agent');
+   if (not isstring (ua))
+     ua := null;
+   langs := rdfdesc_get_lang_acc (lines);
+   gr := rtrim (get_keyword ('g', params, ''));
+   if (gr like '%?debug=on' or gr like '%&debug=on')
+     gr := subseq (gr, 0, length (gr) - 9);
+   if (gr like '%?@Lookup@=%' or gr like '%&@Lookup@=%')
+     {
+       declare tmp any;
+       tmp := regexp_substr ( '(.*)([\\?&]@Lookup@=.*)', gr, 2);
+       tmp := split_and_decode (ltrim (tmp, '?&'));
+       sponge_type := get_keyword ('@Lookup@', tmp, '');
+       force_clean := get_keyword ('refresh', tmp, '-1');
+       do_refresh := atoi (force_clean);
+       if (do_refresh < 0 or force_clean = 'clean')
+         do_refresh := null;
+       gr := regexp_substr ( '(.*)([\\?&]@Lookup@=.*)', gr, 1);
+     }
+   sp_mode := 'add';  
+   accept_mode := null;
+   if (gr like '%sponger:%=%')
+     {
+       declare rq any;
+       rq := WS..PARSE_URI (gr); 
+       rq := split_and_decode (rq[4]);
+       sp_mode := get_keyword ('sponger:get', rq, 'add');
+       accept_mode := get_keyword ('sponger:accept', rq);
+       gr := regexp_substr ( '(.*)([\\?&]sponger:(.*)=.*)', gr, 1);
+     }
+   arr := rfc1808_parse_uri (gr);
+   if (arr[0] = '' and arr[1] = '' and arr[2] <> '') -- case when /about/html/www.cname/path i.e. when no scheme the default is http
+     gr := 'http://' || gr;
+   cookiestr := http_request_header (lines, 'Cookie', null, null);
+   cookiestr := regexp_replace (cookiestr, ';[[:space:]]*', ';', 1, null);
+   cookievec := split_and_decode (cookiestr, 0, '\0\0;=');
+   if (cookievec is not null)
+     sid := get_keyword ('__rdf_sponge_sid', cookievec);
+   else
+     sid := null;
+   if (sid is null)
+     {
+        sid := xenc_rand_bytes (6, 1);
+     	http_header (sprintf ('Set-Cookie: __rdf_sponge_sid=%s; expires=%s; path=/about;\r\n',
+     		sid, date_rfc1123 (dateadd ('hour', 24, now ()))));
+     }
+   http_header (http_header_get () || 'Cache-Control: no-cache, must-revalidate\r\nPragma: no-cache\r\n');
+   connection_set ('__rdf_sponge_sid', sid);
+   if (get_keyword ('debug', params, '') = 'on')
+     connection_set ('__rdf_sponge_debug', 1);
+   else
+     connection_set ('__rdf_sponge_debug', 0);
+   proxy_iri_fn := get_keyword ('p', params, null);
+   pars := split_and_decode (arr[4]);
+   if (isarray (pars) and get_keyword ('p', pars, '') = proxy_iri_fn)
+     proxy_iri_fn := null;
+   connection_set ('proxy_iri_fn', proxy_iri_fn); -- setup proxy iri function
+
+   _G := replace (gr, '%01', '#');
+   _S := get_keyword ('res', params);
+   do_sponge := 0;
+   local_lookup := 0;
+   if (_S is null)
+     {
+       do_sponge := 1;
+       _S := _G;
+     }
+   else
+     _S := replace (_S, '%01', '#');
+
+   if (_S like 'feed:%')
+     _S := 'http:' || subseq (_S, 5);
+   if (_S like 'webcal:%')
+     _S := 'http:' || subseq (_S, 7);
+
+   arr := rfc1808_parse_uri (_G);
+   dspace := arr[1];
+
+   if (arr[2] = '/' and DB.DBA.vspx_uri_compose (arr) <> _G)
+     arr[2] := '';
+   -- enable to stop sponge for #fragment
+   --if (arr[5] <> '')
+   --  do_sponge := 0;
+   arr[0] := lower (arr[0]);
+   if (arr[0] not in ('http', 'https', 'file', 'feed', 'doi', 'webcal', 'oai', 'acct', 'mailto', 'ftp') and _G not like 'urn:lsid:%')
+     {
+       do_sponge := 0;
+       local_lookup := 1;
+     }
+   arr [5] := '';
+   if (arr[0] = 'feed')
+     arr[0] := 'http';
+   _G := DB.DBA.vspx_uri_compose (arr);
+
+   if (arr[1] = host and arr[2] like '/about/id/%')
+     {
+       declare pa, sch, nhost, len, tmp, npath any;
+       pa := split_and_decode (arr[2], 0, '\0\0/');
+       if (length (pa) > 5 and pa[3] = 'entity' and pa[4] <> '' and pa [5] <> '')
+         {
+	    sch := pa[4];
+	    nhost := pa [5];
+	    tmp := '/about/id/entity/' || sch || '/' || nhost;
+	    npath := subseq (arr[2], length (tmp));
+	    arr[0] := sch;
+	    arr[1] := nhost;
+	    arr[2] := npath;
+
+	    if (lower(arr[0]) in ('acct', 'mailto'))
+	      {
+	        arr [2] := arr[1];
+	        arr [1] := '';
+              }
+
+	    _G := DB.DBA.vspx_uri_compose (arr);
+
+	    --do_sponge := 0;
+         }
+       else if (length (pa) > 4 and pa[3] <> '' and pa [4] <> '')
+         {
+	    sch := pa[3];
+	    nhost := pa [4];
+	    tmp := '/about/id/' || sch || '/' || nhost;
+	    npath := subseq (arr[2], length (tmp));
+	    arr[0] := sch;
+	    arr[1] := nhost;
+	    arr[2] := npath;
+
+	    if (sch in ('acct', 'mailto'))
+	      {
+	        arr[2] := arr[1];
+		arr[1] := '';
+	      }
+
+	    _G := DB.DBA.vspx_uri_compose (arr);
+	    --do_sponge := 0;
+         }
+     }
+   arr := rfc1808_parse_uri (_S);
+   _S_save := _S;
+   if (lower (arr[0]) in ('http', 'https') and (arr[1] <> host or arr[2] not like '/about/id/%'))
+     {
+       _S := RDF_SPONGE_PROXY_IRI (_S);
+     }
+
+   _S := replace (_S, '''', '%27');
+   _G := replace (_G, '''', '%27');
+
+   if (_S not like 'nodeID://%' and do_sponge)
+     {
+       declare exit handler for sqlstate '*'
+       {
+          if (__SQL_STATE = 'HT404')
+	    {
+	      http_status_set (404);
+              error_message := 'Cannot find URL: ' || _G;
+	    }
+	  else
+            {
+	      error_message := __SQL_MESSAGE;
+	    }
+	  rollback work;
+          _S := _G;
+	  goto errors;
+       };
+       --DB.DBA.EXEC_AS (sprintf ('sparql define input:storage "" define get:soft "soft" SELECT * from <%S> where { ?x ?y ?z . }', _G), 'SPARQL');
+       --DB.DBA.VT_INC_INDEX_DB_DBA_RDF_OBJ ();
+       -- temporary work around to stop sponging twice
+       if (force_clean = 'clean')
+         {
+           sparql clear graph ?:_G;
+	 }
+       DB.DBA.RM_DO_SPONGE (_G, sponge_type, do_refresh, sp_mode, accept_mode);
+       commit work;
+     }
+   else if (_S like 'nodeID://%' or local_lookup = 1)
+     {
+       -- blank node is subject
+       exec (sprintf ('sparql define input:storage "" select ?g where { graph ?g { <%S> ?p ?o . }} limit 1', _S),
+	  null, null, vector (), 0, meta, data);
+        if (length (data))
+	  _G := data[0][0];
+        else
+          {
+	    exec (sprintf ('sparql define input:storage "" select ?g where { graph ?g { ?s ?p <%S> . }} limit 1', _S),
+	      null, null, vector (), 0, meta, data);
+	    if (length (data))
+	      _G := data[0][0];
+	  }
+     }
+
+   exec (sprintf ('sparql ask where { graph <%S> { <%S> ?p ?o . filter (?p != <http://www.openlinksw.com/schema/attribution#isDescribedUsing>) }}',
+     _G, _S), null, null, vector (), 0, meta, data);
+   if (not length (data))
+     {
+       _S := _S_save;
+       -- rdf views
+       _S := replace (_S, '''', '%27');
+       exec (sprintf ('sparql ask where { graph <%S> { <%s> ?p ?o . }}', _G, _S), null, null, vector (), 0, meta, data);
+       if (not length (data))
+         {
+           exec (sprintf ('sparql ask where { graph <%S> { <%s#this> ?p ?o . }}', _G, _S), null, null, vector (), 0, meta, data);
+           if (length (data))
+	     _S := _S || '#this';
+           else
+	     {
+	       _S := DB.DBA.RDF_PROXY_ENTITY_IRI (_G);
+	     }
+         }
+     }
+
+   -- XXX: the bellow is a guess about subject, should not be used
+   --exec (sprintf ('sparql ask where { graph <%S> { <%S> ?p ?o }}', _G, _S), null, null, vector (), 0, meta, data);
+   --if (not length (data))
+   --  {
+   --     exec (sprintf ('sparql select ?s where { graph <%S> { ?s ?p ?o filter regex (?s, "%S#.*") }}', _G, _S),
+   --	  null, null, vector (), 0, meta, data);
+   --     if (length (data))
+   --       {
+   --         _S := data[0][0];
+   --       }
+   --  }
+
+   label := rdfdesc_label (_S, _G, lines);
+   label := cast (label as varchar);
+   true_label := label;
+   iri_type := rdfdesc_type (_G, _S, iri_uri);
+
+   exec (sprintf ('sparql prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix dc: <http://purl.org/dc/elements/1.1/>
+	select ?o lang(?o) where { graph <%S> { <%S> rdfs:comment ?o } }', _G, _S), null, null, vector (), 0, meta, data);
+   if (length (data)) _subject := rdfdesc_label_get (data, http_request_header_full (lines, 'Accept-Language', 'en'));
+
+   rdf_link := sprintf ('/sparql?default-graph-uri=%U&query=%U', _G, sprintf ('DESCRIBE <%s>',_S));
+   rdfdesc_links_hdr (_S, rdf_link);
+
+   links := '';
+   for select HS_EXPIRATION from SYS_HTTP_SPONGE where HS_ORIGIN_URI = _G do
+     {
+       if (HS_EXPIRATION is not null)
+         links := links||sprintf ('Expires: %s\r\n', date_rfc1123 (HS_EXPIRATION));
+     }
+   commit work;
+   http_header (http_header_get () || links);
+   errors:
+   if (not length (label))
+     label := _S;
+   if (label like 'http%://%')
+     label := rdfdesc_uri_curie (label);
+   set isolation = 'uncommitted';
+   dsn := (SPARQL prefix h: <http://www.w3.org/2006/http#> prefix hh: <http://www.w3.org/2006/http-header#>
+   	     select ?vo { graph `iri(?:_G)` { ?s ?p hh:content-location ; h:fieldValue ?v . ?v h:elementName ?vo } } LIMIT 1);
+   if (dsn is null)
+     {
+       --if (strchr (_G, '#') is null)
+       --  dsn := _G || '#';
+       --else
+	 dsn := _G;
+     }
+   else
+     {
+       dsn := rfc1808_expand_uri (_G, dsn);
+     }
+  declare desc_resource_uri varchar;
+  declare desc_qr varchar;
+  desc_qr := sprintf ('define sql:describe-mode "CBD" DESCRIBE <%s>', _S);
+  desc_resource_uri := sprintf ('http://%{WSHost}s/sparql?query=%U&format=cxml', desc_qr);
+?>
+
+<!-- header -->
+<head profile="http://www.w3.org/1999/xhtml/vocab">
+    <base href="http<?V case is_https_ctx () when 1 then 's' else '' end ?>://<?V http_request_header (lines, 'Host') ?><?V http_map_get ('domain') ?>/" />
+    <title>About: <?vsp http (sprintf ('%s', label)); ?></title>
+    <?vsp rdfdesc_links_mup (_S, rdf_link);  ?>
+    <link rel="stylesheet" type="text/css" href="statics/slidebar.css" />
+    <link rel="stylesheet" type="text/css" href="statics/style_w.css" />
+    <link href="statics/highlighter.css" type="text/css" rel="stylesheet" charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html;charset=utf-8" />
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    var uri	= "<?U dsn ?>";
+    /*]]>*/
+    </script>
+    <script type="text/javascript" src="statics/script.js"></script>
+    <script type="text/javascript" src="oat/loader.js"></script>
+</head>
+<!--
+<body onload="init();" about="<?V _S ?>">
+-->
+<body about="<?V _S ?>">
+  <div id="slb">
+    <div id="sidebar">
+      <h1>What Is This?</h1>
+      <p>This is an HTML+RDFa representation of <b><i>metadata</i></b> describing this Web-addressable resource.</p>
+      <h1>Why Is This Important?</h1>
+      <p>The property (attributes and values pairs) links on this page unveil a different kind of link, one which enables the following on HTTP networks such as the Web:</p>
+      <ol>
+        <li><i>Unambiguous identity</i> for entities (aka. strong identifiers)</li>
+        <li>Implicit binding of an entity and its metadata via <i>strong identifiers</i></li>
+        <li><i>Multiple metadata representations</i> that enable a variety of presentations</li>
+        <li><i>High precision Search and Find queries</i> that simply use the metadata documents (by referencing entity URIs) as the query's Data Source Name</li>
+      </ol>
+      <h1>How Do I Discover Alternative Metadata Representations?</h1>
+      <p>
+      This document exposes metadata in the following formats: (X)HTML+RDFa, Turtle, N3, RDF/JSON,  or RDF/XML. In the most basic form,  you can simply view the (X)HTML source markup of this page, and go directly to the &lt;head/&gt; section which contains a &lt;link/&gt; tag with relationship and type properties for each format.
+     </p>
+     <p>
+     In addition, you can also explicitly request a desired metadata representation for a given resource via HTTP GET requests that use the entity's strong identifier as the call target.
+     </p>
+     <h1>How Can I Expose My Web Resources In This Manner?</h1>
+     <p>
+     Simply include the following in the &lt;head/&gt; section of your (static or dynamically generated) (X)HTML page:<br/><br/>
+     &lt;link rel="alternate" title="My Data in RDF Linked Data form"<br/>
+     type="application/rdf+xml"<br/>
+     href="http://linkeddata.uriburner.com/about/id/&lt;this-page-URL&gt;/&gt;"
+     </p>
+     <h1>How Is This Related To The Linked Data Meme?</h1>
+     <p>
+     As stated above, the links in this page expose strong identifiers for its <b>primary topic, secondary topics, attributes, and some values</b>. These links, via  implicit association, act as conduits to their metadata-bearing documents, in a variety formats.
+    </p>
+    </div><!-- #sidebar -->
+    </div> <!-- slb -->
+
+    <div id="header">
+      <div id="hd_l">
+        <div id="opl_logo">
+          <a href="http://www.openlinksw.com"
+             title="OpenLink Software">
+            <img src="statics/openlinklogo_wstrap_2008.png"
+                 alt="[OpenLink Software]" />
+          </a>
+        </div>
+	<div id="entity_info">
+          <h1 id="title">About: <a href="<?= case when _S like 'nodeID://%' then rdfdesc_http_url (_S) else replace (_S, '#', '%01') end ?>"><?vsp http (label); ?></a></h1>
+          <div id="homelink">
+          </div>
+          <div class="page-resource-uri">
+	    An Entity of Type : <a href="<?V iri_uri ?>"><?V iri_type ?></a>,
+	    from Data Source : <a href="<?V dsn ?>"><?V dsn ?></a>,
+	    within Data Space : <a href="http://<?V dspace ?>"><?V host ?></a>
+          </div>
+        </div> <!-- #entity_info -->
+      </div> <!-- hd_l -->
+      <div id="hd_r">
+<?vsp
+  declare qrimg any;
+  qrimg := rdfdesc_make_qr_code (rdfdesc_make_curie (case when _S like 'nodeID://%' then rdfdesc_http_url (_S) else _S end, lines));
+  if (qrimg is not null and strcasestr (ua, 'Mobile') is null) {
+
+?>
+	<img id="qrcode" alt="QRcode image" src="data:image/jpg;base64,<?V qrimg ?>"/>
+<?vsp } ?>
+
+      </div> <!-- hd_r -->
+    </div> <!-- header -->
+    <div id="content_wrapper">
+    <div id="content">
+
+      <p><?vsp if (__tag (_subject) = 230) http_value (_subject); else http (sprintf ('%s', _subject)); ?></p>
+      <?vsp if (error_message is not null) { ?>
+      <div id="err"><?V error_message ?></div>
+      <?vsp } else { ?>
+     <div id="navarea">
+       <div id="navbar">
+         <ul id="navlist">
+          <li>
+            <a href="#" id="tab_attributes" onclick="toggle_tab('attributes'); return false;" class="current" title="description subject references other objects or literal values via one or more attribute-value pairs">References</a>
+          </li>
+          <li>
+            <a href="#" id="tab_attributeof" onclick="toggle_tab('attributeof'); return false;" title="description subject referenced by other objects by being the value of one or more attribute-value pairs">Referenced By</a>
+          </li>
+         </ul>
+      </div> <!-- #navbar -->
+
+      <div id="attributes">
+<!-- proptable -->
+      <table class="description">
+	  <!--
+	  <tr><th class="property">Attributes</th><th class="value">Values</th></tr>
+	  -->
+
+<?vsp
+      exec (sprintf ('select "p" as PRED from (sparql select distinct ?p where { graph <%S> { <%S> ?p ?o } }) sp order by 1', _G, _S),
+		null, null, vector (), 0, null, null, h1);
+      while (0 = exec_next (h1, null, null, data))
+	{
+           declare PRED any;
+	   pred := data[0];
+	   rdfdesc_http_print_l (PRED, odd_position);
+	   exec (sprintf ('sparql select ?o where { graph <%S> { <%S> <%S> ?o } } limit 300', _G, _S, PRED),
+		null, null, vector (), 0, null, null, h2);
+	   while (0 = exec_next (h2, null, null, data))
+	      {
+                declare OBJECT any;
+		OBJECT := data [0];
+		rdfdesc_http_print_r (OBJECT, PRED, lines, 1, langs);
+	      }
+	   exec_close (h2);
+
+	   http ('</ul></td></tr>');
+	}
+      exec_close (h1);
+      if  (odd_position = 0)
+      {
+        http ('<tr><td colspan="2"><p>No further information is available.</p></td></tr>');
+      }
+?>
+      </table>
+      </div> <!-- #attributes -->
+
+      <div id="attributeof" style="display: none;">
+      <!-- inverseproptable -->
+      <table class="description">
+	  <!--
+	  <tr><th class="property">Attributes</th><th class="value">Entities</th></tr>
+	  -->
+
+<?vsp
+      exec (sprintf ('select "p" as PRED from (sparql select distinct ?p where { graph <%S> { ?o ?p <%S> } }) sp order by 1', _G, _S),
+		null, null, vector (), 0, null, null, h1);
+      inx := 0;
+      while (0 = exec_next (h1, null, null, data))
+	{
+           declare PRED any;
+	   pred := data[0];
+	   inx := inx + 1;
+	   rdfdesc_http_print_l (PRED, odd_position, 1);
+	   exec (sprintf ('sparql select ?s where { graph <%S> { ?s <%S> <%S> } } limit 300', _G, PRED, _S),
+		null, null, vector (), 0, null, null, h2);
+	   while (0 = exec_next (h2, null, null, data))
+	      {
+                declare OBJECT any;
+		OBJECT := data [0];
+		rdfdesc_http_print_r (OBJECT, PRED, lines, 0, langs);
+	      }
+	   exec_close (h2);
+
+	   http ('</ul></td></tr>');
+	}
+      exec_close (h1);
+      if  (odd_position = 0)
+      {
+        http ('<tr><td colspan="2"><p>No further information is available.</p></td></tr>');
+      }
+?>
+      </table>
+      </div> <!-- #attributeof -->
+     </div> <!-- #navarea -->
+      <?vsp } ?>
+    </div> <!--  #content -->
+    </div> <!--  #content_wrapper -->
+
+<!-- footer -->
+    <div id="footer">
+<?vsp if (_addthis_key <> '0') { ?>
+  <div id="FT_share">
+    <!-- AddThis Button BEGIN -->
+	<div class="addthis_toolbox addthis_default_style ">
+	<a class="addthis_button_facebook_like" id="fb_like_id"></a>
+	<a class="addthis_button_tweet"></a>
+	<a class="addthis_button_google_plusone" id="g_plusone_id"></a>
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+    <script type="text/javascript"> 
+    /*<![CDATA[*/
+	var addthis_config = {"data_track_clickback":true; ui_cobrand:"Virtuoso"};
+	var addthis_share = { url_transforms : { clean: true, remove: ['sid'] } };
+    /*]]>*/
+    </script>
+    <script type="text/javascript"> 
+	var fb_like_id = document.getElementById('fb_like_id');
+	if (fb_like_id) fb_like_id.setAttribute('fb:like:layout', 'button_count');
+	var g_plusone_id = document.getElementById('g_plusone_id');
+	if (g_plusone_id) g_plusone_id.setAttribute('g:plusone:size', 'medium');
+    </script>
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=<?=_addthis_key?>"></script>
+    <!-- AddThis Button END -->
+  </div><!-- ft_s -->
+<?vsp } ?>
+      <?vsp if (error_message is null) { ?>
+      <div id="ft_t">
+        Alternative Linked Data Views:
+
+	<?vsp if (VAD_CHECK_VERSION ('fct') is not null) { ?>
+	<a href="/describe/?uri=<?vsp http_url (_S); ?>" title="Faceted Browing using Follow-Your-Nose pattern across links" target="_blank">Facets</a>
+	|
+	<?vsp } ?>
+	<?vsp if (VAD_CHECK_VERSION ('PivotViewer') is not null) { ?>
+	<a href="/PivotViewer/?url=<?vsp http_url (desc_resource_uri); ?>"  title="PivotViewer page for exploring results and generating new queries" target="_blank">PivotViewer</a>
+	|
+	<?vsp } ?>
+	<?vsp if (VAD_CHECK_VERSION ('iSPARQL') is not null) { ?>
+	<a href="/isparql/view/?query=<?vsp http_url (desc_qr); ?>&amp;resultview=browser" title="Interactive Query By Example oriented SPARQL UI" target="_blank">iSPARQL</a>
+	|
+	<?vsp } ?>
+	<a href="/ode/?uri=<?vsp http_url (_S); ?>" title="Basic navigation and exploration" target="_blank">ODE</a>
+
+       &nbsp; &nbsp; Raw Linked Data formats:
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'text/cxml')?>">CXML</a> |
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'text/csv')?>">CSV</a> | RDF (
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'text/plain') ?>">N-Triples</a>
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'text/rdf+n3') ?>">N3/Turtle</a>
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'application/rdf+json')?>">JSON</a>
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'application/rdf+xml') ?>">XML</a> ) | OData (
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'application/atom+xml')?>">Atom</a>
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'application/odata+json')?>">JSON</a> ) | Microdata (
+	<a href="<?=rdf_link || sprintf ('&output=%U', 'application/microdata+json') ?>">JSON</a>
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'text/html') ?>">HTML</a>) |
+        <a href="<?=rdf_link || sprintf ('&output=%U', 'application/ld+json')?>">JSON-LD</a> 
+
+      </div> <!-- #ft_t -->
+      <?vsp } ?>
+      <div id="ft_b">
+        <a href="http://linkeddata.org/"><img alt="This material is Open Knowledge" src="statics/LoDLogo.gif" style="border-width:0"  /></a> &nbsp;
+        <a href="http://dbpedia.org/sparql"><img alt="W3C Semantic Web Technology" src="statics/sw-sparql-blue.png" style="border-width:0" /></a> &nbsp;  &nbsp;
+        <a href="http://www.opendefinition.org/"><img alt="This material is Open Knowledge" src="statics/od_80x15_red_green.png" style="border-width:0" /></a>
+	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="statics/creativecommons.png" /></a>
+	<span about=""
+	resource="http://www.w3.org/TR/rdfa-syntax"
+	rel="dc:conformsTo" xmlns:dc="http://purl.org/dc/terms/">
+	<a href="http://validator.w3.org/check?uri=referer"><img
+	    src="http://www.w3.org/Icons/valid-xhtml-rdfa"
+	    alt="Valid XHTML + RDFa" height="27" /></a>
+	</span>
+	<br />
+	This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>.
+	<br />
+	<?vsp rdfdesc_virt_info (); ?>
+      </div> <!-- #ft_b -->
+    <div>
+	<?vsp
+	   if (registry_get ('__rdf_sponge_debug') = '1')
+	     http ('Trace ID: ' || sid);
+	?>
+    </div>
+    <div id="status"></div>
+    </div> <!-- #footer -->
+
+    <?vsp if (isstring (registry_get ('urchinTracker'))) { ?>
+    <script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("<?V registry_get ('urchinTracker')  ?>");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+    <?vsp } ?>
+
+ </body>
+</html>

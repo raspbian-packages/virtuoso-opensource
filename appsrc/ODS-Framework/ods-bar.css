@@ -1,0 +1,151 @@
+
+#ods_bar {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  float: left;
+  clear: both;
+  color: #444;
+  font-size: 9pt;
+  font-family: "Gill Sans", Arial, Helvetica, sans-serif;
+  background-color: #ddeff9}
+
+#ods_bar ul {
+  list-style-type: none}
+
+#ods_bar ul li {
+  display: inline}
+
+#ods_bar a {
+  text-decoration: none;
+  color: inherit}
+
+#ods_bar img {
+  float: none;
+  border: 0;
+  margin: 0}
+
+#ods_bar input {
+  margin-right: 8px;
+  font-size: 7pt;
+  color: #555;}
+
+#ods_bar_handle {
+  width: 10px;
+  float: left}
+
+#ods_bar_content {
+  float: left;
+  width: 98%;
+  background-color: #ddeff9}
+
+#ods_bar_top {
+  float: left;
+  width: 100%;
+  background-color: #fff}
+
+#ods_bar_bot {
+  float: left;
+  clear: left;
+  width: 100%;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: #85b9d2}
+
+#ods_bar_top_cmds {
+  font-size: 7.5pt;
+  margin-top: 4px;
+  color: #42abc4;
+  background-color: #fff;
+  float: right;
+  padding-right: 8px}
+
+#ods_bar_top_cmds img {
+  vertical-align: middle;
+  margin-left: 8px;}
+
+#ods_bar_top_cmds a {
+  margin-left: 3px;
+  text-decoration: none}
+
+#ods_bar_top_cmds a.user_profile_lnk {
+  text-transform: none}
+
+#ods_bar_first_lvl {
+  float: left;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  background: #0075A8 url("images/navlv1default.png")}
+
+#ods_bar_first_lvl li {
+  padding: 0;
+  padding-left: 4px;
+  margin: 0}
+
+#ods_bar_first_lvl li a {
+  margin-top: 0px;
+  padding: 6px 3px 6px 3px;
+  vertical-align: middle;
+  color: #fff; /* Required due to buggy CSS in IE */}
+
+#ods_bar_first_lvl li a img {
+  margin-top: 2px;
+  margin-bottom: 5px;
+  vertical-align: middle;}
+
+#ods_bar_first_lvl li.sel a {
+  color: #455;
+  background: #b1d4e5 url("images/navlv1sel.png")}
+
+#ods_bar_second_lvl {
+  width: 100%;
+  height: 20px;
+  float: left; clear: left;
+  margin: 0; padding: 0;
+  padding-top: 4px;
+  background: #ddeff9 url("images/navlv2default.png")}
+
+#ods_bar_second_lvl li {
+  margin-right: 5px}
+
+#ods_bar_second_lvl li:first-child {
+  margin-left: 27px;}
+
+#ods_bar_second_lvl li a {
+  vertical-align: middle;
+  color: #444; /* Required by buggy IE CSS implementation */ }
+
+#ods_bar_home_path {
+  margin: 2px 0px 0px 36px;
+  padding: 0;
+  font-size: 8pt}
+
+.popup {
+	position: absolute;
+	background-color: #fff;
+	border: 1px dotted #4800F4;
+	padding: 0.5em;
+	font-size: 80%;
+}
+
+#ods_bar_odslogin {
+  font-size: 7.5pt;
+  margin-top: 4px;
+  color: #42abc4;
+  background-color: #fff;
+  float: right;
+  padding-right: 8px;
+}
+
+#ods_bar_odslogin img {
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+#ods_bar_odslogin a {
+  margin-left: 3px;
+  color: inherit;
+  text-decoration: none;
+}
+

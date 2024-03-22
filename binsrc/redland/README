@@ -1,0 +1,48 @@
+Installation and usage:
+
+Download and compile Redland: http://svn.librdf.org/
+
+Test compilation whit test utility utils/rdfproc:
+
+rdfproc test parse http://planetrdf.com/guide/rss.rdf
+rdfproc test print
+rdfproc test serialize ntriples
+
+This test will be use default 'hashes' storage.
+
+If this step is successfully apply diff from binsrc/redland. 
+Add attached file to librdf/librdf directory.
+
+Reconfigure:
+
+./configure --with-virtuoso=yes
+
+Test virtuoso storage whit some utility:
+
+ export RDFPROC_STORAGE_TYPE=virtuoso
+ export LD_LIBRARY_PATH=virtuoso_driver:$LD_LIBRARY_PATH
+ export ODBCINI=odbc.ini
+ 
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red add aa bb cc  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red add aa a2 _:cc  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red add aa a2 "cc"  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red add mm nn "Some long literal with language@en"  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red add oo pp "12345^^<http://www.w3.org/2001/XMLSchema#int>"
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red print 
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red size 
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red arc aa cc  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red arcs aa cc  
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red arcs-in aa   
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red arcs-out aa   
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red contains aa a2 cc
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red find aa - -
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red has-arc-in yy zz
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red has-arc-out aa bb
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red query sparql - "SELECT * WHERE { ?s ?p ?o }"
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red remove aa bb cc
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red source a2 cc
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red sources a2 cc
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red target aa a2
+rdfproc -r xml -t "user='dba',password='dba',dsn='Demo'" red targets aa a2
+
+

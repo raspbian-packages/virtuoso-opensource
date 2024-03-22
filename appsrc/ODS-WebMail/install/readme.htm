@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head />
+<body>
+    <a name="PageTop" />
+    <h1>Virtuoso ODS WebMail Installation Guide</h1>
+    <h2>Requirements</h2>
+    <p>To make an ODS WebMail Installation you need:</p>
+    <ol>
+      <li>WebMail VAD package: <b>ods_webmail_dav.vad</b>
+      </li>
+      <li>ODS Framework vad package: <b>ods_framework_dav.vad</b>
+      </li>
+      <li>Running Virtuoso Server. (version 3.5 or higher)</li>
+      <li>SMTP Server</li>
+      <li>Mail Drop application</li>
+    </ol>
+    <h2>Installation steps</h2>
+    <h3>Step 1: Building VAD package</h3>
+    <ol>
+      <li>If you have WebMail VAD package, you can jump to Step 2.</li>
+      <li>To build an WebMail VAD package, you need to have a fresh copy of the WebMail sources
+from CVS repository and Virtuoso environment installed.</li>
+      <li>In the opensource tree, the path to module is: \virtuoso-opensource\appsrc\ODS-WebMail</li>
+      <li>After cvs update, go to ODS-WebMail directory and run:</li>
+      <pre>./make_vad.sh</pre>
+      <li>As result should be build ods_webmail_dav.vad and ods_webmail_filesystem.vad packages.
+You can locate them in the same folder \virtuoso-opensource\appsrc\ODS-WebMail.</li>
+    </ol>
+    <h3>Step 2: Installing the WebMail VAD package</h3>
+    <ol>
+      <li>If you already have installed the ODS Framework package, you need only to execute either
+from Conductor Interactive SQL or from ISQL the following line:</li>
+<pre>DB.DBA.VAD_INSTALL('/&lt;package_path&gt;/ods_webmail_dav.vad',0);</pre>
+      <li>As result, if the installation is successful, should be shown the messages:</li>
+<pre>
+  00000    No errors detected, installation complete.
+  00000    Now making a final checkpoint.
+  00000    Final checkpoint is made.
+  00000    SUCCESS
+</pre>
+</ol>
+    <h3>Step 3: Configuration of receiving mail messages</h3>
+    <ol>
+      <li>To be able to receive mail using your ODS WebMail account, you need to have the following components:</li>
+      <ol>
+        <li>SMTP server (MS SMTP, Sendmail, Qmail, ...)</li>
+        <li>domain name (for example: domain.com)</li>
+        <li>OpenLink Mail Drop program</li>
+      </ol>
+      <li>The working schema is:</li>
+      <pre>Internet--&gt;SMTP Server(*@domain.com)--&gt;Mail Drop App (via odbc)--&gt;Virtuoso DB message</pre>
+      <p>You need to configure a SMTP server to receive messages for your domain name and execute mail_drop
+application for every incoming mail message to this domain. For reference see the steps below.</p>
+    </ol>
+    <h4>For Windows installation</h4>
+    <ol>
+      <li>You can use Windows version of Mail drop program and standard MS SMTP Server. The Mail Drop application included the following files:</li>
+      <ol>
+        <li>maildrop.dll</li>
+        <li>odbc_mail.exe</li>
+        <li><a href="http://ods.openlinksw.com/wiki/ODS/OdsMailInstallGuide/odbc_mail.ini" target="_top">odbc_mail.ini</a></li>
+        <li><a href="http://ods.openlinksw.com/wiki/ODS/OdsMailInstallGuide/register.bat" target="_top">register.bat</a></li>
+        <li><a href="http://ods.openlinksw.com/wiki/ODS/OdsMailInstallGuide/smtpreg.vbs" target="_top">smtpreg.vbs</a></li>
+      </ol>
+      <p>The files maildrop.dll and odbc_mail.exe you can found in your Virtuoso installation folder.</p>
+      <li>Place the files from above in the Virtuoso Server folder and execute:</li>
+      <pre>register.bat /register domain.com</pre>
+      <li>As result will be registered a rule in your MS SMTP server which means:</li>
+      <p>"If incoming message is for domain domain.com, then execute odbc_mail.exe"</p>
+      <li>Configure the SMTP server so to add domain.com as alias or as default domain name.
+This can be done via Internet Information Services Administration:
+       <pre>Start->Settings->Control Panel->Administrative Tools->Internet Information Services.</pre></li>
+    </ol>
+    <h3>Step 4: Configuring WebMail application</h3>
+    <ol>
+      <li>Go to http://[host]:[port]/ods</li>
+      <li>Login as dav user (default password is dav)</li>
+      <li>Go to Site Settings->Server Settings and configure domain names list with available domain for user registrations.</li>
+      <li>Check if in the list "Existing Hosted Mail Domains" there is your domain, for ex. domain.com. If not, add it.</li>
+      <li>Logout as user dav.</li>
+    </ol>
+    <h3>Step 5:WebMail UI</h3>
+    <ol>
+      <li>Go to http://[host]:[port]/ods and register a new user.</li>
+      <li>Go to WebMail and create new instance. In the create instance page you need to provide domain from the list of available domains for your email address.</li>
+      <li>As result you will be redirected to your WebMail Inbox</li>
+    </ol>
+  </body>
+</html>

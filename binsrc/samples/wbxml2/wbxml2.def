@@ -1,0 +1,3 @@
+LIBRARY WBXML2
+EXPORTS
+  wbxml2_check @1
