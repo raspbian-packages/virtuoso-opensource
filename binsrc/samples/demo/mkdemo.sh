@@ -396,7 +396,7 @@ DO_COMMAND shutdown
 
 BREAK
 
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	exit 1
@@ -437,7 +437,7 @@ fi
 #  Show final results of run
 #
 CHECK_LOG
-RUN egrep  '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
+RUN egrep -q '"\*\*.*FAILED:|\*\*.*ABORTED:"' "$LOGFILE"
 if test $STATUS -eq 0
 then
 	exit 1
