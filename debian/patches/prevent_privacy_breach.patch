@@ -1,0 +1,17 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Tue, 12 Feb 2019 08:50:31 +0100
+Description: While referencing external potentially active code might be a privacy
+ breach in general the referenced link does not even exist so remove the unneeded
+ statement.
+Forwarded: not-needed
+
+--- a/binsrc/vsp/newfeatures.html
++++ b/binsrc/vsp/newfeatures.html
+@@ -3,7 +3,6 @@
+ <meta http-equiv="Content-Language" content="en-us">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- #BeginEditable "doctitle" -->
+ <title>What&#39;s New in Virtuoso 4.5</title><!-- #EndEditable -->
+-<meta name="keywords" content="VDB, XML, XQuery, HTTP, SOAP, Virtual, EII, Enterprise Data Integration, Process Management, Business Process Management, XML, SQLX, RSS, SQL"><link rel="p3pv1" href="http://www.openlinksw.com/w3c/p3p.xml">
+ <link href="default.css" rel="stylesheet" type="text/css">
+ <style>.milonic{width:1px;visibility:hidden;position:absolute}span.bodycopy1
+ 	{font-family:Arial;

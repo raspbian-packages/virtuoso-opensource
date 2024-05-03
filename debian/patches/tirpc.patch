@@ -1,0 +1,37 @@
+Author: Andreas Beckmann <anbe@debian.org>
+Description: use libtirpc-dev for rpc/types.h etc.
+Bug-Debian: #993390
+Last-Update: Wed Oct 20 10:37:47 2021 +0200
+
+--- a/libsrc/Dk/Makefile.am
++++ b/libsrc/Dk/Makefile.am
+@@ -59,7 +59,9 @@ libdksrv_la_SOURCES = \
+ 
+ libdksrv_la_CFLAGS  = @VIRT_AM_CFLAGS@
+ libdksrv_la_CFLAGS  += -I$(top_srcdir)/libsrc
++libdksrv_la_CFLAGS  += -I/usr/include/tirpc
+ libdksrv_la_LDFLAGS = -prefer-pic
++libdksrv_la_LIBADD  = -ltirpc
+ 	
+ #############################################
+ #DK1T
+@@ -89,7 +91,9 @@ libdk1t_la_SOURCES = \
+ 		     
+ libdk1t_la_CFLAGS   = @VIRT_AM_CFLAGS@
+ libdk1t_la_CFLAGS  += -I$(top_srcdir)/libsrc
++libdk1t_la_CFLAGS  += -I/usr/include/tirpc
+ libdk1t_la_LDFLAGS  = -prefer-pic
++libdk1t_la_LIBADD   = -ltirpc
+ 
+ #############################################
+ #DK1T_NC
+@@ -119,7 +123,9 @@ libdk1t_nc_la_SOURCES = \
+ 		     
+ libdk1t_nc_la_CFLAGS  = @VIRT_AM_CFLAGS@
+ libdk1t_nc_la_CFLAGS  += -I$(top_srcdir)/libsrc
++libdk1t_nc_la_CFLAGS  += -I/usr/include/tirpc
+ libdk1t_nc_la_LDFLAGS = -prefer-pic
++libdk1t_nc_la_LIBADD  = -ltirpc
+ 
+ # ----------------------------------------------------------------------
+ #
