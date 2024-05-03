@@ -25,7 +25,8 @@
 
 #include "xmlparser_impl.h"
 #include "schema.h"
-#include "pcre.h"
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
 
 ptrlong
 xs_get_primitive_typeidx (vxml_parser_t * parser, xs_component_t *type)
@@ -48,7 +49,7 @@ xs_get_primitive_typeidx (vxml_parser_t * parser, xs_component_t *type)
   return (ptrlong)base_type;
 }
 
-extern caddr_t regexp_match_01 (const char* pattern, const char* str, int c_opts);
+extern caddr_t regexp_match_01 (const char* pattern, const char* str, uint32_t c_opts);
 
 int
 xs_check_type_compliance (vxml_parser_t * parser, xs_component_t *type,
@@ -69,7 +70,7 @@ xs_check_type_compliance (vxml_parser_t * parser, xs_component_t *type,
   if (NULL != basetype_regexp)
     {
       int match_len = 1;
-      caddr_t match = regexp_match_01 (basetype_regexp, (const char *) value, PCRE_UTF8);
+      caddr_t match = regexp_match_01 (basetype_regexp, (const char *) value, PCRE2_UTF);
       if (match)
 	{
 	  match_len = box_length (match);
