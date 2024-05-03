@@ -1,0 +1,77 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Tue, 14 Aug 2018 21:48:59 +0200
+Description: Do not try to create Makefile in deleted dir
+Forwarded: not-needed
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -3304,7 +3304,6 @@ AC_CONFIG_FILES([
+ 	libsrc/util/Makefile
+ 	libsrc/Wi/Makefile
+ 	libsrc/Xml.new/Makefile
+-	libsrc/zlib/Makefile
+ 	appsrc/Makefile
+ 	appsrc/ODS-Framework/Makefile
+ 	appsrc/ODS-Addressbook/Makefile
+--- a/libsrc/Wi/bif_file.c
++++ b/libsrc/Wi/bif_file.c
+@@ -6886,10 +6886,11 @@ signal_error:
+ #define fopen64  fopen
+ #endif
+ 
+-#include "zlib/contrib/minizip/unzip.h"
+-#include "zlib/contrib/minizip/ioapi.h"
+-#include "zlib/contrib/minizip/ioapi.c"
+-#include "zlib/contrib/minizip/unzip.c"
++#include "minizip/unzip.h"
++#include "minizip/ioapi.h"
++/*#include "minizip/ioapi.c"
++ *#include "minizip/unzip.c"
++ */
+ 
+ static caddr_t
+ bif_unzip_file (caddr_t * qst, caddr_t * err_ret, state_slot_t ** args)
+--- a/binsrc/virtuoso/Makefile.am
++++ b/binsrc/virtuoso/Makefile.am
+@@ -39,7 +39,7 @@ else
+     VIRTUOSO_BIN=virtuoso-t
+ endif
+ 
+-LIBS		+= @ZLIB_LIB@
++LIBS		+= @ZLIB_LIB@ -lminizip -lpcre
+ 
+ lib_LTLIBRARIES = libvirtuoso-t.la $(IODBC_LIBS) $(MONO_LIBS) $(IODBC_MONO_LIBS)
+ bin_PROGRAMS = virtuoso-t $(IODBC_PROGS)
+--- a/binsrc/tests/Makefile.am
++++ b/binsrc/tests/Makefile.am
+@@ -51,15 +51,16 @@ server_libs = \
+ 	$(top_builddir)/libsrc/langfunc/liblangfunc.la \
+ 	$(top_builddir)/libsrc/Tidy/libtidy.la \
+ 	$(top_builddir)/libsrc/util/libutil.la \
+-	@srvrlibs@ 
++	@srvrlibs@ \
++	-lpcre -lminizip
+ 
+ client_libs = \
+ 	$(top_builddir)/libsrc/Wi/libwic.la \
+ 	$(top_builddir)/libsrc/Dk/libdk1t.la \
+ 	$(top_builddir)/libsrc/Thread/libthrs.la \
+ 	$(top_builddir)/libsrc/util/libutil.la \
+-	@clntlibs@
+-
++	@clntlibs@ \
++	-lpcre -lminizip
+ 
+ M2_SOURCES = chil.c
+ M2_LDADD = \
+--- a/libsrc/Wi/Makefile.am
++++ b/libsrc/Wi/Makefile.am
+@@ -563,7 +563,7 @@ libwi_la_SOURCES += \
+ 	$(libwi_base_la_sources)
+ 
+ libwi_la_CFLAGS  = $(libwi_base_la_cflags)
+-libwi_la_LDLAGS  = -static
++libwi_la_LDLAGS  = -static -lminizip -lpcre
+ 
+ #KUBL_UNIV_FILES_ODBC
+ libwi_odbc_la_SOURCES += \

@@ -1,0 +1,18 @@
+Author: Maximiliano Curia <maxy@gnuservers.com.ar>
+Description: Disable the full test suite
+Forwarded: not-needed
+Date:   Wed Jun 5 10:23:30 2013 +0200
+
+diff --git a/binsrc/tests/Makefile.am b/binsrc/tests/Makefile.am
+index 2736231..2a81e8a 100644
+--- a/binsrc/tests/Makefile.am
++++ b/binsrc/tests/Makefile.am
+@@ -19,7 +19,7 @@
+ #  
+ #  
+ 
+-SUBDIRS = . biftest suite dotnet tpcrun oledb rdf wb lubm bsbm
++SUBDIRS = . biftest dotnet tpcrun oledb rdf wb lubm bsbm
+ 
+ MAKEVER = $(SHELL) $(top_srcdir)/bin/makever
+ 
