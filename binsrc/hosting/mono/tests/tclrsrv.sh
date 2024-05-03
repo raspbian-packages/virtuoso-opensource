@@ -215,12 +215,11 @@ START_SERVER ()
 {
       LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
       ddate=`date`
-      starth=`date | cut -f 2 -d :`
-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
       timeout=600
       rm -f *.lck
       $SERVER +foreground -c tclr.ini $* 1>/dev/null & 
       stat="true"
+      t_start=$(date +%s)
       while true 
 	do
 	  sleep 4
@@ -231,15 +230,9 @@ START_SERVER ()
 		    LOG "PASSED: Virtuoso Server successfully started on port $port"
 		    return 0
 	      fi
-		
-	  nowh=`date | cut -f 2 -d :`
-          nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-    
-          nowh=`expr $nowh - $starth`
-          nows=`expr $nows - $starts`
-    
-          nows=`expr $nows + $nowh \*  60`
-          if test $nows -ge $timeout
+          t_now=$(date +%s)
+          t_elapsed=$(expr $t_now - $t_start)
+          if test $t_elapsed -ge $timeout
           then
               LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
               exit 1

@@ -222,12 +222,10 @@ START_SERVER ()
 {
       LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
       ddate=`date`
-      starth=`date | cut -f 2 -d :`
-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
       rm -f *.lck
       $SERVER +foreground -c tpcd.ini $* 1>/dev/null & 
       stat="true"
-      while true 
+      for i in $(seq 1 15)
 	do
 	  sleep 5
 	      stat=`$NETSTAT -an 2>/dev/null | grep "[\.\:]$PORT " | grep LISTEN` 
