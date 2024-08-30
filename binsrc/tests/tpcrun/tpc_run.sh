@@ -361,7 +361,7 @@ esac
 #
 #  Check if the tests logged any failures
 #
-RUN egrep '"\*\*\*FAILED|\*\*\*ABORTED"' *.output
+RUN egrep -q '"\*\*\*FAILED|\*\*\*ABORTED"' *.output
 if test $STATUS -eq 0
 then
     ECHO ""
