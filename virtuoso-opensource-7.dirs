@@ -1,0 +1,4 @@
+etc/virtuoso-opensource-7/
+var/lib/virtuoso-opensource-7/db
+var/lib/virtuoso-opensource-7/vsp
+var/log/virtuoso-opensource-7/
