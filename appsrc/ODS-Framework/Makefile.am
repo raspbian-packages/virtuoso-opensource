@@ -56,43 +56,13 @@ EXTRA_DIST = \
 	*.xml \
 	*.xsl \
 	ckeditor/*.css \
-	ckeditor/*.html \
+	ckeditor/*.pack\
 	ckeditor/*.js \
-	ckeditor/images/*.gif \
-	ckeditor/lang/*.js \
-	ckeditor/plugins/clipboard/dialogs/*.js \
-	ckeditor/plugins/colordialog/dialogs/*.js \
-	ckeditor/plugins/dialog/*.js \
-	ckeditor/plugins/find/dialogs/*.js \
-	ckeditor/plugins/flash/dialogs/*.js \
-	ckeditor/plugins/flash/images/*.png \
-	ckeditor/plugins/image/dialogs/*.js \
-	ckeditor/plugins/link/dialogs/*.js \
-	ckeditor/plugins/link/images/*.gif \
-	ckeditor/plugins/pastetext/dialogs/*.js \
-	ckeditor/plugins/scayt/dialogs/*.css \
-	ckeditor/plugins/scayt/dialogs/*.js \
-	ckeditor/plugins/showblocks/images/*.png \
-	ckeditor/plugins/smiley/dialogs/*.js \
-	ckeditor/plugins/smiley/images/*.gif \
-	ckeditor/plugins/specialchar/dialogs/*.js \
-	ckeditor/plugins/specialchar/lang/*.js \
-	ckeditor/plugins/styles/styles/*.js \
-	ckeditor/plugins/table/dialogs/*.js \
-	ckeditor/plugins/tabletools/dialogs/*.js \
-	ckeditor/plugins/templates/dialogs/*.js \
-	ckeditor/plugins/templates/templates/*.js \
-	ckeditor/plugins/templates/templates/images/*.gif \
-	ckeditor/plugins/wsc/dialogs/*.css \
-	ckeditor/plugins/wsc/dialogs/*.html \
-	ckeditor/plugins/wsc/dialogs/*.js \
-	ckeditor/skins/kama/*.css \
-	ckeditor/skins/kama/*.js \
-	ckeditor/skins/kama/*.png \
-	ckeditor/skins/kama/images/*.gif \
-	ckeditor/skins/kama/images/*.png \
-	ckeditor/themes/default/*.js \
-	comp/*.js \
+	ckeditor/images \
+	ckeditor/lang \
+	ckeditor/plugins \
+	ckeditor/skins \
+	ckeditor/themes \
 	comp/*.xml \
 	comp/*.xsl \
 	icons/*.gif \
