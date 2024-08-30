@@ -24,7 +24,7 @@ HOST_OS=`uname -s | grep WIN`
 NEED_VERSION=04.00.2803
 VERSION=1.00.0007  # see automatic versioning bellow 
 
-BUILDDATE=`date +"%Y-%m-%d"`
+BUILDDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d"`
 
 if [ "x$1" = "xdev" ]
 then
@@ -203,6 +203,9 @@ directory_init() {
   do
     cp $file vad_files/vsp/tutorial/$file
   done
+  sed -i 's/<xsl:value-of select="\(\$now_rfc1123\|@date\)"\/>/'"$(date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%a, %_d %b %Y %T %Z")"'/' \
+	vad_files/vsp/tutorial/page_rss_output.xsl \
+	vad_files/vsp/tutorial/page_sioc_output.xsl \
 
   for dir in `find . -type d -print | LC_ALL=C sort | grep -v "^\.$" | grep -v CVS | grep -v vad_files | grep -v bpeldemo`
   do
@@ -211,7 +214,7 @@ directory_init() {
 
   for dir in `find . -type d | grep "\\./[^/]*$"  | grep -v CVS | grep -v vad_files | grep -v bpeldemo`
   do
-	  for file in `find $dir -type f -print | LC_ALL=C sort | grep -v CVS`
+	  for file in `find $dir -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
 	  do
 	    cp $file vad_files/vsp/tutorial/$file
 	  done
@@ -279,7 +282,7 @@ directory_init() {
 #    mkdir $LOGDIR/vad_files/vsp/tutorial/bpeldemo/$dir
 #  done
 
-#  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
+#  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
 #  do
 #    cp $file $LOGDIR/vad_files/vsp/tutorial/bpeldemo/$file
 #  done
@@ -290,13 +293,13 @@ directory_init() {
   mkdir vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/data
 
   cd $HOME/binsrc/samples/xquery
-  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
+  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
   do
     cp $file $LOGDIR/vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/$file
   done
 
   cd $HOME/binsrc/tests/wb/inputs/XqW3cUseCases
-  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
+  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
   do
     cp $file $LOGDIR/vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/data/$file
   done
@@ -339,7 +342,7 @@ sticker_init() {
   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
   echo "  </name>" >> $STICKER
   echo "  <version package=\"$VERSION\">" >> $STICKER
-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
   echo "    <prop name=\"Build\" value=\"Release\"/>" >> $STICKER
   echo "  </version>" >> $STICKER
   echo "</caption>" >> $STICKER

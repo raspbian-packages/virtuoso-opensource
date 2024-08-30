@@ -34,7 +34,7 @@ LOGDIR=`pwd`
 LOGFILE="${LOGDIR}/make__demo_vad.log"
 STICKER_NAME="make__demo_vad.xml"
 STICKER="${LOGDIR}/${STICKER_NAME}"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-virtuoso}
 THOST=${THOST-localhost}
 TPORT=${TPORT-8440}
@@ -338,6 +338,8 @@ directory_init() {
   cp -f $HOME/binsrc/samples/webapp/forums/func_vad.sql             vad/data/demo/sql
 
   cp -f check_demo.sql                                          vad/data/demo/sql
+
+  find vad/data/demo -name Makefile\* | xargs -r rm -v
 }
 
 virtuoso_shutdown() {

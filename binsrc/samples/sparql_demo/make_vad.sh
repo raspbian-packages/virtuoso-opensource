@@ -34,7 +34,7 @@ VERSION="1.0.0"
 LOGDIR=`pwd`
 LOGFILE="${LOGDIR}/make_sparql_demo_vad.log"
 STICKER="make_sparql_demo_vad.xml"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-virtuoso}
 THOST=${THOST-localhost}
 TPORT=${TPORT-8440}
