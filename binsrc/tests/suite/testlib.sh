@@ -301,21 +301,15 @@ START_SERVER()
 
     stat="true"
     ddate=`date`
-    starth=`date | cut -f 2 -d :`
-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+    t_start=$(date +%s)
     while [ "z$stat" != "z" -a $timeout -gt 0 ]
     do
 	sleep 5
 	stat=`$NETSTAT -an 2>/dev/null | grep "[\.\:]$port " | grep LISTEN`
 
-	nowh=`date | cut -f 2 -d :`
-	nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-	nowh=`expr $nowh - $starth`
-	nows=`expr $nows - $starts`
-
-	nows=`expr $nows + $nowh \*  60`
-	if test $nows -ge $timeout
+	t_now=$(date +%s)
+	t_elapsed=$(expr $t_now - $t_start)
+	if test $t_elapsed -ge $timeout
 	then
 	    LOG "***FAILED: The Listener on port $port didn't stop within $timeout seconds"
 	    exit 1
@@ -323,8 +317,6 @@ START_SERVER()
     done
 
     ddate=`date`
-    starth=`date | cut -f 2 -d :`
-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
     
     if test -f "$LOCKFILE"
     then
@@ -341,6 +333,7 @@ START_SERVER()
     
     if [ $timeout -gt 0 ]
     then
+        t_start=$(date +%s)
         while true
         do
             sleep 5
@@ -350,14 +343,9 @@ START_SERVER()
         	LOG "PASSED: Virtuoso Server successfully started on port $port"
         	break
             fi
-            nowh=`date | cut -f 2 -d :`
-            nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-            
-            nowh=`expr $nowh - $starth`
-            nows=`expr $nows - $starts`
-            
-            nows=`expr $nows + $nowh \*  60`
-            if test $nows -ge $timeout
+            t_now=$(date +%s)
+            t_elapsed=$(expr $t_now - $t_start)
+            if test $t_elapsed -ge $timeout
             then
         	LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
         	exit 1
@@ -395,6 +383,7 @@ START_SERVER()
 CHECK_PORT()
 {
   port=$1
+  t_start=$(date +%s)
   while true
   do
     sleep 5
@@ -404,14 +393,9 @@ CHECK_PORT()
 	LOG "PASSED: Port $port is not listened by any process"
 	return 0
     fi
-    nowh=`date | cut -f 2 -d :`
-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-    nowh=`expr $nowh - $starth`
-    nows=`expr $nows - $starts`
-
-    nows=`expr $nows + $nowh \*  60`
-    if test $nows -ge $timeout
+    t_now=$(date +%s)
+    t_elapsed=$(expr $t_now - $t_start)
+    if test $t_elapsed -ge $timeout
     then
 	LOG "***FAILED: Port $port is not freed during $timeout seconds"
 	exit 1
@@ -960,9 +944,8 @@ WAIT_CLUSTER_PORT_UP ()
 
     stat="true"
     ddate=`date`
-    starth=`date | cut -f 2 -d :`
-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
 
+    t_start=$(date +%s)
     while true
     do
         sleep 5
@@ -972,14 +955,9 @@ WAIT_CLUSTER_PORT_UP ()
             LOG "PASSED: $3 listen on port $port"
             return 0
         fi
-        nowh=`date | cut -f 2 -d :`
-        nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-        nowh=`expr $nowh - $starth`
-        nows=`expr $nows - $starts`
-
-        nows=`expr $nows + $nowh \*  60`
-        if test $nows -ge $timeout
+        t_now=$(date +%s)
+        t_elapsed=$(expr $t_now - $t_start)
+        if test $t_elapsed -ge $timeout
         then
             LOG "***FAILED: Could not start Virtuoso cluster within $timeout seconds"
             exit 1
@@ -1000,8 +978,7 @@ WAIT_CLUSTER_TO_STOP ()
   file=$1 
   timeout=$2 
   ddate=`date`
-  starth=`date | cut -f 2 -d :`
-  starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+  t_start=$(date +%s)
   while true
   do
       if [ -f $file ]
@@ -1014,12 +991,9 @@ WAIT_CLUSTER_TO_STOP ()
               LOG "PASSED: cluster with lock-file $file stopped."
               return 0;
           fi
-          nowh=`date | cut -f 2 -d :`
-          nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-          nowh=`expr $nowh - $starth`
-          nows=`expr $nows - $starts`
-          nows=`expr $nows + $nowh \*  60`
-          if test $nows -ge $timeout
+          t_now=$(date +%s)
+          t_elapsed=$(expr $t_now - $t_start)
+          if test $t_elapsed -ge $timeout
           then
               LOG "***FAILED: Could not stop cluster within $timeout seconds"
               exit 1

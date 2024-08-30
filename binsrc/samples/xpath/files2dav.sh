@@ -101,9 +101,7 @@ START_SERVER()
   ECHO "Starting Virtuoso DEMO server ..."     
   virtuoso +wait 
 
-  starth=`date | cut -f 2 -d :`
-  starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
-
+  t_start=$(date +%s)
   while true 
     do
       sleep 6
@@ -112,14 +110,9 @@ START_SERVER()
 	  ECHO "Virtuoso server started"     
 	  return 0
 	fi
-      nowh=`date | cut -f 2 -d :`
-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-      nowh=`expr $nowh - $starth`
-      nows=`expr $nows - $starts`
-
-      nows=`expr $nows + $nowh \*  60`
-      if test $nows -ge $timeout 
+      t_now=$(date +%s)
+      t_elapsed=$(expr $t_now - $t_start)
+      if test $t_elapsed -ge $timeout
         then
 	  ECHO "***FAILED: Could not start Virtuoso DEMO Server within $timeout seconds"
 	  exit 1
