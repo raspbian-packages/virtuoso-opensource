@@ -1,0 +1,9 @@
+---
+include:
+  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/recipes/debian.yml
+
+variables:
+  SALSA_CI_DISABLE_BUILD_PACKAGE_I386: 1
+  # Building .vad files means embedding a directory tree, the method
+  # enumerating the files has not yet been identified.
+  SALSA_CI_REPROTEST_ARGS: --vary=-fileordering

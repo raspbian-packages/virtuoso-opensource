@@ -1,0 +1,106 @@
+Author: Maximiliano Curia <maxy@gnuservers.com.ar>
+Description: Do not depend on MAXPATHLEN
+Date:   Mon Jun 10 15:23:25 2013 +0200
+
+diff --git a/binsrc/hosting/fcgi/cgi_fcgi.c b/binsrc/hosting/fcgi/cgi_fcgi.c
+index 0695097..ae1daca 100644
+--- a/binsrc/hosting/fcgi/cgi_fcgi.c
++++ b/binsrc/hosting/fcgi/cgi_fcgi.c
+@@ -55,7 +55,7 @@ typedef struct vfc_fcgi_srv_s
+   dk_mutex_t *mtx;
+   caddr_t uri;
+   int n_servers;
+-  char bind_path [MAXPATHLEN];
++  char *bind_path;
+ 
+   int next_req_id;
+   dk_set_t requests;
+@@ -111,6 +111,7 @@ vfc_fcgi_server_allocate (const char *base_uri, const char *bind_file, char *err
+ {
+   vfc_fcgi_srv_t *srv = (vfc_fcgi_srv_t *) dk_alloc (sizeof (vfc_fcgi_srv_t));
+   caddr_t md5_val = NULL;
++  char *aux;
+ 
+   vfc_printf (("vfc_fcgi_server_allocate base_uri=[%s] bind_file=[%s]\n",
+ 	base_uri,bind_file));
+@@ -122,8 +123,9 @@ vfc_fcgi_server_allocate (const char *base_uri, const char *bind_file, char *err
+   if (!bind_file)
+     md5_val = md5 (srv->uri);
+   vfc_printf (("vfc_fcgi_server_allocate md5_val=[%s] \n", md5_val));
+-  snprintf (srv->bind_path, sizeof (srv->bind_path), "%s/%s",
+-      fcgi_socket_path, bind_file ? bind_file : md5_val);
++  aux = bind_file ? bind_file : md5_val;
++  srv->bind_path = malloc(strlen(fcgi_socket_path) + strlen(aux) + 2);
++  sprintf (srv->bind_path, "%s/%s", fcgi_socket_path, aux);
+   id_hash_set (vfc_server_hash, (caddr_t) &srv->uri, (caddr_t) &srv);
+   dk_free_box (md5_val);
+   vfc_printf (("vfc_fcgi_server_allocate ret =%p\n",
+diff --git a/libsrc/util/fnsearch.c b/libsrc/util/fnsearch.c
+index 62f566e..8725613 100644
+--- a/libsrc/util/fnsearch.c
++++ b/libsrc/util/fnsearch.c
+@@ -40,14 +40,31 @@
+ char *
+ fnsearch (const char *filename, const char *path)
+ {
+-  static char namebuf[MAXPATHLEN];
++  static char *namebuf = NULL;
++  static size_t namebuf_size = 0;
++  size_t new_size;
+   const char *cp;
+   char *np;
+ 
+   if (path == NULL)
+     return NULL;
+-  np = namebuf;
+   cp = path;
++
++  /* Avoid a call to realloc, whenever possible */
++  new_size = strlen(path) + strlen(filename) + 2;
++  if (namebuf_size < new_size)
++    {
++      /* Ask more than enough space to store the result */
++      /* (realloc of NULL behaves like malloc) */
++      np = realloc(namebuf, new_size);
++      if (np == NULL)
++        return NULL;
++      namebuf_size = new_size;
++      namebuf = np;
++    }
++  else
++    np = namebuf;
++
+   while (1)
+     {
+       if (*cp == PATHSEP || *cp == '\0')
+diff --git a/libsrc/util/setext.c b/libsrc/util/setext.c
+index d7c0295..62f0faa 100644
+--- a/libsrc/util/setext.c
++++ b/libsrc/util/setext.c
+@@ -46,10 +46,25 @@
+ char *
+ setext (const char *path, const char *ext, int mode)
+ {
+-  static char name[MAXPATHLEN];
++  static char *name = NULL;
++  static size_t name_size = 0;
++  size_t new_size;
+   char *slash;
+   char *dot;
+ 
++  /* Avoid a call to realloc, whenever possible */
++  new_size = strlen(path) + strlen(ext) + 2;
++  if (name_size < new_size)
++    {
++      /* Ask more than enough space to store the result */
++      /* (realloc of NULL behaves like malloc) */
++      dot = realloc(name, new_size);
++      if (dot == NULL)
++        return NULL;
++      name_size = new_size;
++      name = dot;
++    }
++
+   strcpy (name, path);
+ 
+ #ifdef VMS
