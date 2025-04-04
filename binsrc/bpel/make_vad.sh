@@ -37,7 +37,7 @@ LOGDIR=`pwd`
 LOGFILE="${LOGDIR}/make_bpel_vad.log"
 STICKER_DAV="vad_dav.xml"
 STICKER_FS="vad_fs.xml"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-}
 THOST=${THOST-localhost}
 TPORT=${TPORT-8445}

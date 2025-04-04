@@ -36,7 +36,7 @@ VERSION="1.00.00"
 LOGDIR=`pwd`
 STICKER_DAV="vad_dav.xml"
 STICKER_FS="vad_fs.xml"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-}
 THOST=${THOST-localhost}
 TPORT=${TPORT-8445}
@@ -227,8 +227,8 @@ directory_init() {
   gzip -V 2>/dev/null 1>/dev/null
   if test $? -eq 0
   then
-      gzip vad/vsp/rdf_mappers/ontologies/xbrl/*.owl
-      gzip vad/vsp/rdf_mappers/ontologies/owl/*.owl
+      gzip -n vad/vsp/rdf_mappers/ontologies/xbrl/*.owl
+      gzip -n vad/vsp/rdf_mappers/ontologies/owl/*.owl
   else
       echo "GZip must be installed" 
       exit 1
