@@ -39,7 +39,7 @@ else
     VIRTUOSO_BIN=virtuoso-t
 endif
 
-LIBS		+= @ZLIB_LIB@ -lminizip -lpcre
+LIBS		+= @ZLIB_LIB@ -lminizip -lpcre2-8
 
 lib_LTLIBRARIES = libvirtuoso-t.la $(IODBC_LIBS) $(MONO_LIBS) $(IODBC_MONO_LIBS)
 bin_PROGRAMS = virtuoso-t $(IODBC_PROGS)
