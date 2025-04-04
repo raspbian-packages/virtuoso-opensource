@@ -1,0 +1,457 @@
+Author: Andreas Beckmann <anbe@debian.org>
+Description: make the build reproducible
+Last-Update: 2024-03-13
+
+--- a/bin/makever
++++ b/bin/makever
+@@ -39,6 +39,11 @@ DATE=`date`
+ UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+ UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+ 
++if [ -n "$SOURCE_DATE_EPOCH" ]
++then
++	DATE=$(LC_ALL=POSIX date --utc --date="@$SOURCE_DATE_EPOCH")
++	UNAME_RELEASE=
++fi
+ 
+ #
+ #  Parse command line
+--- a/appsrc/ODS-Addressbook/make_vad.sh
++++ b/appsrc/ODS-Addressbook/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Blog/make_vad.sh
++++ b/appsrc/ODS-Blog/make_vad.sh
+@@ -33,7 +33,7 @@ LOGDIR=`pwd`
+ LOGFILE="${LOGDIR}/make_ods_blog_vad.log"
+ STICKER_NAME="make_ods_blog_vad.xml"
+ STICKER="${LOGDIR}/$STICKER_NAME"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8440}
+--- a/appsrc/ODS-Bookmark/make_vad.sh
++++ b/appsrc/ODS-Bookmark/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Briefcase/make_vad.sh
++++ b/appsrc/ODS-Briefcase/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Calendar/make_vad.sh
++++ b/appsrc/ODS-Calendar/make_vad.sh
+@@ -32,7 +32,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Community/make_vad.sh
++++ b/appsrc/ODS-Community/make_vad.sh
+@@ -33,7 +33,7 @@ LOGDIR=`pwd`
+ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/make_vad.log"
+ STICKER="make_vad.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8440}
+--- a/appsrc/ODS-FeedManager/make_vad.sh
++++ b/appsrc/ODS-FeedManager/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Framework/make_vad.sh
++++ b/appsrc/ODS-Framework/make_vad.sh
+@@ -33,7 +33,7 @@ LOGDIR=`pwd`
+ VERSION="1.00.00"  # see automatic versioning below "1.02.69"
+ LOGFILE="${LOGDIR}/make_ods_vad.log"
+ STICKER="make_ods_vad.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1970}
+--- a/appsrc/ODS-Framework/oauth/make_vad.sh
++++ b/appsrc/ODS-Framework/oauth/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.00.00"
+ LOGDIR=`pwd`
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
+--- a/appsrc/ODS-Gallery/make_vad.sh
++++ b/appsrc/ODS-Gallery/make_vad.sh
+@@ -32,7 +32,7 @@ LOGDIR=`pwd`
+ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/make_vad.log"
+ STICKER="make_vad.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-Polls/make_vad.sh
++++ b/appsrc/ODS-Polls/make_vad.sh
+@@ -32,7 +32,7 @@ VERSION="1.0.0"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/appsrc/ODS-WebMail/make_vad.sh
++++ b/appsrc/ODS-WebMail/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.5.122"
+ LOGFILE="${LOGDIR}/vad_make.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_filesystem.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ PORT=${PORT-1940}
+--- a/binsrc/fct/make_vad.sh
++++ b/binsrc/fct/make_vad.sh
+@@ -33,7 +33,7 @@ VERSION="1.00.00"
+ LOGDIR=`pwd`
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
+--- a/binsrc/bpel/make_vad.sh
++++ b/binsrc/bpel/make_vad.sh
+@@ -37,7 +37,7 @@ LOGDIR=`pwd`
+ LOGFILE="${LOGDIR}/make_bpel_vad.log"
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
+--- a/binsrc/dbpedia/make_vad.sh
++++ b/binsrc/dbpedia/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.00.00"
+ LOGDIR=`pwd`
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
+--- a/binsrc/isparql/make_vad.sh
++++ b/binsrc/isparql/make_vad.sh
+@@ -33,7 +33,7 @@ VERSION="1.0.0"
+ LOGDIR=`pwd`
+ LOGFILE="${LOGDIR}/make_isparql_vad.log"
+ STICKER="make_isparql_vad.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8440}
+--- a/binsrc/rdf_mappers/make_vad.sh
++++ b/binsrc/rdf_mappers/make_vad.sh
+@@ -36,7 +36,7 @@ VERSION="1.00.00"
+ LOGDIR=`pwd`
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
+@@ -227,8 +227,8 @@ directory_init() {
+   gzip -V 2>/dev/null 1>/dev/null
+   if test $? -eq 0
+   then
+-      gzip vad/vsp/rdf_mappers/ontologies/xbrl/*.owl
+-      gzip vad/vsp/rdf_mappers/ontologies/owl/*.owl
++      gzip -n vad/vsp/rdf_mappers/ontologies/xbrl/*.owl
++      gzip -n vad/vsp/rdf_mappers/ontologies/owl/*.owl
+   else
+       echo "GZip must be installed" 
+       exit 1
+--- a/binsrc/samples/demo/make_vad.sh
++++ b/binsrc/samples/demo/make_vad.sh
+@@ -34,7 +34,7 @@ LOGDIR=`pwd`
+ LOGFILE="${LOGDIR}/make__demo_vad.log"
+ STICKER_NAME="make__demo_vad.xml"
+ STICKER="${LOGDIR}/${STICKER_NAME}"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8440}
+@@ -338,6 +338,8 @@ directory_init() {
+   cp -f $HOME/binsrc/samples/webapp/forums/func_vad.sql             vad/data/demo/sql
+ 
+   cp -f check_demo.sql                                          vad/data/demo/sql
++
++  find vad/data/demo -name Makefile\* | xargs -r rm -v
+ }
+ 
+ virtuoso_shutdown() {
+--- a/binsrc/samples/demo/mkdoc.sh
++++ b/binsrc/samples/demo/mkdoc.sh
+@@ -62,7 +62,7 @@ VAD_NAME="doc"
+ VAD_NAME_DEVEL="$VAD_NAME"_filesystem.vad
+ VAD_NAME_RELEASE="$VAD_NAME"_dav.vad
+ VERSION="1.1.20"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ 
+ HOST_OS=`uname -s | grep WIN`
+ if [ "x$HOST_OS" != "x" ]
+@@ -361,6 +361,8 @@ LOG "Directory init..."
+   cp drop.sql vad/data/doc/code/.
+   cp doc_sql_rdf.sql vad/data/doc/code/.
+   #cp -f $HOME/binsrc/dav/DET_RDFData.sql vad/data/doc/code/.
++
++  find vad/data/doc -name Makefile\* | xargs -r rm -v
+ }
+ 
+ sticker_init() {
+@@ -387,7 +389,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+--- a/binsrc/samples/sparql_demo/make_vad.sh
++++ b/binsrc/samples/sparql_demo/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.0.0"
+ LOGDIR=`pwd`
+ LOGFILE="${LOGDIR}/make_sparql_demo_vad.log"
+ STICKER="make_sparql_demo_vad.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-virtuoso}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8440}
+--- a/binsrc/conductor/mkvad.sh
++++ b/binsrc/conductor/mkvad.sh
+@@ -37,7 +37,7 @@ _HTTPPORT=`expr $PORT + 10`
+ HTTPPORT=${HTTPPORT-$_HTTPPORT}
+ #PORT=1311
+ #HTTPPORT=8311
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ HOST=${HOST-localhost}
+ STICKER_DAV="vad_dav.xml"
+--- a/appsrc/ODS-Discussion/make_vad.sh
++++ b/appsrc/ODS-Discussion/make_vad.sh
+@@ -244,7 +244,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release, optimized\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+--- a/appsrc/ODS-Wiki/make_vad.sh
++++ b/appsrc/ODS-Wiki/make_vad.sh
+@@ -261,7 +261,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release, optimized\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+--- a/binsrc/rdb2rdf/make_vad.sh
++++ b/binsrc/rdb2rdf/make_vad.sh
+@@ -44,7 +44,7 @@ HOST_OS=`uname -s | grep WIN`
+ NEED_VERSION=06.02.3130
+ VERSION=1.00.0000  # see automatic versioning below
+ 
+-BUILDDATE=`date +"%Y-%m-%d"`
++BUILDDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d"`
+ 
+ if [ "x$1" = "xdev" ]
+ then
+--- a/binsrc/sync/make_vad.sh
++++ b/binsrc/sync/make_vad.sh
+@@ -226,7 +226,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release, optimized\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+--- a/binsrc/tutorial/make_vad.sh
++++ b/binsrc/tutorial/make_vad.sh
+@@ -24,7 +24,7 @@ HOST_OS=`uname -s | grep WIN`
+ NEED_VERSION=04.00.2803
+ VERSION=1.00.0007  # see automatic versioning bellow 
+ 
+-BUILDDATE=`date +"%Y-%m-%d"`
++BUILDDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d"`
+ 
+ if [ "x$1" = "xdev" ]
+ then
+@@ -203,6 +203,9 @@ directory_init() {
+   do
+     cp $file vad_files/vsp/tutorial/$file
+   done
++  sed -i 's/<xsl:value-of select="\(\$now_rfc1123\|@date\)"\/>/'"$(date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%a, %_d %b %Y %T %Z")"'/' \
++	vad_files/vsp/tutorial/page_rss_output.xsl \
++	vad_files/vsp/tutorial/page_sioc_output.xsl \
+ 
+   for dir in `find . -type d -print | LC_ALL=C sort | grep -v "^\.$" | grep -v CVS | grep -v vad_files | grep -v bpeldemo`
+   do
+@@ -211,7 +214,7 @@ directory_init() {
+ 
+   for dir in `find . -type d | grep "\\./[^/]*$"  | grep -v CVS | grep -v vad_files | grep -v bpeldemo`
+   do
+-	  for file in `find $dir -type f -print | LC_ALL=C sort | grep -v CVS`
++	  for file in `find $dir -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
+ 	  do
+ 	    cp $file vad_files/vsp/tutorial/$file
+ 	  done
+@@ -279,7 +282,7 @@ directory_init() {
+ #    mkdir $LOGDIR/vad_files/vsp/tutorial/bpeldemo/$dir
+ #  done
+ 
+-#  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
++#  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
+ #  do
+ #    cp $file $LOGDIR/vad_files/vsp/tutorial/bpeldemo/$file
+ #  done
+@@ -290,13 +293,13 @@ directory_init() {
+   mkdir vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/data
+ 
+   cd $HOME/binsrc/samples/xquery
+-  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
++  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
+   do
+     cp $file $LOGDIR/vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/$file
+   done
+ 
+   cd $HOME/binsrc/tests/wb/inputs/XqW3cUseCases
+-  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS`
++  for file in `find . -type f -print | LC_ALL=C sort | grep -v CVS | grep -v Makefile`
+   do
+     cp $file $LOGDIR/vad_files/vsp/tutorial/xml/xq_s_1/xqdemo/data/$file
+   done
+@@ -339,7 +342,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+--- a/binsrc/vsp/admin/debug/make_vad.sh
++++ b/binsrc/vsp/admin/debug/make_vad.sh
+@@ -193,7 +193,7 @@ sticker_init() {
+   echo "    <prop name=\"Download\" value=\"http://www.openlinksw.co.uk/virtuoso\"/>" >> $STICKER
+   echo "  </name>" >> $STICKER
+   echo "  <version package=\"$VERSION\">" >> $STICKER
+-  echo "    <prop name=\"Release Date\" value=\""`date +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
++  echo "    <prop name=\"Release Date\" value=\""`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`"\"/>" >> $STICKER
+   echo "    <prop name=\"Build\" value=\"Release, optimized\"/>" >> $STICKER
+   echo "  </version>" >> $STICKER
+   echo "</caption>" >> $STICKER
+@@ -208,7 +208,7 @@ sticker_init() {
+   echo "    <![CDATA[" >> $STICKER
+   echo "      registry_set('_http_debug_path_', '/DAV/VAD/http_debug');" >> $STICKER
+   echo "      registry_set('_http_debug_version_', '$VERSION');" >> $STICKER
+-  echo "      registry_set('_http_debug_build_', '`date +"%Y-%m-%d %H:%M"`');" >> $STICKER
++  echo "      registry_set('_http_debug_build_', '`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`');" >> $STICKER
+   echo "      DB.DBA.VAD_LOAD_SQL_FILE('/DAV/VAD/http_debug/init.sql', 1, 'report', 1);" >> $STICKER
+   echo "      vhost_remove (lpath=>'/http_debug');" >> $STICKER
+   echo "      vhost_define (lpath=>'/http_debug', ppath=>'/DAV/VAD/http_debug/', is_dav=>1, vsp_user=>'dba', def_page=>'record.vspx');" >> $STICKER
+--- a/libsrc/Wi/Makefile.am
++++ b/libsrc/Wi/Makefile.am
+@@ -778,7 +778,7 @@ jsonld_p.c jsonld_p.h: $(srcdir)/jsonld.
+ sqlwords.h: $(srcdir)/sqlwords.gperf Makefile.am
+ 	@${GEN} --stdout ${GPERF} \
+ 		-o sqlwords.h \
+-		-aCDGptr -Kkwd -L ANSI-C -k1,2,3,6,9,$$ \
++		-aCDGpt -Kkwd -L ANSI-C -k1,2,3,6,9,$$ \
+ 		-Nlex_hash_kw \
+ 		$(srcdir)/sqlwords.gperf
+ 
+@@ -811,7 +811,7 @@ xpscn.c: xpscn.l xpathp.h Makefile.am
+ 
+ sparqlwords.h: sparqlwords.gperf Makefile.am
+ 	@$(GEN) --stdout $(GPERF) -o $@ \
+-		-aCDGptr \
++		-aCDGpt \
+ 		-Kkwd \
+ 		-L ANSI-C \
+ 		-k1,2,3,5,7,$$ \
+--- a/libsrc/Xml.new/Makefile.am
++++ b/libsrc/Xml.new/Makefile.am
+@@ -55,7 +55,7 @@ BUILT_SOURCES = xhtml_ent.h
+ xhtml_ent.h: $(srcdir)/xhtml_ent.gperf
+ 	@${GEN} --stdout ${GPERF} \
+                 -o xhtml_ent.h \
+-                -aCDGptr \
++                -aCDGpt \
+ 		-Kentity \
+ 		-L ANSI-C \
+ 		-k1,2,3,4,5,$$ \
+--- a/binsrc/websocket/make_vad.sh
++++ b/binsrc/websocket/make_vad.sh
+@@ -34,7 +34,7 @@ VERSION="1.00.00"
+ LOGDIR=`pwd`
+ STICKER_DAV="vad_dav.xml"
+ STICKER_FS="vad_fs.xml"
+-PACKDATE=`date +"%Y-%m-%d %H:%M"`
++PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
+ SERVER=${SERVER-}
+ THOST=${THOST-localhost}
+ TPORT=${TPORT-8445}
