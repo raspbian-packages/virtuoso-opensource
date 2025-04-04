@@ -128,14 +128,13 @@ START_SERVER()
     done
 
 	ddate=`date`
-	starth=`date | cut -f 2 -d :`
-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
 	if test -f "$LOCKFILE"
 	  then
 	      echo Removing $LOCKFILE >> $LOGFILE
 	      rm $LOCKFILE
           fi
 	RUN $SERVER +foreground $* &
+	t_start=$(date +%s)
 	while true
 	do
             sleep 5
@@ -145,14 +144,9 @@ START_SERVER()
 		LOG "PASSED: Virtuoso Server successfully started on port $port"
 		return 0
 	    fi
-	    nowh=`date | cut -f 2 -d :`
-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
-
-	    nowh=`expr $nowh - $starth`
-	    nows=`expr $nows - $starts`
-
-	    nows=`expr $nows + $nowh \*  60`
-	    if test $nows -ge $timeout
+	    t_now=$(date +%s)
+	    t_elapsed=$(expr $t_now - $t_start)
+	    if test $t_elapsed -ge $timeout
 	    then
 		LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
 		exit 1
