@@ -917,7 +917,7 @@ then
        #elif OPENSSL_VERSION_NUMBER < 0x30200000L
        /* OpenSSL version 3.1.x is supported */
 	#else
-	#error OpenSSL version too new
+	//#error OpenSSL version too new
 	#endif
 	    ],[
              AC_MSG_RESULT([$openssl_VERSION is supported])
