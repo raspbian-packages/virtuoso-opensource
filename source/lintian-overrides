@@ -1,0 +1,33 @@
+# The code created with this script is cc-by-nc-sa and thus links inside
+# the code are linking to it but the code itself is GPL
+virtuoso-opensource source: license-problem-cc-by-nc-sa [binsrc/rdf_mappers/xslt/main/cc2rdf.xsl]
+
+# These are just a bit long lines in non-compressed JS thus a false positives
+source-is-missing [appsrc/ODS-Framework/ods_ubiquity.js]
+source-is-missing [appsrc/ODS-Framework/tbl.js]
+source-is-missing [appsrc/ODS-Framework/terms.html]
+source-is-missing [binsrc/conductor/dav/dav_tbl.js]
+source-is-missing [binsrc/conductor/js/tbl.js]
+source-is-missing [binsrc/conductor/syntax/shCore.js]
+source-is-missing [binsrc/fct/www/about.html]
+source-is-missing [binsrc/oat/toolkit/OpenLayers.js]
+source-is-missing [binsrc/oat/toolkit/xpath.js]
+source-is-missing [binsrc/samples/sparql_demo/syntax/shCore.js]
+source-is-missing [binsrc/tutorial/syntax/shCore.js]
+source-contains-prebuilt-javascript-object [appsrc/ODS-Framework/ods_ubiquity.js]
+source-contains-prebuilt-javascript-object [appsrc/ODS-Framework/tbl.js]
+source-contains-prebuilt-javascript-object [binsrc/conductor/dav/dav_tbl.js]
+source-contains-prebuilt-javascript-object [binsrc/conductor/js/tbl.js]
+source-contains-prebuilt-javascript-object [binsrc/conductor/syntax/shCore.js]
+source-contains-prebuilt-javascript-object [binsrc/oat/toolkit/OpenLayers.js]
+source-contains-prebuilt-javascript-object [binsrc/oat/toolkit/xpath.js]
+source-contains-prebuilt-javascript-object [binsrc/samples/sparql_demo/syntax/shCore.js]
+source-contains-prebuilt-javascript-object [binsrc/tutorial/syntax/shCore.js]
+
+# Binaries
+very-long-line-length-in-source-file * > 512 [*.class:*]
+very-long-line-length-in-source-file * > 512 [binsrc/samples/demo/CAT*:*]
+very-long-line-length-in-source-file * > 512 [binsrc/samples/demo/EMP*:*]
+
+# Test data
+very-long-line-length-in-source-file * > 512 [binsrc/*tests*:*]

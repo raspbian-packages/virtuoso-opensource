@@ -1,0 +1,1329 @@
+Author: Steven Chamberlain <steven@pyro.eu.org>
+Author: Andreas Beckmann <anbe@debian.org>
+Description: This patch avoids FTBFS due to wrong calculation of timeout
+ If the current minute or second wraps around past 59, the timeout
+ calculation is wrong, and may get stuck forever.  Since this happens
+ in many parts of the testsuite it meant considerable risk of FTBFS.
+Last-Update: 2024-03-07
+
+--- a/appsrc/ODS-Addressbook/make_vad.sh
++++ b/appsrc/ODS-Addressbook/make_vad.sh
+@@ -146,9 +146,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -156,14 +154,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Blog/make_vad.sh
++++ b/appsrc/ODS-Blog/make_vad.sh
+@@ -115,9 +115,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -125,14 +123,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Bookmark/make_vad.sh
++++ b/appsrc/ODS-Bookmark/make_vad.sh
+@@ -145,9 +145,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -155,14 +153,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Briefcase/make_vad.sh
++++ b/appsrc/ODS-Briefcase/make_vad.sh
+@@ -156,9 +156,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -166,14 +164,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Calendar/make_vad.sh
++++ b/appsrc/ODS-Calendar/make_vad.sh
+@@ -144,9 +144,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -154,14 +152,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Community/make_vad.sh
++++ b/appsrc/ODS-Community/make_vad.sh
+@@ -140,9 +140,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -150,14 +148,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Discussion/make_vad.sh
++++ b/appsrc/ODS-Discussion/make_vad.sh
+@@ -114,9 +114,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -124,14 +122,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-FeedManager/make_vad.sh
++++ b/appsrc/ODS-FeedManager/make_vad.sh
+@@ -144,9 +144,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -154,14 +152,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Framework/make_vad.sh
++++ b/appsrc/ODS-Framework/make_vad.sh
+@@ -144,9 +144,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -154,14 +152,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Framework/oauth/make_vad.sh
++++ b/appsrc/ODS-Framework/oauth/make_vad.sh
+@@ -192,9 +192,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -202,14 +200,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Gallery/make_vad.sh
++++ b/appsrc/ODS-Gallery/make_vad.sh
+@@ -129,9 +129,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -139,14 +137,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Polls/make_vad.sh
++++ b/appsrc/ODS-Polls/make_vad.sh
+@@ -132,9 +132,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -142,14 +140,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-WebMail/make_vad.sh
++++ b/appsrc/ODS-WebMail/make_vad.sh
+@@ -143,9 +143,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -153,14 +151,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/appsrc/ODS-Wiki/make_vad.sh
++++ b/appsrc/ODS-Wiki/make_vad.sh
+@@ -136,9 +136,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -146,14 +144,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/fct/make_vad.sh
++++ b/binsrc/fct/make_vad.sh
+@@ -198,9 +198,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -208,14 +206,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/bpel/make_vad.sh
++++ b/binsrc/bpel/make_vad.sh
+@@ -258,9 +258,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -268,14 +266,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/hosting/mono/tests/tclrsrv.sh
++++ b/binsrc/hosting/mono/tests/tclrsrv.sh
+@@ -215,12 +215,11 @@ START_SERVER ()
+ {
+       LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
+       ddate=`date`
+-      starth=`date | cut -f 2 -d :`
+-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+       timeout=600
+       rm -f *.lck
+       $SERVER +foreground -c tclr.ini $* 1>/dev/null & 
+       stat="true"
++      t_start=$(date +%s)
+       while true 
+ 	do
+ 	  sleep 4
+@@ -231,15 +230,9 @@ START_SERVER ()
+ 		    LOG "PASSED: Virtuoso Server successfully started on port $port"
+ 		    return 0
+ 	      fi
+-		
+-	  nowh=`date | cut -f 2 -d :`
+-          nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-    
+-          nowh=`expr $nowh - $starth`
+-          nows=`expr $nows - $starts`
+-    
+-          nows=`expr $nows + $nowh \*  60`
+-          if test $nows -ge $timeout
++          t_now=$(date +%s)
++          t_elapsed=$(expr $t_now - $t_start)
++          if test $t_elapsed -ge $timeout
+           then
+               LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+               exit 1
+--- a/binsrc/isparql/make_vad.sh
++++ b/binsrc/isparql/make_vad.sh
+@@ -119,9 +119,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -129,14 +127,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/rdf_mappers/make_vad.sh
++++ b/binsrc/rdf_mappers/make_vad.sh
+@@ -255,9 +255,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -265,14 +263,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/samples/demo/make_vad.sh
++++ b/binsrc/samples/demo/make_vad.sh
+@@ -117,9 +117,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -127,14 +125,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/samples/demo/mkdemo.sh
++++ b/binsrc/samples/demo/mkdemo.sh
+@@ -146,9 +146,8 @@ START_SERVER()
+   if [ "z$HOST_OS" != "z" ] 
+   then
+       "$SERVER" +foreground &
+-      starth=`date | cut -f 2 -d :`
+-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
++      t_start=$(date +%s)
+       while true
+ 	do
+ 	  sleep 6
+@@ -157,14 +156,9 @@ START_SERVER()
+ 	      ECHO "Virtuoso server started"
+ 	      return 0
+ 	    fi
+-	  nowh=`date | cut -f 2 -d :`
+-	  nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	  nowh=`expr $nowh - $starth`
+-	  nows=`expr $nows - $starts`
+-
+-	  nows=`expr $nows + $nowh \*  60`
+-	  if test $nows -ge $timeout
++	  t_now=$(date +%s)
++	  t_elapsed=$(expr $t_now - $t_start)
++	  if test $t_elapsed -ge $timeout
+ 	    then
+ 	      ECHO "***FAILED: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	      exit 1
+--- a/binsrc/samples/demo/mkdoc.sh
++++ b/binsrc/samples/demo/mkdoc.sh
+@@ -164,9 +164,8 @@ START_SERVER()
+   if [ "z$HOST_OS" != "z" ] 
+   then
+       "$SERVER" +foreground &
+-      starth=`date | cut -f 2 -d :`
+-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
++      t_start=$(date +%s)
+       while true
+ 	do
+ 	  sleep 6
+@@ -175,14 +174,9 @@ START_SERVER()
+ 	      ECHO "Virtuoso server started"
+ 	      return 0
+ 	    fi
+-	  nowh=`date | cut -f 2 -d :`
+-	  nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	  nowh=`expr $nowh - $starth`
+-	  nows=`expr $nows - $starts`
+-
+-	  nows=`expr $nows + $nowh \*  60`
+-	  if test $nows -ge $timeout
++	  t_now=$(date +%s)
++	  t_elapsed=$(expr $t_now - $t_start)
++	  if test $t_elapsed -ge $timeout
+ 	    then
+ 	      ECHO "***FAILED: Could not start Virtuoso DOC Server within $timeout seconds"
+ 	      exit 1
+--- a/binsrc/samples/sparql_demo/make_vad.sh
++++ b/binsrc/samples/sparql_demo/make_vad.sh
+@@ -115,9 +115,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -125,14 +123,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/samples/xpath/files2dav.sh
++++ b/binsrc/samples/xpath/files2dav.sh
+@@ -101,9 +101,7 @@ START_SERVER()
+   ECHO "Starting Virtuoso DEMO server ..."     
+   virtuoso +wait 
+ 
+-  starth=`date | cut -f 2 -d :`
+-  starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++  t_start=$(date +%s)
+   while true 
+     do
+       sleep 6
+@@ -112,14 +110,9 @@ START_SERVER()
+ 	  ECHO "Virtuoso server started"     
+ 	  return 0
+ 	fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout 
++      t_now=$(date +%s)
++      t_elapsed=$(expr $t_now - $t_start)
++      if test $t_elapsed -ge $timeout
+         then
+ 	  ECHO "***FAILED: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	  exit 1
+--- a/binsrc/samples/xquery/files2dav.sh
++++ b/binsrc/samples/xquery/files2dav.sh
+@@ -101,9 +101,7 @@ START_SERVER()
+   ECHO "Starting Virtuoso DEMO server ..."     
+   virtuoso +wait 
+ 
+-  starth=`date | cut -f 2 -d :`
+-  starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++  t_start=$(date +%s)
+   while true 
+     do
+       sleep 6
+@@ -112,14 +110,9 @@ START_SERVER()
+ 	  ECHO "Virtuoso server started"     
+ 	  return 0
+ 	fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout 
++      t_now=$(date +%s)
++      t_elapsed=$(expr $t_now - $t_start)
++      if test $t_elapsed -ge $timeout
+         then
+ 	  ECHO "***FAILED: Could not start Virtuoso DEMO Server within $timeout seconds"
+ 	  exit 1
+--- a/binsrc/sync/make_vad.sh
++++ b/binsrc/sync/make_vad.sh
+@@ -108,9 +108,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -118,14 +116,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/tests/biftest/thook.sh
++++ b/binsrc/tests/biftest/thook.sh
+@@ -128,14 +128,13 @@ START_SERVER()
+     done
+ 
+ 	ddate=`date`
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 	if test -f "$LOCKFILE"
+ 	  then
+ 	      echo Removing $LOCKFILE >> $LOGFILE
+ 	      rm $LOCKFILE
+           fi
+ 	RUN $SERVER +foreground $* &
++	t_start=$(date +%s)
+ 	while true
+ 	do
+             sleep 5
+@@ -145,14 +144,9 @@ START_SERVER()
+ 		LOG "PASSED: Virtuoso Server successfully started on port $port"
+ 		return 0
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/tests/suite/test_fn.sh
++++ b/binsrc/tests/suite/test_fn.sh
+@@ -248,21 +248,15 @@ START_SERVER()
+ 
+     stat="true"
+     ddate=`date`
+-    starth=`date | cut -f 2 -d :`
+-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
++    t_start=$(date +%s)
+     while [ "z$stat" != "z" -a $timeout -gt 0 ]
+     do
+ 	sleep 5
+ 	stat=`$NETSTAT -an 2>/dev/null | grep "[\.\:]$port " | grep LISTEN`
+ 
+-	nowh=`date | cut -f 2 -d :`
+-	nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	nowh=`expr $nowh - $starth`
+-	nows=`expr $nows - $starts`
+-
+-	nows=`expr 1 + $nows + $nowh \*  60`
+-	if test $nows -ge $timeout
++	t_now=$(date +%s)
++	t_elapsed=$(expr $t_now - $t_start)
++	if test $t_elapsed -ge $timeout
+ 	then
+ 	    LOG "***FAILED: The Listener on port $port didn't stop within $timeout seconds"
+ 	    exit 1
+@@ -276,8 +270,6 @@ START_SERVER()
+ 	#  with -S option, which will wait until the service has done the
+ 	#  roll forward of the log.
+ #	ddate=`date`
+-#	starth=`date | cut -f 2 -d :`
+-#	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ #	RUN $SERVER -I$SERVICE$port +service create $*
+ #	if test $? -eq 0
+ #	then
+@@ -299,8 +291,6 @@ START_SERVER()
+ 	#  The rest is for Unix.
+ 	#
+ 	ddate=`date`
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
+ 	if [ $timeout -eq 0 ]
+ 	then
+@@ -331,6 +321,7 @@ START_SERVER()
+ 	then
+ 	    return
+ 	fi
++	t_start=$(date +%s)
+ 	while true
+ 	do
+             sleep 5
+@@ -340,14 +331,9 @@ START_SERVER()
+ 		LOG "PASSED: Virtuoso Server successfully started on port $port"
+ 		return 0
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+@@ -358,6 +344,7 @@ START_SERVER()
+ CHECK_PORT()
+ {
+   port=$1
++  t_start=$(date +%s)
+   while true
+   do
+     sleep 5
+@@ -367,14 +354,9 @@ CHECK_PORT()
+ 	LOG "PASSED: Port $port is not listened by any process"
+ 	return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
++    t_now=$(date +%s)
++    t_elapsed=$(expr $t_now - $t_start)
++    if test $t_elapsed -ge $timeout
+     then
+ 	LOG "***FAILED: Port $port is not freed during $timeout seconds"
+ 	exit 1
+--- a/binsrc/tests/suite/tpc-d/tpcd.sh
++++ b/binsrc/tests/suite/tpc-d/tpcd.sh
+@@ -222,12 +222,10 @@ START_SERVER ()
+ {
+       LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
+       ddate=`date`
+-      starth=`date | cut -f 2 -d :`
+-      starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+       rm -f *.lck
+       $SERVER +foreground -c tpcd.ini $* 1>/dev/null & 
+       stat="true"
+-      while true 
++      for i in $(seq 1 15)
+ 	do
+ 	  sleep 5
+ 	      stat=`$NETSTAT -an 2>/dev/null | grep "[\.\:]$PORT " | grep LISTEN` 
+--- a/binsrc/tutorial/make_vad.sh
++++ b/binsrc/tutorial/make_vad.sh
+@@ -106,9 +106,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -116,14 +114,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/vsp/admin/debug/make_vad.sh
++++ b/binsrc/vsp/admin/debug/make_vad.sh
+@@ -74,9 +74,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -84,14 +82,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/vspx/suite/vspx_suite.sh
++++ b/binsrc/vspx/suite/vspx_suite.sh
+@@ -48,9 +48,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -58,14 +56,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/conductor/mkvad.sh
++++ b/binsrc/conductor/mkvad.sh
+@@ -154,9 +154,7 @@ START_SERVER()
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -164,14 +162,9 @@ START_SERVER()
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/dbpedia/make_vad.sh
++++ b/binsrc/dbpedia/make_vad.sh
+@@ -191,9 +191,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -201,14 +199,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/rdb2rdf/make_vad.sh
++++ b/binsrc/rdb2rdf/make_vad.sh
+@@ -125,9 +125,7 @@ virtuoso_start() {
+     then
+ 	"$SERVER" +foreground &
+ 
+-	starth=`date | cut -f 2 -d :`
+-	starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++	t_start=$(date +%s)
+ 	while true
+ 	do
+ 	    sleep 6
+@@ -135,14 +133,9 @@ virtuoso_start() {
+ 	    then
+ 		break
+ 	    fi
+-	    nowh=`date | cut -f 2 -d :`
+-	    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	    nowh=`expr $nowh - $starth`
+-	    nows=`expr $nows - $starts`
+-
+-	    nows=`expr $nows + $nowh \*  60`
+-	    if test $nows -ge $timeout
++	    t_now=$(date +%s)
++	    t_elapsed=$(expr $t_now - $t_start)
++	    if test $t_elapsed -ge $timeout
+ 	    then
+ 		ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 		exit 1
+--- a/binsrc/tests/suite/testlib.sh
++++ b/binsrc/tests/suite/testlib.sh
+@@ -301,21 +301,15 @@ START_SERVER()
+ 
+     stat="true"
+     ddate=`date`
+-    starth=`date | cut -f 2 -d :`
+-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
++    t_start=$(date +%s)
+     while [ "z$stat" != "z" -a $timeout -gt 0 ]
+     do
+ 	sleep 5
+ 	stat=`$NETSTAT -an 2>/dev/null | grep "[\.\:]$port " | grep LISTEN`
+ 
+-	nowh=`date | cut -f 2 -d :`
+-	nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-	nowh=`expr $nowh - $starth`
+-	nows=`expr $nows - $starts`
+-
+-	nows=`expr $nows + $nowh \*  60`
+-	if test $nows -ge $timeout
++	t_now=$(date +%s)
++	t_elapsed=$(expr $t_now - $t_start)
++	if test $t_elapsed -ge $timeout
+ 	then
+ 	    LOG "***FAILED: The Listener on port $port didn't stop within $timeout seconds"
+ 	    exit 1
+@@ -323,8 +317,6 @@ START_SERVER()
+     done
+ 
+     ddate=`date`
+-    starth=`date | cut -f 2 -d :`
+-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+     
+     if test -f "$LOCKFILE"
+     then
+@@ -341,6 +333,7 @@ START_SERVER()
+     
+     if [ $timeout -gt 0 ]
+     then
++        t_start=$(date +%s)
+         while true
+         do
+             sleep 5
+@@ -350,14 +343,9 @@ START_SERVER()
+         	LOG "PASSED: Virtuoso Server successfully started on port $port"
+         	break
+             fi
+-            nowh=`date | cut -f 2 -d :`
+-            nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-            
+-            nowh=`expr $nowh - $starth`
+-            nows=`expr $nows - $starts`
+-            
+-            nows=`expr $nows + $nowh \*  60`
+-            if test $nows -ge $timeout
++            t_now=$(date +%s)
++            t_elapsed=$(expr $t_now - $t_start)
++            if test $t_elapsed -ge $timeout
+             then
+         	LOG "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+         	exit 1
+@@ -395,6 +383,7 @@ START_SERVER()
+ CHECK_PORT()
+ {
+   port=$1
++  t_start=$(date +%s)
+   while true
+   do
+     sleep 5
+@@ -404,14 +393,9 @@ CHECK_PORT()
+ 	LOG "PASSED: Port $port is not listened by any process"
+ 	return 0
+     fi
+-    nowh=`date | cut -f 2 -d :`
+-    nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-    nowh=`expr $nowh - $starth`
+-    nows=`expr $nows - $starts`
+-
+-    nows=`expr $nows + $nowh \*  60`
+-    if test $nows -ge $timeout
++    t_now=$(date +%s)
++    t_elapsed=$(expr $t_now - $t_start)
++    if test $t_elapsed -ge $timeout
+     then
+ 	LOG "***FAILED: Port $port is not freed during $timeout seconds"
+ 	exit 1
+@@ -960,9 +944,8 @@ WAIT_CLUSTER_PORT_UP ()
+ 
+     stat="true"
+     ddate=`date`
+-    starth=`date | cut -f 2 -d :`
+-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+ 
++    t_start=$(date +%s)
+     while true
+     do
+         sleep 5
+@@ -972,14 +955,9 @@ WAIT_CLUSTER_PORT_UP ()
+             LOG "PASSED: $3 listen on port $port"
+             return 0
+         fi
+-        nowh=`date | cut -f 2 -d :`
+-        nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-        nowh=`expr $nowh - $starth`
+-        nows=`expr $nows - $starts`
+-
+-        nows=`expr $nows + $nowh \*  60`
+-        if test $nows -ge $timeout
++        t_now=$(date +%s)
++        t_elapsed=$(expr $t_now - $t_start)
++        if test $t_elapsed -ge $timeout
+         then
+             LOG "***FAILED: Could not start Virtuoso cluster within $timeout seconds"
+             exit 1
+@@ -1000,8 +978,7 @@ WAIT_CLUSTER_TO_STOP ()
+   file=$1 
+   timeout=$2 
+   ddate=`date`
+-  starth=`date | cut -f 2 -d :`
+-  starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
++  t_start=$(date +%s)
+   while true
+   do
+       if [ -f $file ]
+@@ -1014,12 +991,9 @@ WAIT_CLUSTER_TO_STOP ()
+               LOG "PASSED: cluster with lock-file $file stopped."
+               return 0;
+           fi
+-          nowh=`date | cut -f 2 -d :`
+-          nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-          nowh=`expr $nowh - $starth`
+-          nows=`expr $nows - $starts`
+-          nows=`expr $nows + $nowh \*  60`
+-          if test $nows -ge $timeout
++          t_now=$(date +%s)
++          t_elapsed=$(expr $t_now - $t_start)
++          if test $t_elapsed -ge $timeout
+           then
+               LOG "***FAILED: Could not stop cluster within $timeout seconds"
+               exit 1
+--- a/binsrc/websocket/make_vad.sh
++++ b/binsrc/websocket/make_vad.sh
+@@ -178,9 +178,7 @@ virtuoso_start() {
+   then
+     "$SERVER" +foreground &
+ 
+-    starth=`date | cut -f 2 -d :`
+-    starts=`date | cut -f 3 -d :|cut -f 1 -d " "`
+-
++    t_start=$(date +%s)
+     while true
+     do
+       sleep 6
+@@ -188,14 +186,9 @@ virtuoso_start() {
+       then
+ 	break
+       fi
+-      nowh=`date | cut -f 2 -d :`
+-      nows=`date | cut -f 3 -d : | cut -f 1 -d " "`
+-
+-      nowh=`expr $nowh - $starth`
+-      nows=`expr $nows - $starts`
+-
+-      nows=`expr $nows + $nowh \*  60`
+-      if test $nows -ge $timeout
++      t_now=$(date +%s)
++      t_elapsed=$(expr $t_now - $t_start)
++      if test $t_elapsed -ge $timeout
+       then
+ 	ECHO "***FAILED: Could not start Virtuoso Server within $timeout seconds"
+ 	exit 1
