@@ -52,7 +52,7 @@ server_libs = \
 	$(top_builddir)/libsrc/Tidy/libtidy.la \
 	$(top_builddir)/libsrc/util/libutil.la \
 	@srvrlibs@ \
-	-lpcre -lminizip
+	-lpcre2-8 -lminizip
 
 client_libs = \
 	$(top_builddir)/libsrc/Wi/libwic.la \
@@ -60,7 +60,7 @@ client_libs = \
 	$(top_builddir)/libsrc/Thread/libthrs.la \
 	$(top_builddir)/libsrc/util/libutil.la \
 	@clntlibs@ \
-	-lpcre -lminizip
+	-lpcre2-8 -lminizip
 
 M2_SOURCES = chil.c
 M2_LDADD = \
