@@ -34,7 +34,7 @@ VERSION="1.5.122"
 LOGFILE="${LOGDIR}/vad_make.log"
 STICKER_DAV="vad_dav.xml"
 STICKER_FS="vad_filesystem.xml"
-PACKDATE=`date +"%Y-%m-%d %H:%M"`
+PACKDATE=`date ${SOURCE_DATE_EPOCH:+--utc --date="@$SOURCE_DATE_EPOCH"} +"%Y-%m-%d %H:%M"`
 SERVER=${SERVER-virtuoso}
 THOST=${THOST-localhost}
 PORT=${PORT-1940}
