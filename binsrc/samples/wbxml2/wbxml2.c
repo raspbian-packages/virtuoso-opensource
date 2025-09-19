@@ -29,6 +29,10 @@
 #include "import_gate_virtuoso.h"
 #include "wbxml.h"
 
+//#include "wbxml_mem.h"
+void * wbxml_realloc(void *memblock, size_t size);
+void wbxml_free(void *memblock);
+
 #define wi_inst (wi_instance_get()[0])
 
 #define WBMXL2_VERSION "0.9"

@@ -1700,7 +1700,7 @@ then
     old_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
     case "$with_wbxml2" in
 	yes)
-	   WBXML2_CFLAGS=""
+	   WBXML2_CFLAGS="-I/usr/include/libwbxml-1.0/wbxml"
 	   WBXML2_LDFLAGS="-lwbxml2"
 	   ;;
 	*)
@@ -1722,7 +1722,8 @@ then
 int
 main ()
 {
-  WBXMLParser *wbxml_parser = wbxml_parser_create();
+  if (0)
+    wbxml_conv_xml2wbxml_withlen(0, 0, 0, 0, 0);
 
   return 0;
 }],
