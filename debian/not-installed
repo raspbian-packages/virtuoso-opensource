@@ -1,0 +1,65 @@
+#Do not install *.a *.la files
+usr/lib/${DEB_HOST_MULTIARCH}/libvirtuoso-t.a
+usr/lib/${DEB_HOST_MULTIARCH}/libvirtuoso-t.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbc.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbc.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbc_r.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbc_r.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbcu.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbcu.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbcu_r.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtodbcu_r.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/creolewiki.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/creolewiki.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/im.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/im.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/mediawiki.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/mediawiki.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/shapefileio.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/shapefileio.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/wbxml2.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/wbxml2.la
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/wikiv.a
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/wikiv.la
+
+#Do not install sesame stuff
+usr/lib/${DEB_HOST_MULTIARCH}/sesame/create-virtuoso.xsl
+usr/lib/${DEB_HOST_MULTIARCH}/sesame/create.xsl
+usr/share/doc/virtuoso-opensource-7/README.sesame2.md
+usr/share/doc/virtuoso-opensource-7/README.sesame3.md
+
+#Do not install duplicate license information
+usr/share/doc/virtuoso-opensource-7/COPYING
+usr/share/doc/virtuoso-opensource-7/COPYING.md
+usr/share/doc/virtuoso-opensource-7/CREDITS
+usr/share/doc/virtuoso-opensource-7/CREDITS.md
+usr/share/doc/virtuoso-opensource-7/LICENSE
+usr/share/doc/virtuoso-opensource-7/LICENSE.md
+
+#Do not install misc uneccesary docs
+usr/share/doc/virtuoso-opensource-7/AUTHORS
+usr/share/doc/virtuoso-opensource-7/INSTALL
+usr/share/doc/virtuoso-opensource-7/INSTALL.md
+usr/share/doc/virtuoso-opensource-7/README.GIT.md
+usr/share/doc/virtuoso-opensource-7/README.MACOSX.md
+usr/share/doc/virtuoso-opensource-7/README.OpenSSL.md
+usr/share/doc/virtuoso-opensource-7/README.WINDOWS.md
+usr/share/doc/virtuoso-opensource-7/README.hibernate.md
+usr/share/doc/virtuoso-opensource-7/README.jena.md
+usr/share/doc/virtuoso-opensource-7/README.jsse.md
+usr/share/doc/virtuoso-opensource-7/README.php5.md
+
+# ???
+usr/lib/${DEB_HOST_MULTIARCH}/rdf4j/create-virtuoso.xsl
+usr/lib/${DEB_HOST_MULTIARCH}/rdf4j/create.xsl
+
+# 7.2.8
+usr/lib/${DEB_HOST_MULTIARCH}/rdf4j_4/create-virtuoso.xsl
+usr/lib/${DEB_HOST_MULTIARCH}/rdf4j_4/create.xsl
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql/introspection/cciso-intro.ttl
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql/introspection/graphql-intro-schema.ttl
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql/introspection/graphql-intro.sql
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql/introspection/graphql-intro.ttl
+usr/lib/${DEB_HOST_MULTIARCH}/virtuoso-opensource-7/hosting/graphql/introspection/graphql-schema.ttl

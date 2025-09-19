@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ -n "$DEBIAN_SCRIPT_DEBUG" ]; then set -v -x; DEBIAN_SCRIPT_TRACE=1; fi
+${DEBIAN_SCRIPT_TRACE:+ echo "#42#DEBUG# RUNNING $0 $*" 1>&2 }
+
+# Always add in the postinst, always delete in the prerm -- this way,
+# we'll always have a good reference count in odbcinst.ini.
+db_get low libvirtodbc0/register-odbc-driver || true
+if [ "$RET" = "true" ]; then
+    odbcinst -i -d -f /usr/share/libvirtodbc0/odbcinst.ini 1>&2
+fi
+
+#DEBHELPER#

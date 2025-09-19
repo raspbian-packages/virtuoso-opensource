@@ -1,0 +1,37 @@
+From cbff960af7caeae44794c7b1d9cb2cf367fa4567 Mon Sep 17 00:00:00 2001
+From: Patrick van Kleef <pkleef@openlinksw.com>
+Date: Thu, 10 Apr 2025 14:09:05 +0000
+Subject: [PATCH] Removed unused union
+
+---
+ libsrc/Wi/xml.h | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/libsrc/Wi/xml.h b/libsrc/Wi/xml.h
+index ebaf76aff..50739ef4b 100644
+--- a/libsrc/Wi/xml.h
++++ b/libsrc/Wi/xml.h
+@@ -83,20 +83,6 @@ encoding_handler_t *intl_find_user_charset (const char *encname, int xml_input_i
+ 
+ #define XML_CHAR_ESCAPE(c,s) xml_escapes [c] = s;
+ 
+-#ifndef __cplusplus
+-/* Types definition */
+-#ifndef _boolean
+-typedef enum
+-  {
+-    false, true
+-  }
+-_boolean;
+-#endif
+-#endif
+-
+-
+-
+-
+ 
+ typedef struct close_tag_s {
+   int		ct_level;
+-- 
+2.39.5
+

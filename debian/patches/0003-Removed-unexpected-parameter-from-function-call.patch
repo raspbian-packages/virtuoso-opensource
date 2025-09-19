@@ -1,0 +1,39 @@
+From f14111645fdcbe439bfa45a4dc69039cd1cc673c Mon Sep 17 00:00:00 2001
+From: Patrick van Kleef <pkleef@openlinksw.com>
+Date: Thu, 10 Apr 2025 11:08:59 +0000
+Subject: [PATCH] Removed unexpected parameter from function call
+
+---
+ binsrc/tests/isql.c | 2 +-
+ libsrc/Wi/mtwrite.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/binsrc/tests/isql.c b/binsrc/tests/isql.c
+index 50aa8bd18..79da3e1a3 100644
+--- a/binsrc/tests/isql.c
++++ b/binsrc/tests/isql.c
+@@ -7335,7 +7335,7 @@ rep_loop (FILE * infp, TCHAR *new_prompt)
+         }
+       else if (!isqlt_tcsncmp(tmp_pt,_T("#endif"),6)) /* end of conditional expression. */
+         {
+-          ifdef_pop (tmp_pt);
++          ifdef_pop ();
+         }
+       else if (*tmp_pt == '!')
+ 	{ /* Spawn a command to shell and wait for it if doesn't end with & */
+diff --git a/libsrc/Wi/mtwrite.c b/libsrc/Wi/mtwrite.c
+index 17db48911..e2ef756e9 100644
+--- a/libsrc/Wi/mtwrite.c
++++ b/libsrc/Wi/mtwrite.c
+@@ -1274,7 +1274,7 @@ mt_flush_all (void)
+     {
+       if (dbs->dbs_slices)
+ 	continue;
+-      dirty_after += dbs_dirty_count (dbs);
++      dirty_after += dbs_dirty_count ();
+       tc_dirty_after_flush += dirty_after;
+     }
+   END_DO_SET();
+-- 
+2.39.5
+

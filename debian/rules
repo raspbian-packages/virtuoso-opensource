@@ -1,0 +1,45 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all, optimize=-lto
+# most of the flags can be dropped with release 7.2.13
+export DEB_CFLAGS_MAINT_APPEND = -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int
+
+# Needed for memmmem at least in hurd and kfreebsd*
+CFLAGS += -D_GNU_SOURCE
+
+TEMPLATES	:= $(wildcard debian/*.in)
+AUTOGEN		+= $(patsubst %.in,%,$(TEMPLATES))
+
+%:
+	dh $@ --with pkgkde_symbolshelper
+
+# autoreconf updates INSTALL only if it exists
+execute_before_dh_autoreconf:
+	touch INSTALL
+
+override_dh_auto_configure: autogen
+	dh_auto_configure -- --with-layout=Debian --program-transform-name='s/isql$$/isql-vt/;s/isqlw/isqlw-vt/' --with-readline --without-internal-zlib \
+		--enable-bpel-vad --enable-conductor-vad --enable-demo-vad --enable-isparql-vad --enable-rdfmappers-vad \
+		--enable-sparqldemo-vad --enable-syncml-vad --enable-tutorial-vad
+
+execute_after_dh_auto_build:
+	# manpages
+	find debian -maxdepth 1 -type f -name '*.1.xml' -execdir docbook2x-man --solinks {} \;
+
+override_dh_installinit:
+	dh_installinit --noscripts
+
+execute_before_dh_auto_clean:
+	# manpages clean
+	$(RM) debian/*.1
+
+execute_after_dh_auto_clean:
+	$(RM) $(AUTOGEN)
+
+execute_after_dh_clean:
+	debconf-updatepo
+
+autogen: $(AUTOGEN) ;
+
+debian/%: debian/%.in
+	sed 's/@@DEB_HOST_MULTIARCH@@/$(DEB_HOST_MULTIARCH)/g' $< > $@

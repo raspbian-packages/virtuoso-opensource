@@ -1,0 +1,45 @@
+From f8863b4b133677b2a38950640c517481acd31fc2 Mon Sep 17 00:00:00 2001
+From: Patrick van Kleef <pkleef@openlinksw.com>
+Date: Thu, 10 Apr 2025 13:59:21 +0000
+Subject: [PATCH] Removed old prototypes not required for Linux/macOS
+
+---
+ libsrc/util/fnqual.c  | 5 +++--
+ libsrc/util/getdate.y | 5 -----
+ 2 files changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/libsrc/util/fnqual.c b/libsrc/util/fnqual.c
+index 6788cfd73..6f67adb48 100644
+--- a/libsrc/util/fnqual.c
++++ b/libsrc/util/fnqual.c
+@@ -34,8 +34,9 @@
+ #define SLASH	'/'
+ #endif
+ 
+-extern char *getcwd ();
+-
++#ifdef WIN32
++#include <direct.h>
++#endif
+ 
+ /*
+  *  Return a fully qualified filename, or NULL on error.
+diff --git a/libsrc/util/getdate.y b/libsrc/util/getdate.y
+index af7b13418..3d3f1a4b8 100644
+--- a/libsrc/util/getdate.y
++++ b/libsrc/util/getdate.y
+@@ -452,11 +452,6 @@ o_merid	: /* NULL */
+    the same signature as the function definition does. */
+ #include "getdate.h"
+ 
+-#ifndef WIN32 /* the windows dudes don't need these, does anyone really? */
+-extern struct tm	*gmtime ();
+-extern struct tm	*localtime ();
+-extern time_t		mktime ();
+-#endif
+ 
+ /* Month and day table. */
+ static TABLE const MonthDayTable[] = {
+-- 
+2.39.5
+
