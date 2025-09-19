@@ -1,0 +1,39 @@
+Author: Andreas Beckmann <anbe@debian.org>
+Description: fix detection of wbxml2 0.11
+Bug-Debian: #993431
+Last-Update: 2024-02-27
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -1700,7 +1700,7 @@ then
+     old_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+     case "$with_wbxml2" in
+ 	yes)
+-	   WBXML2_CFLAGS=""
++	   WBXML2_CFLAGS="-I/usr/include/libwbxml-1.0/wbxml"
+ 	   WBXML2_LDFLAGS="-lwbxml2"
+ 	   ;;
+ 	*)
+@@ -1722,7 +1722,8 @@ then
+ int
+ main ()
+ {
+-  WBXMLParser *wbxml_parser = wbxml_parser_create();
++  if (0)
++    wbxml_conv_xml2wbxml_withlen(0, 0, 0, 0, 0);
+ 
+   return 0;
+ }],
+--- a/binsrc/samples/wbxml2/wbxml2.c
++++ b/binsrc/samples/wbxml2/wbxml2.c
+@@ -29,6 +29,10 @@
+ #include "import_gate_virtuoso.h"
+ #include "wbxml.h"
+ 
++//#include "wbxml_mem.h"
++void * wbxml_realloc(void *memblock, size_t size);
++void wbxml_free(void *memblock);
++
+ #define wi_inst (wi_instance_get()[0])
+ 
+ #define WBMXL2_VERSION "0.9"

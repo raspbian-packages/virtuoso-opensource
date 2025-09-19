@@ -1,0 +1,311 @@
+# Catalan translation of virtuoso-opensource's debconf messages
+# Copyright © 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the virtuoso-opensource package.
+# poc senderi <pocsenderi@protonmail.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: virtuoso-opensource\n"
+"Report-Msgid-Bugs-To: virtuoso-opensource@packages.debian.org\n"
+"POT-Creation-Date: 2025-09-17 18:13+0200\n"
+"PO-Revision-Date: 2025-01-16 15:47+0100\n"
+"Last-Translator: poc senderi <pocsenderi@protonmail.com>\n"
+"Language-Team: Catalan <debian-l10n-catalan@lists.debian.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#. Type: password
+#. Description
+#: ../virtuoso-opensource-7.templates:2001
+msgid "Password for DBA and DAV users:"
+msgstr "Contrasenya per als usuaris DBA i DAV:"
+
+#. Type: password
+#. Description
+#: ../virtuoso-opensource-7.templates:2001
+msgid ""
+"Following installation, users and passwords in Virtuoso can be managed using "
+"the command line tools (see the full documentation) or via the Conductor web "
+"application which is installed by default at http://localhost:8890/conductor."
+msgstr ""
+"Després de la instal·lació, els usuaris i les contrasenyes del Virtuoso es "
+"poden gestionar utilitzant les eines de línia d'ordres (vegeu la "
+"documentació completa) o a través de l'aplicació web Conductor que "
+"s'instal·la per defecte a «http://localhost:8890/conductor»."
+
+#. Type: password
+#. Description
+#: ../virtuoso-opensource-7.templates:2001
+msgid ""
+"Two users (\"dba\" and \"dav\") are created by default, with administrative "
+"access to Virtuoso. Secure passwords must be chosen for these users in order "
+"to complete the installation."
+msgstr ""
+"Es creen per defecte dos usuaris (\"dba\" i \"dav\") amb accés administratiu "
+"al Virtuoso. Per poder completar la instal·lació s'han d'escollir "
+"contrasenyes segures per a aquests usuaris."
+
+#. Type: password
+#. Description
+#: ../virtuoso-opensource-7.templates:2001
+msgid ""
+"If you leave this blank, the daemon will be disabled unless a non-default "
+"password already exists."
+msgstr ""
+"Si ho deixeu en blanc, el dimoni serà desactivarà tret que ja existeixi una "
+"contrasenya no predeterminada."
+
+#. Type: password
+#. Description
+#: ../virtuoso-opensource-7.templates:3001
+msgid "Administrative users password confirmation:"
+msgstr "Confirmació de la contrasenya dels usuaris administratius:"
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:4001
+msgid "Password mismatch"
+msgstr "La contrasenya no coincideix"
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:4001
+msgid ""
+"The two passwords you entered were not the same. Please enter a password "
+"again."
+msgstr ""
+"Les dues contrasenyes que heu introduït no són iguals. Introduïu una "
+"contrasenya altre cop."
+
+#. Type: note
+#. Description
+#: ../virtuoso-opensource-7.templates:5001
+msgid "No initial password set, daemon disabled"
+msgstr ""
+"No s'ha establert cap contrasenya inicial, el dimoni quedarà desactivat"
+
+#. Type: note
+#. Description
+#: ../virtuoso-opensource-7.templates:5001
+msgid ""
+"For security reasons, the default Virtuoso instance is disabled because no "
+"administration password was provided."
+msgstr ""
+"Per raons de seguretat, la instància per defecte del Virtuoso està "
+"desactivada perquè no s'ha proporcionat cap contrasenya d'administració."
+
+#. Type: note
+#. Description
+#: ../virtuoso-opensource-7.templates:5001
+msgid "The default DBA user password will then be \"dba\"."
+msgstr "La contrasenya de l'usuari DBA per defecte serà «dba»."
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:6001
+msgid "Unable to set password for the Virtuoso DBA user"
+msgstr "No s'ha pogut establir la contrasenya per a l'usuari DBA del Virtuoso"
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:6001
+msgid ""
+"An error occurred while setting the password for the Virtuoso administrative "
+"user. This may have happened because the account already has a password, or "
+"because of a communication problem with the Virtuoso server."
+msgstr ""
+"S'ha produït un error a l'establir la contrasenya per a l'usuari "
+"administratiu de Virtuoso. Això pot haver passat perquè el compte ja té una "
+"contrasenya, o a causa d'un problema de comunicació amb el servidor Virtuoso."
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:6001
+msgid ""
+"If the database already existed then it will have retained the original "
+"password. If there was some other problem then the default password "
+"(\"dba\") is used."
+msgstr ""
+"Si la base de dades ja existia, llavors s'haurà conservat la contrasenya "
+"original. Si hi ha hagut algun altre problema, llavors s'utilitza la "
+"contrasenya per defecte («dba»)."
+
+#. Type: error
+#. Description
+#: ../virtuoso-opensource-7.templates:6001
+msgid ""
+"It is recommended to check the passwords for the users \"dba\" and \"dav\" "
+"immediately after installation."
+msgstr ""
+"Es recomana comprovar les contrasenyes dels usuaris «dba» i «dav» "
+"immediatament després de la instal·lació."
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:7001
+msgid "Remove all Virtuoso databases?"
+msgstr "Voleu suprimir totes les bases de dades del Virtuoso?"
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:7001
+msgid ""
+"The /var/lib/virtuoso-opensource-7 directory which contains the Virtuoso "
+"databases is about to be removed."
+msgstr ""
+"El directori «/var/lib/virtuoso-opensource-7» que conté les bases de dades "
+"del Virtuoso està a punt de ser eliminat."
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:7001
+msgid ""
+"If you're removing the Virtuoso package in order to later install a more "
+"recent version, or if a different Virtuoso package is already using it, you "
+"can choose to keep databases."
+msgstr ""
+"Si elimineu el paquet Virtuoso per a instal·lar més endavant una versió més "
+"recent, o si ja l'està utilitzant un altre paquet Virtuoso, podeu triar de "
+"mantenir les bases de dades."
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:8001
+msgid "HTTP server port:"
+msgstr "Port del servidor HTTP:"
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:8001
+msgid ""
+"Virtuoso provides a web server capable of hosting HTML and VSP pages (with "
+"optional support for other languages). If you are installing this instance "
+"as a public web server directly on the Internet, you probably want to choose "
+"80 as web server port."
+msgstr ""
+"El Virtuoso proporciona un servidor web capaç d'allotjar pàgines HTML i VSP "
+"(amb suport opcional per a altres llenguatges). Si esteu instal·lant aquesta "
+"instància com a servidor web públic directament a Internet, probablement "
+"voleu triar el 80 com a port de servidor web."
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:8001
+msgid ""
+"Please note that the default web server root directory is /var/lib/virtuoso-"
+"opensource-7/vsp and will be empty unless you also install the package "
+"containing the standard Virtuoso start page."
+msgstr ""
+"Tingueu en compte que el directori arrel per defecte del servidor web és «/"
+"var/lib/virtuoso-opensource-7/vsp» i estarà buit tret que també instal·leu "
+"el paquet que conté la pàgina d'inici estàndard del Virtuoso."
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:9001
+msgid "Database server port:"
+msgstr "Port del servidor de base de dades:"
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:9001
+msgid ""
+"You may change here the port on which the Virtuoso database server will "
+"listen for connections."
+msgstr ""
+"Podeu canviar aquí el port en el qual el servidor de base de dades Virtuoso "
+"escoltarà les connexions."
+
+#. Type: string
+#. Description
+#: ../virtuoso-opensource-7.templates:9001
+msgid ""
+"Modifying this default value can improve security on servers that might be "
+"targets for unauthorized intrusion."
+msgstr ""
+"La modificació d'aquest valor per defecte pot millorar la seguretat en "
+"servidors que podrien ser objectius d'intrusió no autoritzada."
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:10001
+msgid "Register an ODBC system DSN for Virtuoso?"
+msgstr "Voleu registrar un sistema ODBC DSN per al Virtuoso?"
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:10001
+msgid ""
+"An ODBC manager (unixodbc or iODBC) is already installed on this system, and "
+"the Virtuoso ODBC driver is installed."
+msgstr ""
+"Ja hi ha instal·lat en aquest sistema un gestor ODBC («unixodbc» o iODBC), i "
+"el controlador ODBC del Virtuoso està instal·lat."
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:10001
+msgid ""
+"The default Virtuoso instance can be automatically added to the list of "
+"available System Data Sources (and automatically deleted from the list when "
+"this package is removed)."
+msgstr ""
+"La instància predeterminada del Virtuoso es pot afegir automàticament a la "
+"llista de fonts de dades disponibles del sistema (i esborrar automàticament "
+"de la llista quan s'elimini aquest paquet)."
+
+#. Type: boolean
+#. Description
+#: ../virtuoso-opensource-7.templates:10001
+msgid ""
+"If you choose this option, the DSN will be named \"VOS\". User and password "
+"details are omitted from the DSN for security reasons."
+msgstr ""
+"Si trieu aquesta opció, el DSN s'anomenarà \"VOS\". Les dades d'usuari i "
+"contrasenya s'ometen del DSN per raons de seguretat."
+
+#. Type: select
+#. Description
+#: ../virtuoso-opensource-7.templates:11001
+msgid "Default Virtuoso server package:"
+msgstr "Paquet predeterminat de servidor Virtuoso:"
+
+#. Type: select
+#. Description
+#: ../virtuoso-opensource-7.templates:11001
+msgid ""
+"Please choose the version of virtuoso-server that will be linked to by the "
+"default (unversioned) names, for init scripts and client tools."
+msgstr ""
+"Trieu la versió del «virtuoso-server» al qual s'enllaçaran els noms "
+"predeterminats (no versionats), per als scripts d'inici i les eines del "
+"client."
+
+#. Type: boolean
+#. Description
+#: ../libvirtodbc0.templates:2001
+msgid "Register the Virtuoso ODBC driver?"
+msgstr "Voleu registrar el controlador ODBC del Virtuoso?"
+
+#. Type: boolean
+#. Description
+#: ../libvirtodbc0.templates:2001
+msgid ""
+"An ODBC manager (unixodbc or iODBC)  is already installed on this system."
+msgstr ""
+"Ja hi ha instal·lat un gestor ODBC («unixodbc» o iODBC) en aquest sistema."
+
+#. Type: boolean
+#. Description
+#: ../libvirtodbc0.templates:2001
+msgid ""
+"The Virtuoso ODBC driver can be automatically added to the list of available "
+"ODBC drivers (and automatically deleted from the list when this package is "
+"removed)."
+msgstr ""
+"El controlador ODBC del Virtuoso es pot afegir automàticament a la llista de "
+"controladors ODBC disponibles (i esborrar automàticament de la llista quan "
+"s'elimini aquest paquet)."

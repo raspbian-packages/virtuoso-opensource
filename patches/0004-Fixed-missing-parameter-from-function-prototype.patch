@@ -1,0 +1,25 @@
+From c93dc315d06b569f65e5208f6e3693df38283dd2 Mon Sep 17 00:00:00 2001
+From: Patrick van Kleef <pkleef@openlinksw.com>
+Date: Thu, 10 Apr 2025 11:11:58 +0000
+Subject: [PATCH] Fixed missing parameter from function prototype
+
+---
+ binsrc/tests/lubm-cli.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/binsrc/tests/lubm-cli.c b/binsrc/tests/lubm-cli.c
+index b3570bf36..5d3e57292 100644
+--- a/binsrc/tests/lubm-cli.c
++++ b/binsrc/tests/lubm-cli.c
+@@ -407,7 +407,7 @@ get_AssociateProfessor (char * buf)
+   return buf;
+ }
+ 
+-typedef char * (*rand_func) ();
++typedef char * (*rand_func) (char *);
+ 
+ typedef struct qr_s {
+    int n_pars;
+-- 
+2.39.5
+
